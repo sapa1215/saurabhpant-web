@@ -1,64 +1,66 @@
-# Astro Starter Kit: Blog
+# saurabhpant.com — Website Content Files
+# How To Update Your Astrowind Website
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/astro-blog-starter-template)
+## Files Included
 
-![Astro Template Preview](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+| File | What It Does | Where To Put It |
+|------|-------------|-----------------|
+| `src/config.yaml` | Site name, SEO, metadata | Replace existing `src/config.yaml` |
+| `src/pages/about.md` | Your About page | Replace existing `src/pages/about.md` |
+| `src/pages/index-content.md` | Homepage content guide | Reference file for editing `src/pages/index.astro` |
+| `src/content/post/future-of-oss-bss-5g-era.md` | Your first blog post | Add to `src/content/post/` folder |
 
-<!-- dash-content-start -->
+---
 
-Create a blog with Astro and deploy it on Cloudflare Workers as a [static website](https://developers.cloudflare.com/workers/static-assets/).
+## Step-by-Step Instructions
 
-Features:
+### Step 1 — Update config.yaml
+1. Go to your GitHub repo
+2. Open `src/config.yaml`
+3. Click pencil (edit) icon
+4. Replace ALL content with the new `src/config.yaml` file
+5. Commit changes
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-- ✅ Built-in Observability logging
+### Step 2 — Update About Page
+1. In GitHub repo open `src/pages/about.md`
+2. Replace content with new `about.md` file
+3. Commit changes
 
-<!-- dash-content-end -->
+### Step 3 — Add Your First Blog Post
+1. In GitHub repo go to `src/content/post/` folder
+2. Click "Add file" → "Create new file"
+3. Name it: `future-of-oss-bss-5g-era.md`
+4. Paste content from the blog post file
+5. Commit changes
 
-## Getting Started
+### Step 4 — Cloudflare Auto-Deploys!
+Once you commit to GitHub, Cloudflare automatically rebuilds 
+and deploys your site within 2-3 minutes!
 
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
+---
 
-```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/astro-blog-starter-template
-```
+## What To Update Next (When You Have Full LinkedIn Archive)
 
-A live public deployment of this template is available at [https://astro-blog-starter-template.templates.workers.dev](https://astro-blog-starter-template.templates.workers.dev)
+- [ ] Work experience section
+- [ ] Education section  
+- [ ] Certifications
+- [ ] Recommendations (use as testimonials)
+- [ ] Profile photo
+- [ ] Contact form email address
+- [ ] Google Analytics ID
 
-## 🚀 Project Structure
+---
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Quick Content Tips For EB-1/EB-2
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+1. Publish at least 1 article per week
+2. Share articles on LinkedIn to build backlinks
+3. Add author bio to every post
+4. List your website on your LinkedIn profile
+5. Request colleagues to cite/share your articles
+6. Add a "Media & Speaking" page as you get mentions
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+---
 
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                           | Action                                           |
-| :-------------------------------- | :----------------------------------------------- |
-| `npm install`                     | Installs dependencies                            |
-| `npm run dev`                     | Starts local dev server at `localhost:4321`      |
-| `npm run build`                   | Build your production site to `./dist/`          |
-| `npm run preview`                 | Preview your build locally, before deploying     |
-| `npm run astro ...`               | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help`         | Get help using the Astro CLI                     |
-| `npm run build && npm run deploy` | Deploy your production site to Cloudflare        |
-| `npm wrangler tail`               | View real-time logs for all Workers              |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+## Need Help?
+Come back to Claude anytime and I'll help you customize further!
