@@ -1,16 +1,8 @@
 ---
-publishDate: 2026-05-17T00:00:00Z
 title: "The Future of OSS/BSS in the 5G Era: What Telecom Leaders Need to Know"
 excerpt: "As 5G networks mature, the pressure on legacy OSS/BSS systems has never been greater. Here's how forward-thinking operators are rethinking their architecture for the next decade."
-image: ~/assets/images/default.png
-category: Telecom Strategy
-tags:
-  - 5G
-  - OSS/BSS
-  - Digital Transformation
-  - Telecom
-metadata:
-  canonical: https://saurabhpant.com/future-of-oss-bss-5g-era
+pubDate: 2026-05-18
+heroImage: "/blog-placeholder-1.jpg"
 ---
 
 # The Future of OSS/BSS in the 5G Era: What Telecom Leaders Need to Know
