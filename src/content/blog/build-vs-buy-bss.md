@@ -51,7 +51,7 @@ Modern BSS architectures increasingly support decomposition. Rather than selecti
 
 This approach requires strong integration capability and architectural discipline. It carries its own complexity. But it avoids the two most common failure modes of traditional build vs buy decisions: the brittle monolithic build that becomes impossible to evolve, and the over-customized COTS implementation that carries build costs without build flexibility.
 
-## What I Tell Operators Who Ask Me Directly
+## What I Suggest Operators
 
 If you are a Tier-1 operator with a genuinely differentiated business model and strong internal engineering capability, a carefully scoped custom build for your most differentiated functions — combined with COTS for commodity functions — will likely serve you better than a single platform attempting to do everything.
 
