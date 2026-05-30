@@ -39,7 +39,7 @@ import { SITE_TITLE } from '../consts';
 					<div class="tool-container">
 						<div class="search-row">
 							<input type="text" id="proto-input" placeholder="e.g. TCP, HTTP, Ethernet, BGP, TLS, GTP, SIP..." />
-							<button onclick="lookup()">Search</button>
+							<button id="search-btn">Search</button>
 						</div>
 
 						<div class="suggestions">
@@ -430,5 +430,9 @@ function quickSearch(name) {
 
 document.getElementById("proto-input").addEventListener("keydown", e => {
 	if (e.key === "Enter") lookup();
+});
+
+document.getElementById("search-btn").addEventListener("click", () => {
+	lookup();
 });
 </script>
