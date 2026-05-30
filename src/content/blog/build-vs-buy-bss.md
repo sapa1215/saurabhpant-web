@@ -2,7 +2,7 @@
 title: "Build vs Buy in BSS: How To Make The Right Decision"
 description: "The build vs buy decision in BSS is one of the most consequential choices a telecom operator will make. Here is a framework for getting it right — drawn from two decades of watching operators get it both right and wrong."
 pubDate: 2026-05-25
-heroImage: "/blog-placeholder-4.jpg"
+heroImage: "/Designer.jpg"
 ---
 
 Few decisions in telecom carry more long-term consequence than the choice between building a custom BSS and purchasing a commercial off-the-shelf platform. Get it right and you have a system that fits your operational model, scales with your business, and gives you genuine competitive differentiation. Get it wrong and you spend years either maintaining a custom system that consumes engineering resources and resists modernization, or wrestling with a packaged platform that was never quite designed for how you actually operate.
