@@ -51,6 +51,56 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			.last-updated-on {
 				font-style: italic;
 			}
+			.newsletter-section {
+			background: linear-gradient(135deg, #f0f4ff 0%, #e8f5e9 100%);
+			border: 1px solid #ddd;
+			border-radius: 16px;
+			padding: 2rem 1.5rem;
+			margin: 3rem auto;
+			max-width: 720px;
+		}
+		.newsletter-inner {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 2rem;
+			align-items: center;
+		}
+		.newsletter-text h2 {
+			font-size: 1.4rem;
+			margin: 0 0 0.75rem;
+			color: #1a1a2e;
+		}
+		.newsletter-text p {
+			color: #555;
+			line-height: 1.7;
+			margin: 0 0 1rem;
+			font-size: 0.9rem;
+		}
+		.newsletter-perks {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 0.4rem;
+		}
+		.newsletter-perks li {
+			font-size: 0.85rem;
+			color: #444;
+		}
+		.newsletter-embed {
+			display: flex;
+			justify-content: center;
+		}
+		.newsletter-embed iframe {
+			max-width: 100%;
+		}
+		@media (max-width: 720px) {
+			.newsletter-inner {
+				grid-template-columns: 1fr;
+				gap: 1.5rem;
+			}
+		}
 		</style>
 	</head>
 
@@ -105,7 +155,6 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 						</div>
 					</div>
 				</section>
-
 			</div>
 		</article>
 	</main>
