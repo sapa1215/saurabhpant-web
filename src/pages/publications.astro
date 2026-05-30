@@ -1,0 +1,147 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`Publications — ${SITE_TITLE}`}
+			description="Published articles, research, and thought leadership by Saurabh Pant on telecom transformation, OSS/BSS, 5G, and digital infrastructure."
+		/>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="page-header">
+				<h1>Publications</h1>
+				<p class="subtitle">
+					Original research, articles, and thought leadership on telecom 
+					transformation, OSS/BSS modernization, 5G, and digital infrastructure.
+				</p>
+			</section>
+
+			<!-- FEATURED ARTICLES -->
+			<section class="pub-section">
+				<h2>📝 Articles & Thought Leadership</h2>
+
+				<div class="pub-list">
+
+					<div class="pub-card">
+						<div class="pub-meta">
+							<span class="pub-type article">Article</span>
+							<span class="pub-date">May 2026</span>
+						</div>
+						<h3><a href="/future-of-oss-bss-5g-era">The Future of OSS/BSS in the 5G Era: What Telecom Leaders Need to Know</a></h3>
+						<p class="pub-desc">An in-depth analysis of how legacy OSS/BSS systems must evolve to support 5G network slicing, edge computing, and real-time orchestration demands.</p>
+						<div class="pub-tags">
+							<span class="tag">5G</span>
+							<span class="tag">OSS/BSS</span>
+							<span class="tag">Digital Transformation</span>
+						</div>
+					</div>
+
+					<div class="pub-card">
+						<div class="pub-meta">
+							<span class="pub-type article">Article</span>
+							<span class="pub-date">May 2026</span>
+						</div>
+						<h3><a href="/mvno-business-models-2026">MVNO Business Models in 2026: Opportunities and Challenges</a></h3>
+						<p class="pub-desc">A practitioner's assessment of where real MVNO opportunities and pitfalls lie in 2026, covering vertical, platform, and community MVNO models.</p>
+						<div class="pub-tags">
+							<span class="tag">MVNO</span>
+							<span class="tag">Business Models</span>
+							<span class="tag">Telecom Strategy</span>
+						</div>
+					</div>
+
+					<div class="pub-card">
+						<div class="pub-meta">
+							<span class="pub-type article">Article</span>
+							<span class="pub-date">May 2026</span>
+						</div>
+						<h3><a href="/ai-in-telecom-operations">AI in Telecom Operations: Real Use Cases Beyond the Hype</a></h3>
+						<p class="pub-desc">What AI is genuinely delivering in telecom operations today versus what remains aspirational — based on direct experience with Tier-1 operators across three continents.</p>
+						<div class="pub-tags">
+							<span class="tag">AI</span>
+							<span class="tag">Network Operations</span>
+							<span class="tag">Automation</span>
+						</div>
+					</div>
+
+					<div class="pub-card">
+						<div class="pub-meta">
+							<span class="pub-type article">Article</span>
+							<span class="pub-date">May 2026</span>
+						</div>
+						<h3><a href="/build-vs-buy-bss">Build vs Buy in BSS: How To Make The Right Decision</a></h3>
+						<p class="pub-desc">A framework for one of the most consequential decisions in telecom — drawn from two decades of watching operators get it both right and wrong.</p>
+						<div class="pub-tags">
+							<span class="tag">BSS</span>
+							<span class="tag">Strategy</span>
+							<span class="tag">Architecture</span>
+						</div>
+					</div>
+
+				</div>
+			</section>
+
+			<!-- COMING SOON -->
+			<section class="pub-section">
+				<h2>🎓 Academic & Industry Papers</h2>
+				<div class="coming-soon">
+					<p>📬 Peer-reviewed papers and industry research will be listed here as they are published.</p>
+					<p>For academic citations of my work, visit my <a href="https://scholar.google.com" target="_blank">Google Scholar profile →</a></p>
+				</div>
+			</section>
+
+			<!-- SPEAKING -->
+			<section class="pub-section">
+				<h2>🎤 Speaking & Media</h2>
+				<div class="coming-soon">
+					<p>📬 Conference presentations, podcast appearances, and media mentions will be listed here.</p>
+				</div>
+			</section>
+
+			<!-- STATS -->
+			<section class="stats-section">
+				<div class="stat"><h3>4</h3><p>Published Articles</p></div>
+				<div class="stat"><h3>20+</h3><p>Years Experience</p></div>
+				<div class="stat"><h3>3</h3><p>Continents</p></div>
+				<div class="stat"><h3>Tier-1</h3><p>Operators Served</p></div>
+			</section>
+
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	main { max-width: 860px; margin: 0 auto; padding: 2rem 1rem; }
+	.page-header { text-align: center; padding: 2rem 0; border-bottom: 2px solid #eee; margin-bottom: 2rem; }
+	.page-header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+	.subtitle { color: #666; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+	.pub-section { margin-bottom: 3rem; }
+	.pub-section h2 { font-size: 1.6rem; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid #eee; }
+	.pub-list { display: flex; flex-direction: column; gap: 1.5rem; }
+	.pub-card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 1.5rem; background: #fafafa; border-left: 4px solid #2337ff; }
+	.pub-meta { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; align-items: center; }
+	.pub-type { padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+	.pub-type.article { background: #dbeafe; color: #1d4ed8; }
+	.pub-type.paper { background: #dcfce7; color: #166534; }
+	.pub-date { color: #888; font-size: 0.85rem; }
+	.pub-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+	.pub-card h3 a { color: #2337ff; text-decoration: none; }
+	.pub-card h3 a:hover { text-decoration: underline; }
+	.pub-desc { color: #555; font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.6; }
+	.pub-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+	.tag { background: #f0f4ff; color: #2337ff; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+	.coming-soon { border: 2px dashed #ddd; border-radius: 8px; padding: 2rem; text-align: center; color: #888; }
+	.coming-soon a { color: #2337ff; }
+	.coming-soon p { margin: 0.5rem 0; }
+	.stats-section { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1rem; padding: 2rem; background: #f8fafc; border-radius: 12px; text-align: center; }
+	.stat h3 { font-size: 2rem; color: #2337ff; margin: 0 0 0.25rem; }
+	.stat p { color: #666; font-size: 0.85rem; margin: 0; }
+</style>

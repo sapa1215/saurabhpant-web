@@ -1,0 +1,209 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`Tools & Resources — ${SITE_TITLE}`}
+			description="Curated tools, frameworks, and resources for telecom professionals working in OSS/BSS, 5G, MVNO, and digital infrastructure."
+		/>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="page-header">
+				<h1>Tools & Resources</h1>
+				<p class="subtitle">
+					A curated collection of tools, frameworks, and resources I use and recommend 
+					for telecom transformation, OSS/BSS modernization, and digital infrastructure.
+				</p>
+			</section>
+
+			<!-- OSS/BSS TOOLS -->
+			<section class="tools-section">
+				<h2>⚙️ OSS/BSS & Network Management</h2>
+				<div class="tools-grid">
+
+					<div class="tool-card">
+						<div class="tool-header">
+							<h3>TM Forum Open APIs</h3>
+							<span class="tool-tag free">Free</span>
+						</div>
+						<p>Industry-standard APIs for telecom BSS/OSS integration. Essential reference for any OSS/BSS modernization project.</p>
+						<a href="https://www.tmforum.org/open-apis/" target="_blank" class="tool-link">Visit →</a>
+					</div>
+
+					<div class="tool-card">
+						<div class="tool-header">
+							<h3>3GPP Specifications</h3>
+							<span class="tool-tag free">Free</span>
+						</div>
+						<p>Official 5G technical standards and specifications. The definitive reference for 5G network architecture and protocols.</p>
+						<a href="https://www.3gpp.org/specifications" target="_blank" class="tool-link">Visit →</a>
+					</div>
+
+					<div class="tool-card">
+						<div class="tool-header">
+							<h3>GSMA Intelligence</h3>
+							<span class="tool-tag free">Free</span>
+						</div>
+						<p>Global mobile industry data, forecasts, and research. Invaluable for market analysis and operator benchmarking.</p>
+						<a href="https://www.gsma.com/solutions-and-impact/gsma-intelligence/" target="_blank" class="tool-link">Visit →</a>
+					</div>
+
+					<div class="tool-card">
+						<div class="tool-header">
+							<h3>Open Network Automation Platform (ONAP)</h3>
+							<span class="tool-tag free">Free</span>
+						</div>
+						<p>Open-source platform for real-time, policy-driven orchestration and automation of physical and virtual network functions.</p>
+						<a href="https://www.onap.org" target="_blank" class="tool-link">Visit →</a>
+					</div>
+
+				</div>
+			</section>
+
+			<!-- 5G & MVNO RESOURCES -->
+			<section class="tools-section">
+				<h2>📡 5G & MVNO Resources</h2>
+				<div class="tools-grid">
+
+					<div class="tool-card">
+						<div class="tool-header">
+							<h3>Open RAN Policy Coalition</h3>
+							<span class="tool-tag free">Free</span>
+						</div>
+						<p>Key resource for Open RAN standards, policy developments, and ecosystem updates across global markets.</p>
+						<a href="https://www.openranpolicy.org" target="_blank" class="tool-link">Visit →</a>
+					</div>
+
+					<div class="tool-card">
+						<div class="tool-header">
+							<h3>MVNO Nation</h3>
+							<span class="tool-tag free">Free</span>
+						</div>
+						<p>Industry news, analysis, and community for MVNO operators and enablers. Good pulse on market developments.</p>
+						<a href="https://mvno.nation" target="_blank" class="tool-link">Visit →</a>
+					</div>
+
+					<div class="tool-card">
+						<div class="tool-header">
+							<h3>Light Reading</h3>
+							<span class="tool-tag free">Free</span>
+						</div>
+						<p>Telecom industry news and analysis covering 5G, cloud, AI, and network transformation across global operators.</p>
+						<a href="https://www.lightreading.com" target="_blank" class="tool-link">Visit →</a>
+					</div>
+
+					<div class="tool-card">
+						<div class="tool-header">
+							<h3>Telecoms.com</h3>
+							<span class="tool-tag free">Free</span>
+						</div>
+						<p>Global telecom industry intelligence covering operator strategy, technology trends, and market analysis.</p>
+						<a href="https://telecoms.com" target="_blank" class="tool-link">Visit →</a>
+					</div>
+
+				</div>
+			</section>
+
+			<!-- AI & AUTOMATION -->
+			<section class="tools-section">
+				<h2>🤖 AI & Automation in Telecom</h2>
+				<div class="tools-grid">
+
+					<div class="tool-card">
+						<div class="tool-header">
+							<h3>TM Forum AI & Analytics</h3>
+							<span class="tool-tag free">Free</span>
+						</div>
+						<p>Frameworks and best practices for AI adoption in telecom operations, including autonomous networks guidance.</p>
+						<a href="https://www.tmforum.org/topics/ai-analytics/" target="_blank" class="tool-link">Visit →</a>
+					</div>
+
+					<div class="tool-card">
+						<div class="tool-header">
+							<h3>ITU AI for 5G</h3>
+							<span class="tool-tag free">Free</span>
+						</div>
+						<p>International Telecommunication Union resources on AI/ML applications for 5G networks and beyond.</p>
+						<a href="https://www.itu.int/en/ITU-T/AI/Pages/default.aspx" target="_blank" class="tool-link">Visit →</a>
+					</div>
+
+				</div>
+			</section>
+
+			<!-- PRODUCTIVITY TOOLS -->
+			<section class="tools-section">
+				<h2>🛠️ Professional Productivity</h2>
+				<div class="tools-grid">
+
+					<div class="tool-card">
+						<div class="tool-header">
+							<h3>Miro</h3>
+							<span class="tool-tag freemium">Freemium</span>
+						</div>
+						<p>Online whiteboard for architecture diagrams, process mapping, and collaborative planning. Excellent for OSS/BSS transformation workshops.</p>
+						<a href="https://miro.com" target="_blank" class="tool-link">Visit →</a>
+					</div>
+
+					<div class="tool-card">
+						<div class="tool-header">
+							<h3>draw.io</h3>
+							<span class="tool-tag free">Free</span>
+						</div>
+						<p>Free diagramming tool for network architecture, process flows, and system design. No account required.</p>
+						<a href="https://draw.io" target="_blank" class="tool-link">Visit →</a>
+					</div>
+
+					<div class="tool-card">
+						<div class="tool-header">
+							<h3>Google Scholar</h3>
+							<span class="tool-tag free">Free</span>
+						</div>
+						<p>Search engine for academic papers and industry research. Essential for staying current on telecom research.</p>
+						<a href="https://scholar.google.com" target="_blank" class="tool-link">Visit →</a>
+					</div>
+
+				</div>
+			</section>
+
+			<!-- SUGGEST A TOOL -->
+			<section class="suggest-section">
+				<h2>💡 Suggest a Tool</h2>
+				<p>Know a tool that should be on this list? I'd love to hear about it.</p>
+				<a href="/contact" class="suggest-btn">Get In Touch →</a>
+			</section>
+
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	main { max-width: 860px; margin: 0 auto; padding: 2rem 1rem; }
+	.page-header { text-align: center; padding: 2rem 0; border-bottom: 2px solid #eee; margin-bottom: 2rem; }
+	.page-header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+	.subtitle { color: #666; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+	.tools-section { margin-bottom: 3rem; }
+	.tools-section h2 { font-size: 1.6rem; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid #eee; }
+	.tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+	.tool-card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 1.5rem; background: #fafafa; display: flex; flex-direction: column; gap: 0.75rem; }
+	.tool-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; }
+	.tool-header h3 { font-size: 1rem; margin: 0; }
+	.tool-tag { padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; white-space: nowrap; }
+	.tool-tag.free { background: #dcfce7; color: #166534; }
+	.tool-tag.freemium { background: #fef3c7; color: #92400e; }
+	.tool-tag.paid { background: #fee2e2; color: #991b1b; }
+	.tool-card p { color: #555; font-size: 0.9rem; margin: 0; line-height: 1.6; flex: 1; }
+	.tool-link { color: #2337ff; font-size: 0.9rem; font-weight: bold; text-decoration: none; }
+	.tool-link:hover { text-decoration: underline; }
+	.suggest-section { background: #f0f4ff; border-radius: 12px; padding: 2rem; text-align: center; }
+	.suggest-section h2 { margin-bottom: 0.5rem; }
+	.suggest-section p { color: #555; margin-bottom: 1rem; }
+	.suggest-btn { background: #2337ff; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: bold; }
+</style>
