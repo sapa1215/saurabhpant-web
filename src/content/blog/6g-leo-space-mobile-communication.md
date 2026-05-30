@@ -2,7 +2,7 @@
 title: "Beyond 5G: How 6G Will Solve the Last Frontier of Mobile Connectivity in the LEO Space Era"
 description: "As Low Earth Orbit satellite constellations reshape global connectivity, 6G is being designed to solve problems that 5G was never built to handle. Here is what that means for operators, enterprises, and the future of mobile communication."
 pubDate: 2026-05-30
-heroImage: "/blog-placeholder-4.jpg"
+heroImage: "/6G.jpg"
 ---
 
 We are at an unusual moment in the history of mobile communications. For the first time, the industry is simultaneously completing one generation while designing the next — and doing so in the context of a transformation that has no real precedent: the commercialization of Low Earth Orbit space as a mobile communications platform.
