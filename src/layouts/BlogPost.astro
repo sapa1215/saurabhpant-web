@@ -77,9 +77,38 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 						<hr />
 					</div>
 					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
+
+				<!-- NEWSLETTER SECTION -->
+				<section class="newsletter-section">
+					<div class="newsletter-inner">
+						<div class="newsletter-text">
+							<h2>📬 Enjoyed this article?</h2>
+							<p>
+								Subscribe for weekly telecom insights on 5G strategy, OSS/BSS,
+								MVNO business models, and digital infrastructure.
+							</p>
+							<ul class="newsletter-perks">
+								<li>✅ Original insights from 20+ years in telecom</li>
+								<li>✅ No spam, unsubscribe anytime</li>
+								<li>✅ Free forever</li>
+							</ul>
+						</div>
+						<div class="newsletter-embed">
+							<iframe
+								src="https://saurabhpant.substack.com/embed"
+								width="480"
+								height="320"
+								style="border:1px solid #EEE; background:white; border-radius:8px; max-width:100%;"
+								frameborder="0"
+								scrolling="no">
+							</iframe>
+						</div>
+					</div>
+				</section>
+
+			</div>
+		</article>
+	</main>
+	<Footer />
 	</body>
 </html>
