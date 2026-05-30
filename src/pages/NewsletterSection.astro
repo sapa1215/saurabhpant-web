@@ -1,0 +1,86 @@
+---
+// NewsletterSection.astro
+// Drop this component into any page you want
+---
+
+<section class="newsletter-section">
+	<div class="newsletter-inner">
+		<div class="newsletter-text">
+			<h2>📬 Get Telecom Insights</h2>
+			<p>
+				Weekly analysis on 5G strategy, OSS/BSS modernization, MVNO business models, 
+				and digital infrastructure trends — straight to your inbox.
+			</p>
+			<ul class="newsletter-perks">
+				<li>✅ Original insights from 20+ years in telecom</li>
+				<li>✅ No spam, unsubscribe anytime</li>
+				<li>✅ Free forever</li>
+			</ul>
+		</div>
+		<div class="newsletter-embed">
+			<iframe 
+				src="https://saurabhpant.substack.com/embed" 
+				width="480" 
+				height="320" 
+				style="border: 1px solid #EEE; background: white; border-radius: 8px; max-width: 100%;" 
+				frameborder="0" 
+				scrolling="no">
+			</iframe>
+		</div>
+	</div>
+</section>
+
+<style>
+	.newsletter-section {
+		background: linear-gradient(135deg, #f0f4ff 0%, #e8f5e9 100%);
+		border: 1px solid #ddd;
+		border-radius: 16px;
+		padding: 3rem 2rem;
+		margin: 3rem 0;
+	}
+	.newsletter-inner {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 3rem;
+		align-items: center;
+	}
+	.newsletter-text h2 {
+		font-size: 1.8rem;
+		margin: 0 0 1rem;
+		color: #1a1a2e;
+	}
+	.newsletter-text p {
+		color: #555;
+		line-height: 1.7;
+		margin: 0 0 1.25rem;
+		font-size: 0.95rem;
+	}
+	.newsletter-perks {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+	.newsletter-perks li {
+		font-size: 0.9rem;
+		color: #444;
+	}
+	.newsletter-embed {
+		display: flex;
+		justify-content: center;
+	}
+	.newsletter-embed iframe {
+		max-width: 100%;
+	}
+	@media (max-width: 720px) {
+		.newsletter-inner {
+			grid-template-columns: 1fr;
+			gap: 1.5rem;
+		}
+		.newsletter-text h2 {
+			font-size: 1.4rem;
+		}
+	}
+</style>
