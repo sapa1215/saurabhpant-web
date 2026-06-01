@@ -101,6 +101,23 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				gap: 1.5rem;
 			}
 		}
+	@media (max-width: 720px) {
+		.prose {
+		width: 100%;
+		padding: 0.75em;
+		font-size: 0.95rem;
+	}
+	.hero-image img {
+		border-radius: 6px;
+	}
+	.newsletter-inner {
+		grid-template-columns: 1fr;
+	}
+	.newsletter-embed iframe {
+		width: 100% !important;
+		height: 280px !important;
+	}
+}
 		</style>
 	</head>
 
