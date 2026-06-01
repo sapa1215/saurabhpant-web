@@ -69,9 +69,30 @@ import { SITE_TITLE } from '../consts';
 	.social-links a {
 		display: flex;
 	}
-	@media (max-width: 720px) {
-		.social-links {
-			display: none;
-		}
+@media (max-width: 720px) {
+	.social-links {
+		display: none;
 	}
+	nav {
+		flex-wrap: wrap;
+		padding: 0.5em 0;
+	}
+	h2 {
+		width: 100%;
+		padding: 0.5em 0;
+	}
+	.internal-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0;
+		width: 100%;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	.internal-links a {
+		padding: 0.5em 0.4em;
+		font-size: 0.85rem;
+		white-space: nowrap;
+	}
+}
 </style>
