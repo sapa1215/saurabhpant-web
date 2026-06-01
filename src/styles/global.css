@@ -3,7 +3,6 @@
   https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
-
 :root {
 	--accent: #2337ff;
 	--accent-dark: #000d8a;
@@ -30,6 +29,12 @@
 	font-style: normal;
 	font-display: swap;
 }
+
+/* ===== GLOBAL RESET ===== */
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
 body {
 	font-family: "Atkinson", sans-serif;
 	margin: 0;
@@ -42,63 +47,39 @@ body {
 	color: rgb(var(--gray-dark));
 	font-size: 20px;
 	line-height: 1.7;
+	width: 100%;
+	overflow-x: hidden;
 }
 main {
-	width: 720px;
-	max-width: calc(100% - 2em);
+	width: 100%;
+	max-width: 860px;
 	margin: auto;
 	padding: 3em 1em;
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
 	margin: 0 0 0.5rem 0;
 	color: rgb(var(--black));
 	line-height: 1.2;
 }
-h1 {
-	font-size: 3.052em;
-}
-h2 {
-	font-size: 2.441em;
-}
-h3 {
-	font-size: 1.953em;
-}
-h4 {
-	font-size: 1.563em;
-}
-h5 {
-	font-size: 1.25em;
-}
-strong,
-b {
-	font-weight: 700;
-}
-a {
-	color: var(--accent);
-}
-a:hover {
-	color: var(--accent);
-}
-p {
-	margin-bottom: 1em;
-}
-.prose p {
-	margin-bottom: 2em;
-}
+h1 { font-size: 3.052em; }
+h2 { font-size: 2.441em; }
+h3 { font-size: 1.953em; }
+h4 { font-size: 1.563em; }
+h5 { font-size: 1.25em; }
+strong, b { font-weight: 700; }
+a { color: var(--accent); }
+a:hover { color: var(--accent); }
+p { margin-bottom: 1em; }
+.prose p { margin-bottom: 2em; }
 textarea {
 	width: 100%;
 	font-size: 16px;
 }
-input {
-	font-size: 16px;
-}
+input { font-size: 16px; }
 table {
 	width: 100%;
+	display: block;
+	overflow-x: auto;
 }
 img {
 	max-width: 100%;
@@ -109,14 +90,14 @@ code {
 	padding: 2px 5px;
 	background-color: rgb(var(--gray-light));
 	border-radius: 2px;
+	word-break: break-word;
 }
 pre {
 	padding: 1.5em;
 	border-radius: 8px;
+	overflow-x: auto;
 }
-pre > code {
-	all: unset;
-}
+pre > code { all: unset; }
 blockquote {
 	border-left: 4px solid var(--accent);
 	padding: 0 0 0 20px;
@@ -127,12 +108,102 @@ hr {
 	border: none;
 	border-top: 1px solid rgb(var(--gray-light));
 }
+
+/* ===== MOBILE RESPONSIVE ===== */
 @media (max-width: 720px) {
 	body {
-		font-size: 18px;
+		font-size: 16px;
 	}
 	main {
 		padding: 1em;
+		width: 100%;
+	}
+	h1 { font-size: 2em; }
+	h2 { font-size: 1.6em; }
+	h3 { font-size: 1.3em; }
+
+	/* Navigation */
+	nav {
+		flex-wrap: wrap !important;
+		padding: 0.5em 0 !important;
+	}
+	nav h2 {
+		width: 100%;
+		padding: 0.5em 0 !important;
+	}
+	.internal-links {
+		display: flex !important;
+		flex-wrap: nowrap !important;
+		overflow-x: auto !important;
+		-webkit-overflow-scrolling: touch !important;
+		width: 100% !important;
+		padding-bottom: 4px !important;
+	}
+	.internal-links a {
+		font-size: 0.8rem !important;
+		padding: 0.5em 0.35em !important;
+		white-space: nowrap !important;
+	}
+	.social-links {
+		display: none !important;
+	}
+
+	/* Homepage */
+	.hero h1 { font-size: 1.8rem !important; }
+	.tagline { font-size: 0.95rem !important; }
+	.cta-buttons {
+		flex-direction: column !important;
+		align-items: stretch !important;
+	}
+	.btn-primary, .btn-secondary {
+		text-align: center !important;
+		width: 100% !important;
+	}
+	.grid {
+		grid-template-columns: 1fr !important;
+	}
+	.stats {
+		grid-template-columns: 1fr 1fr !important;
+		gap: 0.75rem !important;
+	}
+
+	/* Blog posts */
+	.prose {
+		width: 100% !important;
+		padding: 0.75em !important;
+		font-size: 0.95rem !important;
+	}
+
+	/* Newsletter */
+	.newsletter-inner {
+		grid-template-columns: 1fr !important;
+		gap: 1rem !important;
+	}
+	.newsletter-embed iframe {
+		width: 100% !important;
+		height: 280px !important;
+	}
+
+	/* Tools & Cards */
+	.tools-grid {
+		grid-template-columns: 1fr !important;
+	}
+	.contact-layout {
+		grid-template-columns: 1fr !important;
+	}
+	.metrics-grid {
+		grid-template-columns: 1fr 1fr !important;
+	}
+
+	/* Embedded OSI tool */
+	.search-row {
+		flex-direction: column !important;
+	}
+	.search-row button {
+		width: 100% !important;
+	}
+	.suggestion-tags {
+		gap: 4px !important;
 	}
 }
 
@@ -144,12 +215,8 @@ hr {
 	height: 1px;
 	width: 1px;
 	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
 	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
 	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
 	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
 }
