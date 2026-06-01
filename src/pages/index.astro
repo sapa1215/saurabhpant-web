@@ -201,4 +201,29 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	.connect a {
 		color: #2337ff;
 	}
+@media (max-width: 720px) {
+	main {
+		padding: 1rem;
+	}
+	.hero h1 {
+		font-size: 1.8rem;
+	}
+	.tagline {
+		font-size: 1rem;
+	}
+	.cta-buttons {
+		flex-direction: column;
+		align-items: center;
+	}
+	.btn-primary, .btn-secondary {
+		width: 100%;
+		text-align: center;
+	}
+	.grid {
+		grid-template-columns: 1fr;
+	}
+	.stats {
+		grid-template-columns: 1fr 1fr;
+	}
+}
 </style>
