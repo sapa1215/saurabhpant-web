@@ -8,21 +8,18 @@ export async function GET(context) {
 		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,
 		site: "https://saurabhpant.com",
+		xmlns: {
+			media: "http://search.yahoo.com/mrss/",
+		},
 		items: posts.map((post) => ({
 			title: post.data.title,
 			description: post.data.description,
 			pubDate: post.data.pubDate,
 			link: `/blog/${post.id}/`,
 			customData: post.data.heroImage
-				? `<enclosure url="https://saurabhpant.com${post.data.heroImage}" type="image/jpeg" length="0"/>
-				   <media:content url="https://saurabhpant.com${post.data.heroImage}" medium="image"/>`
+				? `<media:content url="https://saurabhpant.com${post.data.heroImage}" medium="image"/>`
 				: "",
 		})),
-		customData: `
-			<language>en-us</language>
-			<managingEditor>saurabh@saurabhpant.com</managingEditor>
-			<webMaster>saurabh@saurabhpant.com</webMaster>
-			<xmlns:media>http://search.yahoo.com/mrss/</xmlns:media>
-		`,
+		customData: `<language>en-us</language>`,
 	});
 }
