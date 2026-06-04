@@ -4,7 +4,197 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { getCollection } from 'astro:content';
+import FormattedDate from '../../components/FormattedDate.astro';---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: 100%;
+				max-width: 960px;
+				margin: 0 auto;
+				padding: 1.5rem 1rem;
+			}
+
+			.page-title {
+				text-align: center;
+				margin-bottom: 2rem;
+				font-size: 1.8rem;
+				color: rgb(var(--black));
+			}
+
+			ul {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 2rem;
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+			}
+
+			/* All cards */
+			ul li {
+				width: calc(50% - 1rem);
+				background: transparent;
+				border-radius: 12px;
+				overflow: hidden;
+				transition: transform 0.2s ease;
+			}
+
+			ul li * {
+				text-decoration: none;
+				transition: 0.2s ease;
+			}
+
+			ul li a {
+				display: block;
+				background: transparent;
+				text-decoration: none;
+				border-radius: 12px;
+				overflow: hidden;
+				padding-bottom: 0.75rem;
+			}
+
+			ul li a:hover {
+				background: #f0f4ff;
+				transform: translateY(-2px);
+			}
+
+			/* First featured article */
+			ul li:first-child {
+				width: 100%;
+				margin-bottom: 1rem;
+				text-align: center;
+				background: transparent;
+			}
+
+			ul li:first-child img {
+				width: 100%;
+				height: auto;
+				max-height: 420px;
+				object-fit: contain;
+				border-radius: 12px;
+				background: transparent;
+				display: block;
+				margin: 0 auto;
+			}
+
+			ul li:first-child .title {
+				font-size: 2rem;
+			}
+
+			/* Regular article cards */
+			ul li img {
+				width: 100%;
+				height: 220px;
+				object-fit: cover;
+				border-radius: 12px;
+				display: block;
+				background: transparent;
+				margin-bottom: 0.75rem;
+			}
+
+			.title {
+				margin: 0 0 0.25rem;
+				color: rgb(var(--black));
+				line-height: 1.3;
+				font-size: 1rem;
+				padding: 0 0.5rem;
+			}
+
+			.date {
+				margin: 0;
+				color: rgb(var(--gray));
+				font-size: 0.85rem;
+				padding: 0 0.5rem;
+			}
+
+			ul li a:hover .title,
+			ul li a:hover .date {
+				color: rgb(var(--accent));
+			}
+
+			ul a:hover img {
+				box-shadow: var(--box-shadow);
+			}
+
+			/* Mobile */
+			@media (max-width: 720px) {
+				main {
+					padding: 0.75rem;
+				}
+				ul {
+					gap: 1.25rem;
+				}
+				ul li {
+					width: 100% !important;
+					text-align: center;
+					background: transparent !important;
+				}
+				ul li:first-child {
+					margin-bottom: 0;
+					background: transparent !important;
+				}
+				ul li:first-child img {
+					max-height: 260px !important;
+					object-fit: contain !important;
+					background: transparent !important;
+				}
+				ul li:first-child .title {
+					font-size: 1.3rem !important;
+				}
+				ul li img {
+					width: 100% !important;
+					height: 180px !important;
+					object-fit: cover !important;
+					border-radius: 8px !important;
+					background: transparent !important;
+				}
+				.title {
+					font-size: 0.95rem !important;
+				}
+				ul li a:hover {
+					transform: none;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1 class="page-title">Articles</h1>
+			<section>
+				<ul>
+					{
+						posts.map((post) => (
+							<li>
+								<a href={`/blog/${post.id}/`}>
+									<img width={720} height={360} src={post.data.heroImage} alt={post.data.title} />
+									<h4 class="title">{post.data.title}</h4>
+									<p class="date">
+										<FormattedDate date={post.data.pubDate} />
+									</p>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
