@@ -1,0 +1,460 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`Network Latency Calculator — ${SITE_TITLE}`}
+			description="Calculate and compare theoretical network latency across different technologies — fiber, 5G, 4G LTE, LEO satellite, and geostationary satellite. A free tool for telecom professionals."
+		/>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="page-header">
+				<h1>Network Latency Calculator</h1>
+				<p class="subtitle">
+					Calculate and compare theoretical round-trip latency across different 
+					network technologies for any distance on Earth.
+				</p>
+			</section>
+
+			<div class="calculator-container">
+
+				<!-- INPUT SECTION -->
+				<div class="input-section">
+					<div class="input-group">
+						<label for="source">Source Location</label>
+						<select id="source">
+							<option value="">— Select city —</option>
+							<option value="New York">New York, USA</option>
+							<option value="London">London, UK</option>
+							<option value="Tokyo">Tokyo, Japan</option>
+							<option value="Sydney">Sydney, Australia</option>
+							<option value="Dubai">Dubai, UAE</option>
+							<option value="Singapore">Singapore</option>
+							<option value="Mumbai">Mumbai, India</option>
+							<option value="São Paulo">São Paulo, Brazil</option>
+							<option value="Lagos">Lagos, Nigeria</option>
+							<option value="Toronto">Toronto, Canada</option>
+							<option value="Frankfurt">Frankfurt, Germany</option>
+							<option value="Beijing">Beijing, China</option>
+						</select>
+					</div>
+
+					<div class="input-group">
+						<label for="destination">Destination Location</label>
+						<select id="destination">
+							<option value="">— Select city —</option>
+							<option value="New York">New York, USA</option>
+							<option value="London">London, UK</option>
+							<option value="Tokyo">Tokyo, Japan</option>
+							<option value="Sydney">Sydney, Australia</option>
+							<option value="Dubai">Dubai, UAE</option>
+							<option value="Singapore">Singapore</option>
+							<option value="Mumbai">Mumbai, India</option>
+							<option value="São Paulo">São Paulo, Brazil</option>
+							<option value="Lagos">Lagos, Nigeria</option>
+							<option value="Toronto">Toronto, Canada</option>
+							<option value="Frankfurt">Frankfurt, Germany</option>
+							<option value="Beijing">Beijing, China</option>
+						</select>
+					</div>
+
+					<div class="input-group">
+						<label for="custom-distance">Or Enter Custom Distance (km)</label>
+						<input type="number" id="custom-distance" placeholder="e.g. 5570" min="1" max="20000"/>
+					</div>
+
+					<button id="calculate-btn">Calculate Latency</button>
+				</div>
+
+				<!-- DISTANCE DISPLAY -->
+				<div id="distance-display" class="distance-display" style="display:none;">
+					<span id="distance-text"></span>
+				</div>
+
+				<!-- RESULTS SECTION -->
+				<div id="results" style="display:none;">
+					<h2 class="results-title">Latency Comparison</h2>
+					<p class="results-subtitle">Round-trip time (RTT) — theoretical minimum values</p>
+
+					<div class="results-grid" id="results-grid"></div>
+
+					<!-- EXPLANATION -->
+					<div class="explanation-section">
+						<h3>📡 What These Numbers Mean</h3>
+						<div class="explanation-grid" id="explanation-grid"></div>
+					</div>
+
+					<!-- USE CASES -->
+					<div class="use-cases-section">
+						<h3>🎯 Use Case Suitability</h3>
+						<div id="use-cases-grid" class="use-cases-grid"></div>
+					</div>
+
+				</div>
+
+				<!-- EMPTY STATE -->
+				<div id="empty-state" class="empty-state">
+					<p>⬆️ Select two cities or enter a distance to calculate latency</p>
+				</div>
+
+			</div>
+
+			<!-- ABOUT -->
+			<section class="about-section">
+				<h2>About This Calculator</h2>
+				<p>
+					This tool calculates theoretical minimum round-trip latency based on the 
+					physics of signal propagation and known characteristics of each network technology. 
+					Real-world latency will be higher due to routing overhead, congestion, processing 
+					delays, and network hops.
+				</p>
+				<p>
+					Understanding latency characteristics is fundamental to network architecture decisions — 
+					particularly when evaluating 5G, LEO satellite, and hybrid network designs for 
+					enterprise and operator deployments.
+				</p>
+				<p class="tool-credit">
+					Built by <a href="/about">Saurabh Pant</a> — 
+					<a href="/contact">suggest improvements →</a>
+				</p>
+			</section>
+
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	main { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
+	.page-header { text-align: center; padding: 2rem 0; border-bottom: 2px solid #eee; margin-bottom: 2rem; }
+	.page-header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+	.subtitle { color: #666; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+	/* Calculator Container */
+	.calculator-container { background: #fafafa; border: 1px solid #eee; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+
+	/* Input Section */
+	.input-section { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 1rem; align-items: end; margin-bottom: 1.5rem; }
+	.input-group { display: flex; flex-direction: column; gap: 0.4rem; }
+	.input-group label { font-size: 0.85rem; font-weight: bold; color: #444; }
+	.input-group select, .input-group input { padding: 0.7rem 1rem; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: white; outline: none; }
+	.input-group select:focus, .input-group input:focus { border-color: #2337ff; }
+	#calculate-btn { padding: 0.7rem 1.5rem; background: #2337ff; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; white-space: nowrap; height: fit-content; }
+	#calculate-btn:hover { background: #1a2acc; }
+
+	/* Distance Display */
+	.distance-display { text-align: center; padding: 0.75rem; background: #f0f4ff; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.9rem; color: #2337ff; font-weight: bold; }
+
+	/* Results */
+	.results-title { font-size: 1.4rem; margin-bottom: 0.25rem; }
+	.results-subtitle { color: #888; font-size: 0.85rem; margin-bottom: 1.5rem; }
+	.results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+
+	/* Result Cards */
+	.result-card { border-radius: 12px; padding: 1.25rem; text-align: center; border: 2px solid transparent; transition: transform 0.2s; }
+	.result-card:hover { transform: translateY(-2px); }
+	.result-card.best { border-color: #166534; background: #dcfce7; }
+	.result-card.good { border-color: #1d4ed8; background: #dbeafe; }
+	.result-card.moderate { border-color: #92400e; background: #fef3c7; }
+	.result-card.poor { border-color: #991b1b; background: #fee2e2; }
+	.result-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+	.result-tech { font-size: 0.8rem; font-weight: bold; text-transform: uppercase; color: #555; margin-bottom: 0.25rem; }
+	.result-latency { font-size: 2rem; font-weight: bold; margin-bottom: 0.1rem; }
+	.result-unit { font-size: 0.75rem; color: #777; margin-bottom: 0.5rem; }
+	.result-badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
+	.badge-best { background: #166534; color: white; }
+	.badge-good { background: #1d4ed8; color: white; }
+	.badge-moderate { background: #92400e; color: white; }
+	.badge-poor { background: #991b1b; color: white; }
+
+	/* Explanation */
+	.explanation-section { margin-bottom: 2rem; }
+	.explanation-section h3 { font-size: 1.1rem; margin-bottom: 1rem; }
+	.explanation-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; }
+	.explanation-card { background: white; border: 1px solid #eee; border-radius: 8px; padding: 1rem; }
+	.explanation-card h4 { font-size: 0.85rem; margin-bottom: 0.4rem; color: #333; }
+	.explanation-card p { font-size: 0.8rem; color: #666; margin: 0; line-height: 1.5; }
+
+	/* Use Cases */
+	.use-cases-section h3 { font-size: 1.1rem; margin-bottom: 1rem; }
+	.use-cases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; }
+	.use-case-card { background: white; border: 1px solid #eee; border-radius: 8px; padding: 1rem; }
+	.use-case-title { font-size: 0.85rem; font-weight: bold; margin-bottom: 0.5rem; }
+	.use-case-requirement { font-size: 0.75rem; color: #888; margin-bottom: 0.5rem; }
+	.use-case-techs { display: flex; flex-wrap: wrap; gap: 4px; }
+	.use-case-tech { font-size: 0.7rem; padding: 2px 6px; border-radius: 10px; }
+	.tech-yes { background: #dcfce7; color: #166534; }
+	.tech-no { background: #fee2e2; color: #991b1b; }
+	.tech-maybe { background: #fef3c7; color: #92400e; }
+
+	/* Empty State */
+	.empty-state { text-align: center; padding: 3rem; color: #888; font-size: 1rem; }
+
+	/* About */
+	.about-section { border-top: 2px solid #eee; padding-top: 2rem; }
+	.about-section h2 { font-size: 1.4rem; margin-bottom: 1rem; }
+	.about-section p { color: #555; line-height: 1.7; margin-bottom: 1rem; font-size: 0.95rem; }
+	.tool-credit { color: #888 !important; font-size: 0.85rem !important; }
+	.tool-credit a { color: #2337ff; }
+
+	/* Mobile */
+	@media (max-width: 720px) {
+		.input-section { grid-template-columns: 1fr; }
+		#calculate-btn { width: 100%; }
+		.results-grid { grid-template-columns: 1fr 1fr; }
+	}
+</style>
+
+<script is:inline>
+
+// City coordinates (lat, lng)
+const CITIES = {
+	"New York":    { lat: 40.7128,  lng: -74.0060 },
+	"London":      { lat: 51.5074,  lng: -0.1278  },
+	"Tokyo":       { lat: 35.6762,  lng: 139.6503 },
+	"Sydney":      { lat: -33.8688, lng: 151.2093 },
+	"Dubai":       { lat: 25.2048,  lng: 55.2708  },
+	"Singapore":   { lat: 1.3521,   lng: 103.8198 },
+	"Mumbai":      { lat: 19.0760,  lng: 72.8777  },
+	"São Paulo":   { lat: -23.5505, lng: -46.6333 },
+	"Lagos":       { lat: 6.5244,   lng: 3.3792   },
+	"Toronto":     { lat: 43.6532,  lng: -79.3832 },
+	"Frankfurt":   { lat: 50.1109,  lng: 8.6821   },
+	"Beijing":     { lat: 39.9042,  lng: 116.4074 },
+};
+
+// Network technologies
+const TECHNOLOGIES = [
+	{
+		name: "Fiber Optic",
+		icon: "🔵",
+		speedFactor: 0.67, // light travels at ~2/3 speed in fiber
+		overheadMs: 2,
+		category: "best",
+		desc: "Light travels through glass at ~200,000 km/s. Ultra-low latency for long-haul connections.",
+	},
+	{
+		name: "5G (Sub-6GHz)",
+		icon: "📡",
+		speedFactor: 0.98, // near speed of light through air
+		overheadMs: 5,
+		localMs: 1, // radio access adds ~1ms
+		category: "good",
+		desc: "Radio waves travel near speed of light. 5G NR adds ~1ms radio latency plus backhaul.",
+	},
+	{
+		name: "5G (mmWave)",
+		icon: "⚡",
+		speedFactor: 0.98,
+		overheadMs: 4,
+		localMs: 0.5,
+		category: "best",
+		desc: "Millimeter wave 5G delivers sub-millisecond radio latency but limited range requires dense small cells.",
+	},
+	{
+		name: "4G LTE",
+		icon: "📶",
+		speedFactor: 0.98,
+		overheadMs: 15,
+		localMs: 10,
+		category: "good",
+		desc: "LTE radio access adds 10-15ms. Suitable for most applications but not ultra-low latency use cases.",
+	},
+	{
+		name: "LEO Satellite",
+		icon: "🛰️",
+		speedFactor: 0.99, // near speed of light in space
+		overheadMs: 20,
+		altitudeKm: 550, // typical LEO altitude
+		category: "good",
+		desc: "LEO satellites orbit at 550km. Signal must travel to satellite and back — adds ~5ms per hop.",
+	},
+	{
+		name: "GEO Satellite",
+		icon: "🌍",
+		speedFactor: 0.99,
+		overheadMs: 30,
+		altitudeKm: 35786, // geostationary orbit
+		category: "poor",
+		desc: "Geostationary satellites orbit at 35,786km. The enormous distance creates unavoidable 600ms+ RTT.",
+	},
+];
+
+// Calculate distance between two coordinates (Haversine formula)
+function calculateDistance(lat1, lon1, lat2, lon2) {
+	const R = 6371; // Earth radius in km
+	const dLat = (lat2 - lat1) * Math.PI / 180;
+	const dLon = (lon2 - lon1) * Math.PI / 180;
+	const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+		Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+		Math.sin(dLon/2) * Math.sin(dLon/2);
+	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+	return Math.round(R * c);
+}
+
+// Calculate latency for a technology
+function calculateLatency(tech, distanceKm) {
+	const SPEED_OF_LIGHT = 299792; // km/s
+	let totalDistanceKm = distanceKm;
+
+	// For satellite, add altitude twice (up and down)
+	if (tech.altitudeKm) {
+		totalDistanceKm = distanceKm + (tech.altitudeKm * 2);
+	}
+
+	const propagationMs = (totalDistanceKm / (SPEED_OF_LIGHT * tech.speedFactor)) * 1000;
+	const localMs = tech.localMs || 0;
+	const rtt = (propagationMs * 2) + tech.overheadMs + localMs;
+
+	return Math.round(rtt);
+}
+
+// Get rating label
+function getRating(ms) {
+	if (ms < 20) return { label: "Excellent", class: "best", badge: "badge-best" };
+	if (ms < 50) return { label: "Good", class: "good", badge: "badge-good" };
+	if (ms < 150) return { label: "Moderate", class: "moderate", badge: "badge-moderate" };
+	return { label: "High", class: "poor", badge: "badge-poor" };
+}
+
+// Use cases data
+const USE_CASES = [
+	{
+		name: "🎮 Cloud Gaming",
+		requirement: "< 20ms required",
+		threshold: 20,
+	},
+	{
+		name: "🏥 Remote Surgery",
+		requirement: "< 5ms required",
+		threshold: 5,
+	},
+	{
+		name: "🚗 Autonomous Vehicles",
+		requirement: "< 10ms required",
+		threshold: 10,
+	},
+	{
+		name: "📹 Video Conferencing",
+		requirement: "< 150ms acceptable",
+		threshold: 150,
+	},
+	{
+		name: "🌐 Web Browsing",
+		requirement: "< 300ms acceptable",
+		threshold: 300,
+	},
+	{
+		name: "📡 IoT Sensors",
+		requirement: "< 500ms acceptable",
+		threshold: 500,
+	},
+];
+
+function getTechSuitability(latencyMs, threshold) {
+	if (latencyMs <= threshold) return { label: "✅ Suitable", class: "tech-yes" };
+	if (latencyMs <= threshold * 1.5) return { label: "⚠️ Marginal", class: "tech-maybe" };
+	return { label: "❌ Too high", class: "tech-no" };
+}
+
+function calculate() {
+	const source = document.getElementById("source").value;
+	const destination = document.getElementById("destination").value;
+	const customDistance = document.getElementById("custom-distance").value;
+
+	let distanceKm = 0;
+	let distanceLabel = "";
+
+	if (customDistance && parseInt(customDistance) > 0) {
+		distanceKm = parseInt(customDistance);
+		distanceLabel = `Custom distance: ${distanceKm.toLocaleString()} km`;
+	} else if (source && destination) {
+		if (source === destination) {
+			alert("Please select two different cities!");
+			return;
+		}
+		const c1 = CITIES[source];
+		const c2 = CITIES[destination];
+		distanceKm = calculateDistance(c1.lat, c1.lng, c2.lat, c2.lng);
+		distanceLabel = `${source} → ${destination}: ${distanceKm.toLocaleString()} km`;
+	} else {
+		alert("Please select two cities or enter a custom distance!");
+		return;
+	}
+
+	// Show distance
+	document.getElementById("distance-text").textContent = distanceLabel;
+	document.getElementById("distance-display").style.display = "block";
+
+	// Calculate latencies
+	const results = TECHNOLOGIES.map(tech => ({
+		...tech,
+		latencyMs: calculateLatency(tech, distanceKm),
+	})).sort((a, b) => a.latencyMs - b.latencyMs);
+
+	// Render result cards
+	const grid = document.getElementById("results-grid");
+	grid.innerHTML = results.map(r => {
+		const rating = getRating(r.latencyMs);
+		return `
+			<div class="result-card ${rating.class}">
+				<div class="result-icon">${r.icon}</div>
+				<div class="result-tech">${r.name}</div>
+				<div class="result-latency">${r.latencyMs}</div>
+				<div class="result-unit">ms RTT</div>
+				<span class="result-badge ${rating.badge}">${rating.label}</span>
+			</div>
+		`;
+	}).join("");
+
+	// Render explanations
+	const expGrid = document.getElementById("explanation-grid");
+	expGrid.innerHTML = results.map(r => `
+		<div class="explanation-card">
+			<h4>${r.icon} ${r.name} — ${r.latencyMs}ms</h4>
+			<p>${r.desc}</p>
+		</div>
+	`).join("");
+
+	// Render use cases
+	const ucGrid = document.getElementById("use-cases-grid");
+	ucGrid.innerHTML = USE_CASES.map(uc => {
+		const techs = results.map(r => {
+			const suit = getTechSuitability(r.latencyMs, uc.threshold);
+			return `<span class="use-case-tech ${suit.class}">${r.icon} ${suit.label}</span>`;
+		}).join("");
+		return `
+			<div class="use-case-card">
+				<div class="use-case-title">${uc.name}</div>
+				<div class="use-case-requirement">${uc.requirement}</div>
+				<div class="use-case-techs">${techs}</div>
+			</div>
+		`;
+	}).join("");
+
+	// Show results
+	document.getElementById("empty-state").style.display = "none";
+	document.getElementById("results").style.display = "block";
+}
+
+document.getElementById("calculate-btn").addEventListener("click", calculate);
+
+// Clear custom distance when cities selected and vice versa
+document.getElementById("source").addEventListener("change", () => {
+	document.getElementById("custom-distance").value = "";
+});
+document.getElementById("destination").addEventListener("change", () => {
+	document.getElementById("custom-distance").value = "";
+});
+document.getElementById("custom-distance").addEventListener("input", () => {
+	document.getElementById("source").value = "";
+	document.getElementById("destination").value = "";
+});
+</script>
