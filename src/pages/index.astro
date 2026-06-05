@@ -3,6 +3,10 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+).slice(0, 3);
 ---
 <!doctype html>
 <html lang="en">
@@ -12,218 +16,620 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 	<body>
 		<Header />
 		<main>
+
+			<!-- ===== HERO ===== -->
 			<section class="hero">
-				<h1>Hi, I'm Saurabh Pant 👋</h1>
-				<p class="tagline">
-					Business Transformation & Deal-Oriented Strategy Leader<br/>
-					<strong>Telecom | Digital Infra | Emerging Tech</strong>
-				</p>
-				<p class="location">📍 Denver Metropolitan Area, CO</p>
-				<div class="cta-buttons">
-					<a href="/blog" class="btn-primary">Read My Articles</a>
-					<a href="/about" class="btn-secondary">About Me</a>
+				<div class="hero-inner">
+					<div class="hero-label">Telecom & Digital Infrastructure</div>
+					<h1 class="hero-title">
+						Hi, I'm <span class="accent">Saurabh Pant</span>
+					</h1>
+					<p class="hero-sub">
+						Business transformation leader with 20+ years shaping OSS/BSS, 
+						5G platforms, and MVNO architecture for Tier-1 operators across 
+						the US, UK, and APAC.
+					</p>
+					<div class="hero-actions">
+						<a href="/blog" class="btn-primary">Read Articles</a>
+						<a href="/about" class="btn-ghost">About Me</a>
+					</div>
+					<div class="hero-meta">
+						<span>📍 Denver, CO</span>
+						<span class="dot">·</span>
+						<span>20+ Years Experience</span>
+						<span class="dot">·</span>
+						<span>Tier-1 Operators</span>
+					</div>
 				</div>
 			</section>
 
-			<section class="summary">
-				<h2>About Me</h2>
-				<p>
-					Telecom and digital infrastructure leader with <strong>20+ years of experience</strong> 
-					designing, scaling, and optimizing OSS/BSS, MVNO, and 5G platforms for Tier-1 operators 
-					across the <strong>US, UK, and APAC</strong>. My work spans strategy, architecture, 
-					presales, and delivery — with a consistent focus on building scalable systems, 
-					improving operational efficiency, and enabling high-growth business models.
-				</p>
+			<!-- ===== STATS ===== -->
+			<section class="stats-section">
+				<div class="stats-grid">
+					<div class="stat-item">
+						<div class="stat-number">20+</div>
+						<div class="stat-label">Years in Telecom</div>
+					</div>
+					<div class="stat-item">
+						<div class="stat-number">3</div>
+						<div class="stat-label">Continents</div>
+					</div>
+					<div class="stat-item">
+						<div class="stat-number">Tier-1</div>
+						<div class="stat-label">Operators Served</div>
+					</div>
+					<div class="stat-item">
+						<div class="stat-number">5G</div>
+						<div class="stat-label">& Next-Gen Platforms</div>
+					</div>
+				</div>
 			</section>
 
-			<section class="expertise">
-				<h2>Areas of Expertise</h2>
-				<div class="grid">
-					<div class="card">
-						<h3>🏗️ Architecture & Transformation</h3>
-						<p>Designing end-to-end OSS/BSS, service assurance, inventory, and orchestration platforms for Tier-1 operators.</p>
+			<!-- ===== EXPERTISE ===== -->
+			<section class="section">
+				<div class="section-header">
+					<div class="section-label">Expertise</div>
+					<h2 class="section-title">What I Do</h2>
+				</div>
+				<div class="expertise-grid">
+					<div class="expertise-card">
+						<div class="expertise-icon">🏗️</div>
+						<h3>Architecture & Transformation</h3>
+						<p>End-to-end OSS/BSS design, service assurance, inventory and orchestration platforms for Tier-1 operators.</p>
 					</div>
-					<div class="card">
-						<h3>📡 5G, MVNO & Digital Infra</h3>
-						<p>Hands-on experience with Open RAN, NFV, SDN, and next-generation MVNO platforms across US, UK, and APAC.</p>
+					<div class="expertise-card">
+						<div class="expertise-icon">📡</div>
+						<h3>5G, MVNO & Digital Infra</h3>
+						<p>Open RAN, NFV, SDN, and next-generation MVNO platforms — from concept through commercial deployment.</p>
 					</div>
-					<div class="card">
-						<h3>💼 Commercial & Strategic Impact</h3>
-						<p>Supporting RFP/RFI cycles, evaluating COTS platforms, and shaping long-term IT roadmaps.</p>
+					<div class="expertise-card">
+						<div class="expertise-icon">💼</div>
+						<h3>Commercial Strategy</h3>
+						<p>RFP/RFI cycles, COTS platform evaluation, build-vs-buy advisory, and long-term IT roadmap development.</p>
 					</div>
-					<div class="card">
-						<h3>🤖 AI-Enabled Operations</h3>
-						<p>Applying GenAI and automation frameworks to modernize telecom processes and improve decision-making.</p>
+					<div class="expertise-card">
+						<div class="expertise-icon">🤖</div>
+						<h3>AI-Enabled Operations</h3>
+						<p>GenAI and automation frameworks that modernize telecom processes and improve decision-making at scale.</p>
 					</div>
-					<div class="card">
-						<h3>📈 Value Creation</h3>
+					<div class="expertise-card">
+						<div class="expertise-icon">📈</div>
+						<h3>Value Creation</h3>
 						<p>Reducing operational complexity, accelerating time-to-market, and enabling cost-efficient digital transformation.</p>
 					</div>
-					<div class="card">
-						<h3>🌍 Global Experience</h3>
-						<p>20+ years working with Tier-1 operators across the United States, United Kingdom, and Asia-Pacific.</p>
+					<div class="expertise-card">
+						<div class="expertise-icon">🌍</div>
+						<h3>Global Experience</h3>
+						<p>Deep operator experience across the United States, United Kingdom, and Asia-Pacific markets.</p>
 					</div>
 				</div>
 			</section>
 
-			<section class="stats">
-				<div class="stat">
-					<h3>20+</h3>
-					<p>Years Experience</p>
+			<!-- ===== LATEST ARTICLES ===== -->
+			<section class="section">
+				<div class="section-header">
+					<div class="section-label">Writing</div>
+					<h2 class="section-title">Latest Articles</h2>
+					<a href="/blog" class="section-link">View all →</a>
 				</div>
-				<div class="stat">
-					<h3>Tier-1</h3>
-					<p>Operators Served</p>
-				</div>
-				<div class="stat">
-					<h3>3</h3>
-					<p>Continents</p>
-				</div>
-				<div class="stat">
-					<h3>5G</h3>
-					<p>Next-Gen Platforms</p>
+				<div class="articles-grid">
+					{posts.map((post) => (
+						<a href={`/blog/${post.id}/`} class="article-card">
+							<div class="article-img-wrap">
+								<img src={post.data.heroImage} alt={post.data.title} />
+							</div>
+							<div class="article-body">
+								<p class="article-date">
+									{new Date(post.data.pubDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+								</p>
+								<h3 class="article-title">{post.data.title}</h3>
+								<p class="article-desc">{post.data.description}</p>
+								<span class="article-read">Read article →</span>
+							</div>
+						</a>
+					))}
 				</div>
 			</section>
 
-			<section class="connect">
-				<h2>Let's Connect</h2>
-				<p>I write regularly about telecom transformation, 5G strategy, and digital infrastructure trends.</p>
-				<p>
-					🐦 <a href="https://twitter.com/saurabh_pant">@saurabh_pant</a> &nbsp;|&nbsp;
-					💼 <a href="https://www.linkedin.com/in/saurabh-pant-67b67a10/">LinkedIn</a> &nbsp;|&nbsp;
-					📝 <a href="/blog">Articles</a>
-				</p>
+			<!-- ===== TOOLS ===== -->
+			<section class="section tools-highlight">
+				<div class="section-header">
+					<div class="section-label">Tools</div>
+					<h2 class="section-title">Interactive Tools</h2>
+					<a href="/tools" class="section-link">View all →</a>
+				</div>
+				<div class="tools-grid">
+					<a href="/tools#osi-explorer" class="tool-card-link">
+						<div class="tool-card-icon">🔍</div>
+						<div>
+							<h3>OSI Layer Explorer</h3>
+							<p>Enter any protocol and instantly find which OSI layer it belongs to — with plain English explanations.</p>
+						</div>
+						<span class="tool-arrow">→</span>
+					</a>
+					<a href="/network-latency-calculator" class="tool-card-link">
+						<div class="tool-card-icon">📡</div>
+						<div>
+							<h3>Network Latency Calculator</h3>
+							<p>Compare theoretical latency across fiber, 5G, 4G LTE, LEO and GEO satellite for any global route.</p>
+						</div>
+						<span class="tool-arrow">→</span>
+					</a>
+				</div>
 			</section>
+
+			<!-- ===== NEWSLETTER ===== -->
+			<section class="newsletter-section">
+				<div class="newsletter-inner">
+					<div class="newsletter-text">
+						<div class="section-label">Newsletter</div>
+						<h2>Get Telecom Insights</h2>
+						<p>
+							Weekly analysis on 5G strategy, OSS/BSS modernization, MVNO 
+							business models, and digital infrastructure trends — straight 
+							to your inbox.
+						</p>
+						<ul class="newsletter-perks">
+							<li>✓ Original insights from 20+ years in telecom</li>
+							<li>✓ No spam, unsubscribe anytime</li>
+							<li>✓ Free forever</li>
+						</ul>
+					</div>
+					<div class="newsletter-embed">
+						<iframe
+							src="https://saurabhpant.substack.com/embed"
+							width="480"
+							height="320"
+							style="border:1px solid #EEE; background:white; border-radius:12px; max-width:100%;"
+							frameborder="0"
+							scrolling="no">
+						</iframe>
+					</div>
+				</div>
+			</section>
+
+			<!-- ===== CONNECT ===== -->
+			<section class="connect-section">
+				<h2>Let's Connect</h2>
+				<p>Open to consulting engagements, speaking opportunities, and connecting with telecom professionals worldwide.</p>
+				<div class="connect-links">
+					<a href="https://www.linkedin.com/in/saurabh-pant-67b67a10/" target="_blank" class="connect-btn">
+						<svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/></svg>
+						LinkedIn
+					</a>
+					<a href="https://x.com/saurabh_pant" target="_blank" class="connect-btn">
+						<svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor"><path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/></svg>
+						X / Twitter
+					</a>
+					<a href="https://saurabhpant.substack.com" target="_blank" class="connect-btn">
+						<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+						Substack
+					</a>
+					<a href="/contact" class="connect-btn connect-btn-primary">
+						Get In Touch →
+					</a>
+				</div>
+			</section>
+
 		</main>
 		<Footer />
 	</body>
 </html>
 
 <style>
+	/* ===== BASE ===== */
 	main {
-		max-width: 860px;
+		max-width: 960px;
 		margin: 0 auto;
-		padding: 2rem 1rem;
+		padding: 0 1.5rem 4rem;
 	}
+
+	/* ===== HERO ===== */
 	.hero {
-		text-align: center;
-		padding: 3rem 0 2rem;
+		padding: 5rem 0 4rem;
 		border-bottom: 1px solid #eee;
-		margin-bottom: 2rem;
+		margin-bottom: 4rem;
 	}
-	.hero h1 {
-		font-size: 2.5rem;
+	.hero-inner {
+		max-width: 680px;
+	}
+	.hero-label {
+		font-size: 0.8rem;
+		font-weight: bold;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: #2337ff;
 		margin-bottom: 1rem;
 	}
-	.tagline {
-		font-size: 1.2rem;
-		color: #555;
-		margin-bottom: 0.5rem;
-	}
-	.location {
-		color: #888;
+	.hero-title {
+		font-size: 3.5rem;
+		font-weight: 700;
+		line-height: 1.1;
+		color: #111;
 		margin-bottom: 1.5rem;
+		letter-spacing: -0.02em;
 	}
-	.cta-buttons {
+	.accent {
+		color: #2337ff;
+	}
+	.hero-sub {
+		font-size: 1.15rem;
+		color: #555;
+		line-height: 1.7;
+		margin-bottom: 2rem;
+		max-width: 560px;
+	}
+	.hero-actions {
 		display: flex;
 		gap: 1rem;
-		justify-content: center;
+		margin-bottom: 2rem;
 		flex-wrap: wrap;
 	}
 	.btn-primary {
-		background: #2337ff;
+		background: #111;
 		color: white;
-		padding: 0.75rem 1.5rem;
-		border-radius: 6px;
-		text-decoration: none;
-		font-weight: bold;
-	}
-	.btn-secondary {
-		border: 2px solid #2337ff;
-		color: #2337ff;
-		padding: 0.75rem 1.5rem;
-		border-radius: 6px;
-		text-decoration: none;
-		font-weight: bold;
-	}
-	.summary {
-		margin-bottom: 2rem;
-	}
-	.expertise h2, .summary h2, .connect h2 {
-		font-size: 1.8rem;
-		margin-bottom: 1rem;
-	}
-	.grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-		gap: 1.5rem;
-		margin-top: 1rem;
-	}
-	.card {
-		border: 1px solid #eee;
+		padding: 0.75rem 1.75rem;
 		border-radius: 8px;
-		padding: 1.5rem;
-		background: #fafafa;
+		text-decoration: none;
+		font-size: 0.95rem;
+		font-weight: 600;
+		transition: background 0.2s;
 	}
-	.card h3 {
-		font-size: 1rem;
+	.btn-primary:hover { background: #333; color: white; }
+	.btn-ghost {
+		border: 1.5px solid #ddd;
+		color: #333;
+		padding: 0.75rem 1.75rem;
+		border-radius: 8px;
+		text-decoration: none;
+		font-size: 0.95rem;
+		font-weight: 500;
+		transition: border-color 0.2s;
+	}
+	.btn-ghost:hover { border-color: #999; color: #111; }
+	.hero-meta {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		font-size: 0.85rem;
+		color: #888;
+		flex-wrap: wrap;
+	}
+	.dot { color: #ccc; }
+
+	/* ===== STATS ===== */
+	.stats-section {
+		margin-bottom: 5rem;
+	}
+	.stats-grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1px;
+		background: #eee;
+		border: 1px solid #eee;
+		border-radius: 12px;
+		overflow: hidden;
+	}
+	.stat-item {
+		background: white;
+		padding: 2rem 1.5rem;
+		text-align: center;
+	}
+	.stat-number {
+		font-size: 2rem;
+		font-weight: 700;
+		color: #111;
+		letter-spacing: -0.02em;
+		margin-bottom: 0.25rem;
+	}
+	.stat-label {
+		font-size: 0.8rem;
+		color: #888;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	/* ===== SECTIONS ===== */
+	.section {
+		margin-bottom: 5rem;
+	}
+	.section-header {
+		display: flex;
+		align-items: baseline;
+		gap: 1rem;
+		margin-bottom: 2rem;
+		flex-wrap: wrap;
+	}
+	.section-label {
+		font-size: 0.75rem;
+		font-weight: bold;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: #2337ff;
+		background: #f0f4ff;
+		padding: 0.2rem 0.6rem;
+		border-radius: 4px;
+	}
+	.section-title {
+		font-size: 1.6rem;
+		font-weight: 700;
+		color: #111;
+		margin: 0;
+		flex: 1;
+	}
+	.section-link {
+		font-size: 0.85rem;
+		color: #2337ff;
+		text-decoration: none;
+		font-weight: 500;
+		white-space: nowrap;
+	}
+	.section-link:hover { text-decoration: underline; }
+
+	/* ===== EXPERTISE ===== */
+	.expertise-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.5rem;
+	}
+	.expertise-card {
+		padding: 1.5rem;
+		border: 1px solid #eee;
+		border-radius: 12px;
+		background: #fafafa;
+		transition: border-color 0.2s, transform 0.2s;
+	}
+	.expertise-card:hover {
+		border-color: #2337ff;
+		transform: translateY(-2px);
+	}
+	.expertise-icon {
+		font-size: 1.5rem;
+		margin-bottom: 0.75rem;
+	}
+	.expertise-card h3 {
+		font-size: 0.95rem;
+		font-weight: 600;
+		color: #111;
 		margin-bottom: 0.5rem;
 	}
-	.card p {
-		font-size: 0.9rem;
-		color: #555;
-		margin: 0;
-	}
-	.stats {
-		display: flex;
-		justify-content: space-around;
-		flex-wrap: wrap;
-		gap: 1rem;
-		padding: 2rem 0;
-		border-top: 1px solid #eee;
-		border-bottom: 1px solid #eee;
-		margin: 2rem 0;
-		text-align: center;
-	}
-	.stat h3 {
-		font-size: 2rem;
-		color: #2337ff;
-		margin: 0;
-	}
-	.stat p {
+	.expertise-card p {
+		font-size: 0.85rem;
 		color: #666;
+		line-height: 1.6;
 		margin: 0;
 	}
-	.connect {
-		text-align: center;
-		padding: 2rem 0;
+
+	/* ===== ARTICLES ===== */
+	.articles-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.5rem;
 	}
-	.connect a {
-		color: #2337ff;
-	}
-@media (max-width: 720px) {
-	main {
-		padding: 1rem;
-	}
-	.hero h1 {
-		font-size: 1.8rem;
-	}
-	.tagline {
-		font-size: 1rem;
-	}
-	.cta-buttons {
+	.article-card {
+		display: flex;
 		flex-direction: column;
+		border: 1px solid #eee;
+		border-radius: 12px;
+		overflow: hidden;
+		text-decoration: none;
+		transition: border-color 0.2s, transform 0.2s;
+		background: white;
+	}
+	.article-card:hover {
+		border-color: #2337ff;
+		transform: translateY(-2px);
+	}
+	.article-img-wrap {
+		width: 100%;
+		height: 160px;
+		overflow: hidden;
+	}
+	.article-img-wrap img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 0;
+		display: block;
+	}
+	.article-body {
+		padding: 1.25rem;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+	.article-date {
+		font-size: 0.75rem;
+		color: #aaa;
+		margin-bottom: 0.5rem;
+	}
+	.article-title {
+		font-size: 0.95rem;
+		font-weight: 600;
+		color: #111;
+		line-height: 1.4;
+		margin-bottom: 0.5rem;
+	}
+	.article-desc {
+		font-size: 0.82rem;
+		color: #777;
+		line-height: 1.5;
+		margin-bottom: 1rem;
+		flex: 1;
+	}
+	.article-read {
+		font-size: 0.82rem;
+		color: #2337ff;
+		font-weight: 500;
+	}
+
+	/* ===== TOOLS ===== */
+	.tools-highlight {
+		background: #f8f9ff;
+		border-radius: 16px;
+		padding: 2.5rem;
+		margin-left: -1.5rem;
+		margin-right: -1.5rem;
+	}
+	.tools-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
+	}
+	.tool-card-link {
+		display: flex;
+		align-items: flex-start;
+		gap: 1rem;
+		padding: 1.25rem;
+		background: white;
+		border: 1px solid #eee;
+		border-radius: 12px;
+		text-decoration: none;
+		transition: border-color 0.2s, transform 0.2s;
+	}
+	.tool-card-link:hover {
+		border-color: #2337ff;
+		transform: translateY(-2px);
+	}
+	.tool-card-icon {
+		font-size: 1.5rem;
+		flex-shrink: 0;
+	}
+	.tool-card-link h3 {
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: #111;
+		margin-bottom: 0.3rem;
+	}
+	.tool-card-link p {
+		font-size: 0.8rem;
+		color: #777;
+		margin: 0;
+		line-height: 1.5;
+	}
+	.tool-arrow {
+		margin-left: auto;
+		color: #2337ff;
+		font-size: 1rem;
+		flex-shrink: 0;
+		padding-top: 2px;
+	}
+
+	/* ===== NEWSLETTER ===== */
+	.newsletter-section {
+		margin-bottom: 5rem;
+		background: #111;
+		border-radius: 16px;
+		padding: 3rem 2.5rem;
+		color: white;
+	}
+	.newsletter-inner {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 3rem;
 		align-items: center;
 	}
-	.btn-primary, .btn-secondary {
-		width: 100%;
+	.newsletter-section .section-label {
+		background: rgba(255,255,255,0.1);
+		color: #aaa;
+		margin-bottom: 0.75rem;
+		display: inline-block;
+	}
+	.newsletter-text h2 {
+		font-size: 1.6rem;
+		font-weight: 700;
+		color: white;
+		margin-bottom: 1rem;
+	}
+	.newsletter-text p {
+		color: #aaa;
+		font-size: 0.9rem;
+		line-height: 1.7;
+		margin-bottom: 1.25rem;
+	}
+	.newsletter-perks {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+	.newsletter-perks li {
+		font-size: 0.85rem;
+		color: #aaa;
+	}
+	.newsletter-embed {
+		display: flex;
+		justify-content: center;
+	}
+	.newsletter-embed iframe {
+		max-width: 100%;
+		border-radius: 12px !important;
+	}
+
+	/* ===== CONNECT ===== */
+	.connect-section {
 		text-align: center;
+		padding: 3rem 0;
+		border-top: 1px solid #eee;
 	}
-	.grid {
-		grid-template-columns: 1fr;
+	.connect-section h2 {
+		font-size: 1.8rem;
+		font-weight: 700;
+		color: #111;
+		margin-bottom: 0.75rem;
 	}
-	.stats {
-		grid-template-columns: 1fr 1fr;
+	.connect-section p {
+		color: #666;
+		font-size: 0.95rem;
+		margin-bottom: 2rem;
+		max-width: 500px;
+		margin-left: auto;
+		margin-right: auto;
 	}
-}
+	.connect-links {
+		display: flex;
+		gap: 0.75rem;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+	.connect-btn {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 0.6rem 1.25rem;
+		border: 1.5px solid #ddd;
+		border-radius: 8px;
+		text-decoration: none;
+		font-size: 0.85rem;
+		font-weight: 500;
+		color: #333;
+		transition: border-color 0.2s;
+	}
+	.connect-btn:hover { border-color: #999; color: #111; }
+	.connect-btn-primary {
+		background: #2337ff;
+		border-color: #2337ff;
+		color: white !important;
+	}
+	.connect-btn-primary:hover { background: #1a2acc; border-color: #1a2acc; }
+
+	/* ===== MOBILE ===== */
+	@media (max-width: 720px) {
+		main { padding: 0 1rem 3rem; }
+		.hero { padding: 3rem 0 2.5rem; }
+		.hero-title { font-size: 2.2rem; }
+		.hero-sub { font-size: 1rem; }
+		.stats-grid { grid-template-columns: 1fr 1fr; }
+		.expertise-grid { grid-template-columns: 1fr; }
+		.articles-grid { grid-template-columns: 1fr; }
+		.tools-highlight { margin-left: -1rem; margin-right: -1rem; padding: 1.5rem 1rem; }
+		.tools-grid { grid-template-columns: 1fr; }
+		.newsletter-inner { grid-template-columns: 1fr; gap: 1.5rem; }
+		.newsletter-section { padding: 2rem 1.25rem; }
+		.newsletter-embed iframe { width: 100% !important; height: 280px !important; }
+		.connect-links { flex-direction: column; align-items: center; }
+		.connect-btn { width: 100%; justify-content: center; }
+	}
 </style>
