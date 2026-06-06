@@ -117,10 +117,10 @@ import { SITE_TITLE } from '../consts';
 						<div id="bars-grid" class="bars-grid"></div>
 					</div>
 
-					<!-- Specs comparison table -->
+					<!-- Specs comparison cards -->
 					<div id="specs-section" class="specs-section">
 						<h3 class="section-label">🔬 Technical Specifications</h3>
-						<div id="specs-table" class="specs-table"></div>
+						<div id="specs-cards" class="spec-cards"></div>
 					</div>
 
 					<!-- Technology descriptions -->
@@ -216,18 +216,27 @@ import { SITE_TITLE } from '../consts';
 	.bar-fill.fill-b { background: #166534; }
 	.bar-value { font-size: 0.78rem; font-weight: bold; color: #333; }
 
-	/* Specs table */
+	/* Spec cards */
 	.specs-section { margin-bottom: 2rem; }
-	.specs-table { border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; }
-	.specs-row { display: grid; grid-template-columns: 1fr 1.2fr 1fr; }
-	.specs-row:nth-child(even) { background: #fafafa; }
-	.specs-row.header-row { background: #111; color: white; font-weight: bold; font-size: 0.8rem; }
-	.specs-cell { padding: 0.65rem 1rem; font-size: 0.82rem; color: #333; border-right: 1px solid #e0e0e0; }
-	.specs-cell:last-child { border-right: none; }
-	.specs-row.header-row .specs-cell { color: white; }
-	.specs-cell.metric { color: #666; font-size: 0.75rem; }
-	.specs-cell.winner-a { color: #2337ff; font-weight: bold; }
-	.specs-cell.winner-b { color: #166534; font-weight: bold; }
+	.spec-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+	.spec-card { background: white; border: 2px solid; border-radius: 12px; overflow: hidden; }
+	.spec-card.spec-a { border-color: #2337ff; }
+	.spec-card.spec-b { border-color: #166534; }
+	.spec-card-header { padding: 0.85rem 1.1rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+	.spec-card.spec-a .spec-card-header { background: #eff6ff; }
+	.spec-card.spec-b .spec-card-header { background: #f0fdf4; }
+	.spec-card-name { font-size: 0.95rem; font-weight: bold; color: #111; }
+	.spec-badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
+	.spec-card.spec-a .spec-badge { background: #dbeafe; color: #1d4ed8; }
+	.spec-card.spec-b .spec-badge { background: #dcfce7; color: #166534; }
+	.spec-card-body { padding: 0.25rem 1.1rem 0.75rem; }
+	.spec-row { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; padding: 0.4rem 0; border-bottom: 1px solid #f3f3f3; }
+	.spec-row:last-child { border-bottom: none; }
+	.spec-metric { font-size: 0.72rem; color: #888; white-space: nowrap; flex-shrink: 0; }
+	.spec-value { font-size: 0.8rem; font-weight: 600; text-align: right; word-break: break-word; }
+	.spec-value.is-winner { color: #166534; }
+	.spec-value.is-loser { color: #bbb; }
+	.spec-value.is-neutral { color: #333; }
 
 	/* Explanations */
 	.explanation-section { }
@@ -251,6 +260,7 @@ import { SITE_TITLE } from '../consts';
 		.vs-label { display: none; }
 		#compare-btn { grid-column: 1 / -1; width: 100%; }
 		.compare-cards { grid-template-columns: 1fr; }
+		.spec-cards { grid-template-columns: 1fr; }
 		.explanation-grid { grid-template-columns: 1fr; }
 		.bar-row { grid-template-columns: 70px 1fr 80px; }
 	}
@@ -618,33 +628,44 @@ function compare() {
 		`;
 	}).join("");
 
-	// --- Specs table ---
-	const specsTable = document.getElementById("specs-table");
-	const specs = [
-		{ label: "Peak Downlink",   va: fmtBw(a.dlMbps), vb: fmtBw(b.dlMbps), cmp: a.dlMbps > b.dlMbps ? "a" : "b" },
-		{ label: "Peak Uplink",     va: fmtBw(a.ulMbps), vb: fmtBw(b.ulMbps), cmp: a.ulMbps > b.ulMbps ? "a" : "b" },
-		{ label: "Typical Downlink",va: fmtBw(a.typicalDlMbps), vb: fmtBw(b.typicalDlMbps), cmp: a.typicalDlMbps > b.typicalDlMbps ? "a" : "b" },
-		{ label: "Typical Uplink",  va: fmtBw(a.typicalUlMbps), vb: fmtBw(b.typicalUlMbps), cmp: a.typicalUlMbps > b.typicalUlMbps ? "a" : "b" },
-		{ label: "Frequency Band",  va: { num: a.band, unit: "" }, vb: { num: b.band, unit: "" }, cmp: null },
-		{ label: "Channel Width",   va: { num: a.channelWidth, unit: "" }, vb: { num: b.channelWidth, unit: "" }, cmp: null },
-		{ label: "Modulation",      va: { num: a.modulation, unit: "" }, vb: { num: b.modulation, unit: "" }, cmp: null },
-		{ label: "Typical Latency", va: { num: a.latencyMs + " ms", unit: "" }, vb: { num: b.latencyMs + " ms", unit: "" }, cmp: a.latencyMs < b.latencyMs ? "a" : "b" },
-		{ label: "Coverage Range",  va: { num: a.rangeKm >= 1 ? a.rangeKm + " km" : (a.rangeKm * 1000) + " m", unit: "" }, vb: { num: b.rangeKm >= 1 ? b.rangeKm + " km" : (b.rangeKm * 1000) + " m", unit: "" }, cmp: null },
+	// --- Spec cards (side-by-side, each with label:value rows) ---
+	const specDefs = [
+		{ label: "Peak Downlink",    valA: fmtBw(a.dlMbps),         valB: fmtBw(b.dlMbps),         cmp: a.dlMbps > b.dlMbps ? "a" : "b" },
+		{ label: "Peak Uplink",      valA: fmtBw(a.ulMbps),         valB: fmtBw(b.ulMbps),         cmp: a.ulMbps > b.ulMbps ? "a" : "b" },
+		{ label: "Typical Downlink", valA: fmtBw(a.typicalDlMbps),  valB: fmtBw(b.typicalDlMbps),  cmp: a.typicalDlMbps > b.typicalDlMbps ? "a" : "b" },
+		{ label: "Typical Uplink",   valA: fmtBw(a.typicalUlMbps),  valB: fmtBw(b.typicalUlMbps),  cmp: a.typicalUlMbps > b.typicalUlMbps ? "a" : "b" },
+		{ label: "Latency",          valA: { num: a.latencyMs + " ms", unit: "" }, valB: { num: b.latencyMs + " ms", unit: "" }, cmp: a.latencyMs < b.latencyMs ? "a" : "b" },
+		{ label: "Frequency",        valA: { num: a.band, unit: "" },        valB: { num: b.band, unit: "" },        cmp: null },
+		{ label: "Channel Width",    valA: { num: a.channelWidth, unit: "" }, valB: { num: b.channelWidth, unit: "" }, cmp: null },
+		{ label: "Modulation",       valA: { num: a.modulation, unit: "" },  valB: { num: b.modulation, unit: "" },  cmp: null },
+		{ label: "Coverage",         valA: { num: a.rangeKm >= 1 ? a.rangeKm + " km" : (a.rangeKm * 1000) + " m", unit: "" }, valB: { num: b.rangeKm >= 1 ? b.rangeKm + " km" : (b.rangeKm * 1000) + " m", unit: "" }, cmp: null },
 	];
-	specsTable.innerHTML = `
-		<div class="specs-row header-row">
-			<div class="specs-cell">${a.name}</div>
-			<div class="specs-cell metric" style="text-align:center">Metric</div>
-			<div class="specs-cell">${b.name}</div>
-		</div>
-		${specs.map(s => `
-			<div class="specs-row">
-				<div class="specs-cell ${s.cmp === "a" ? "winner-a" : ""}">${s.va.num}${s.va.unit ? " " + s.va.unit : ""}</div>
-				<div class="specs-cell metric" style="text-align:center">${s.label}</div>
-				<div class="specs-cell ${s.cmp === "b" ? "winner-b" : ""}">${s.vb.num}${s.vb.unit ? " " + s.vb.unit : ""}</div>
+
+	function valueClass(cmp, side) {
+		if (cmp === null) return "is-neutral";
+		return cmp === side ? "is-winner" : "is-loser";
+	}
+
+	function buildSpecCard(t, side, cardCls) {
+		const rows = specDefs.map(s => {
+			const raw = side === "a" ? s.valA : s.valB;
+			const display = raw.num + (raw.unit ? " " + raw.unit : "");
+			return `<div class="spec-row">
+				<span class="spec-metric">${s.label}</span>
+				<span class="spec-value ${valueClass(s.cmp, side)}">${display}</span>
+			</div>`;
+		}).join("");
+		return `<div class="spec-card ${cardCls}">
+			<div class="spec-card-header">
+				<span class="spec-card-name">${t.name}</span>
+				<span class="spec-badge">${t.category} ${t.icon}</span>
 			</div>
-		`).join("")}
-	`;
+			<div class="spec-card-body">${rows}</div>
+		</div>`;
+	}
+
+	document.getElementById("specs-cards").innerHTML =
+		buildSpecCard(a, "a", "spec-a") + buildSpecCard(b, "b", "spec-b");
 
 	// --- Explanations ---
 	const expGrid = document.getElementById("explanation-grid");
@@ -666,7 +687,7 @@ function compare() {
 document.getElementById("compare-btn").addEventListener("click", function() {
 	document.getElementById("compare-cards").innerHTML = "";
 	document.getElementById("bars-grid").innerHTML = "";
-	document.getElementById("specs-table").innerHTML = "";
+	document.getElementById("specs-cards").innerHTML = "";
 	document.getElementById("explanation-grid").innerHTML = "";
 	compare();
 });
