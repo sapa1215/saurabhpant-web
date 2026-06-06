@@ -115,17 +115,6 @@ import { SITE_TITLE } from '../consts';
 		border-radius: 2px;
 		transition: all 0.3s;
 	}
-	/* Animate bars → X when menu is open */
-	.hamburger.menu-open span:nth-child(1) {
-		transform: rotate(45deg) translate(5px, 5px);
-	}
-	.hamburger.menu-open span:nth-child(2) {
-		opacity: 0;
-		transform: scaleX(0);
-	}
-	.hamburger.menu-open span:nth-child(3) {
-		transform: rotate(-45deg) translate(5px, -5px);
-	}
 
 	/* CLOSE BUTTON */
 	.close-btn {
@@ -224,12 +213,10 @@ import { SITE_TITLE } from '../consts';
 
 	function openMenu() {
 		navMenu.classList.add('open');
-		hamburger.classList.add('menu-open');
 	}
 
 	function closeMenu() {
 		navMenu.classList.remove('open');
-		hamburger.classList.remove('menu-open');
 	}
 
 	// Toggle open/close on hamburger tap
