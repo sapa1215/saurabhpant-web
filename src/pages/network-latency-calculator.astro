@@ -235,24 +235,24 @@ const TECHNOLOGIES = [
 	{
 		name: "Fiber Optic",
 		icon: "🔵",
-		speedFactor: 0.67, // light travels at ~2/3 speed in fiber
-		overheadMs: 2,
+		speedFactor: 0.667, // light travels at ~66.7% speed in glass (~200,000 km/s)
+		overheadMs: 5,      // routing/switching overhead
 		category: "best",
-		desc: "Light travels through glass at ~200,000 km/s. Ultra-low latency for long-haul connections.",
+		desc: "Light travels through glass at ~200,000 km/s (66.7% of c). Pure ground distance — no altitude overhead.",
 	},
 	{
 		name: "5G (Sub-6GHz)",
 		icon: "📡",
-		speedFactor: 0.98, // near speed of light through air
+		speedFactor: 0.999, // radio waves through air at ~299,700 km/s
 		overheadMs: 5,
-		localMs: 1, // radio access adds ~1ms
+		localMs: 1,         // radio access adds ~1ms
 		category: "good",
-		desc: "Radio waves travel near speed of light. 5G NR adds ~1ms radio latency plus backhaul.",
+		desc: "Radio waves travel at ~299,700 km/s. 5G NR adds ~1ms radio access latency plus backhaul.",
 	},
 	{
 		name: "5G (mmWave)",
 		icon: "⚡",
-		speedFactor: 0.98,
+		speedFactor: 0.999,
 		overheadMs: 4,
 		localMs: 0.5,
 		category: "best",
@@ -261,29 +261,29 @@ const TECHNOLOGIES = [
 	{
 		name: "4G LTE",
 		icon: "📶",
-		speedFactor: 0.98,
+		speedFactor: 0.999, // radio waves through air at ~299,700 km/s
 		overheadMs: 15,
-		localMs: 10,
+		localMs: 10,        // radio access adds 10-15ms
 		category: "good",
-		desc: "LTE radio access adds 10-15ms. Suitable for most applications but not ultra-low latency use cases.",
+		desc: "Radio waves at ~299,700 km/s. LTE radio access adds 10-15ms — suitable for most but not ultra-low-latency use cases.",
 	},
 	{
 		name: "LEO Satellite",
 		icon: "🛰️",
-		speedFactor: 0.99, // near speed of light in space
+		speedFactor: 0.999, // radio waves through space at ~299,700 km/s
 		overheadMs: 20,
-		altitudeKm: 550, // typical LEO altitude
+		altitudeKm: 550,    // signal travels up 550km + down 550km = +1100km
 		category: "good",
-		desc: "LEO satellites orbit at 550km. Signal must travel to satellite and back — adds ~5ms per hop.",
+		desc: "LEO satellites orbit at 550km. Signal travels up 550km and down 550km (+1100km total), plus 20ms ground station processing.",
 	},
 	{
 		name: "GEO Satellite",
 		icon: "🌍",
-		speedFactor: 0.99,
+		speedFactor: 0.999,
 		overheadMs: 30,
-		altitudeKm: 35786, // geostationary orbit
+		altitudeKm: 35786,  // signal travels up 35,786km + down 35,786km = +71,572km
 		category: "poor",
-		desc: "Geostationary satellites orbit at 35,786km. The enormous distance creates unavoidable 600ms+ RTT.",
+		desc: "Geostationary orbit at 35,786km. Signal travels +71,572km extra — unavoidable 480–550ms RTT regardless of ground distance.",
 	},
 ];
 
