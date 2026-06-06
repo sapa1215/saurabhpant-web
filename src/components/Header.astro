@@ -57,7 +57,7 @@ import { SITE_TITLE } from '../consts';
 		background: white;
 		box-shadow: 0 2px 8px rgba(var(--black), 5%);
 		position: relative;
-		z-index: 100;
+		z-index: 200;
 	}
 	h2 {
 		margin: 0;
@@ -114,6 +114,17 @@ import { SITE_TITLE } from '../consts';
 		border-radius: 2px;
 		transition: all 0.3s;
 	}
+	/* Animate bars → X when menu is open */
+	.hamburger.menu-open span:nth-child(1) {
+		transform: rotate(45deg) translate(5px, 5px);
+	}
+	.hamburger.menu-open span:nth-child(2) {
+		opacity: 0;
+		transform: scaleX(0);
+	}
+	.hamburger.menu-open span:nth-child(3) {
+		transform: rotate(-45deg) translate(5px, -5px);
+	}
 
 	/* CLOSE BUTTON */
 	.close-btn {
@@ -166,24 +177,23 @@ import { SITE_TITLE } from '../consts';
 		.social-links {
 			display: none;
 		}
-		/* Dropdown slides down from below the header */
+		/* Slides in from right, starts below the header */
 		.internal-links {
 			position: fixed;
 			top: 52px;
-			left: 0;
+			right: -100%;
 			width: 100%;
 			height: auto;
 			background: white;
 			flex-direction: column;
 			align-items: stretch;
 			z-index: 150;
-			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-			transform: translateY(-110%);
-			transition: transform 0.3s ease;
+			transition: right 0.3s ease;
 			overflow-y: auto;
+			box-shadow: -4px 8px 24px rgba(0, 0, 0, 0.12);
 		}
 		.internal-links.open {
-			transform: translateY(0);
+			right: 0;
 		}
 		.internal-links a {
 			padding: 1.1rem 1.5rem;
@@ -202,7 +212,6 @@ import { SITE_TITLE } from '../consts';
 			border-bottom: 1px solid #eee;
 			border-left: 3px solid var(--accent);
 		}
-		/* Close button not needed for dropdown style */
 		.close-btn {
 			display: none;
 		}
@@ -221,22 +230,25 @@ import { SITE_TITLE } from '../consts';
 	function openMenu() {
 		navMenu.classList.add('open');
 		overlay.classList.add('open');
+		hamburger.classList.add('menu-open');
 		document.body.style.overflow = 'hidden';
-		hamburger.style.display = 'none';
 	}
 
 	function closeMenu() {
 		navMenu.classList.remove('open');
 		overlay.classList.remove('open');
+		hamburger.classList.remove('menu-open');
 		document.body.style.overflow = '';
-		hamburger.style.display = 'flex';
 	}
 
-	hamburger.addEventListener('click', openMenu);
-	closeBtn.addEventListener('click', closeMenu);
+	// Toggle open/close on hamburger tap
+	hamburger.addEventListener('click', () => {
+		navMenu.classList.contains('open') ? closeMenu() : openMenu();
+	});
+
 	overlay.addEventListener('click', closeMenu);
 
-	// Close menu when a link is clicked
+	// Close when a nav link is tapped
 	navMenu.querySelectorAll('a').forEach(link => {
 		link.addEventListener('click', closeMenu);
 	});
