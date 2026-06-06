@@ -90,15 +90,19 @@ import { SITE_TITLE } from '../consts';
 						</div>
 					</div>
 				</div>
-			</section>
-			<div class="tool-card">
-    			<div class="tool-header">
-        			<h3>Network Latency Calculator</h3>
-        			<span class="tool-tag free">Free</span>
-    			</div>
-    			<p>Calculate and compare theoretical round-trip latency across fiber, 5G, 4G LTE, LEO and GEO satellite for any distance on Earth.</p>
-    			<a href="/network-latency-calculator" class="tool-link">Try it →</a>
-			</div>
+	
+				<!-- NETWORK LATENCY CALCULATOR -->
+				<div class="embedded-tool">
+					<div class="tool-intro" style="border-bottom: none;">
+						<div class="intro-tool-header">
+							<h3>Network Latency Calculator</h3>
+							<span class="tool-tag free">Free</span>
+						</div>
+						<p>Calculate and compare theoretical round-trip latency across fiber, 5G, 4G LTE, LEO and GEO satellite for any distance on Earth.</p>
+						<a href="/network-latency-calculator" class="tool-link" style="display: inline-block; margin-top: 0.5rem;">Try it →</a>
+					</div>
+				</div>
+		</section>
 
 			<!-- ========================================= -->
 			<!-- OSS/BSS TOOLS -->
@@ -268,6 +272,7 @@ import { SITE_TITLE } from '../consts';
 	.tool-intro { background: #f0f4ff; padding: 1.25rem 1.5rem; border-bottom: 1px solid #ddd; }
 	.tool-intro h3 { margin: 0 0 0.4rem; font-size: 1.1rem; color: #2337ff; }
 	.tool-intro p { margin: 0; color: #555; font-size: 0.9rem; }
+	.intro-tool-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; }
 	.tool-container { padding: 1.5rem; background: #fafafa; }
 	.search-row { display: flex; gap: 8px; margin-bottom: 1.25rem; }
 	.search-row input { flex: 1; padding: 0.7rem 1rem; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; }
