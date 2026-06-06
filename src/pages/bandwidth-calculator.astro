@@ -1,0 +1,359 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`Bandwidth Calculator — ${SITE_TITLE}`}
+			description="Compare theoretical maximum bandwidth across wireless and wireline technologies — from 2G to fiber optic. A free tool for telecom professionals."
+		/>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="page-header">
+				<h1>Bandwidth Calculator</h1>
+				<p class="subtitle">
+					Compare theoretical maximum bandwidth across wireless
+					and wireline technologies — from 2G to fiber optic.
+				</p>
+			</section>
+
+			<div class="calculator-container">
+
+				<!-- FILTER BAR -->
+				<div class="filter-bar">
+					<button class="filter-btn active" data-filter="all">All Technologies</button>
+					<button class="filter-btn" data-filter="mobile">📱 Mobile</button>
+					<button class="filter-btn" data-filter="fixed">🏠 Fixed Line</button>
+					<button class="filter-btn" data-filter="wifi">📶 Wi-Fi</button>
+				</div>
+
+				<!-- RESULTS GRID -->
+				<div id="results-grid" class="results-grid"></div>
+
+				<!-- EXPLANATION -->
+				<div class="explanation-section">
+					<h3>📡 About These Numbers</h3>
+					<div class="explanation-cards">
+						<div class="explanation-card">
+							<h4>Theoretical Maximum</h4>
+							<p>Values represent peak bandwidth under ideal conditions. Real-world throughput is typically 30–60% of these figures due to overhead, contention, and signal quality.</p>
+						</div>
+						<div class="explanation-card">
+							<h4>Downlink vs Uplink</h4>
+							<p>Most wireless technologies are asymmetric — more bandwidth allocated to download than upload to match typical consumer usage patterns.</p>
+						</div>
+						<div class="explanation-card">
+							<h4>Spectral Efficiency</h4>
+							<p>Bandwidth scales with channel width (MHz) and modulation order. 5G mmWave and Wi-Fi 7 achieve massive throughput by combining wide channels with high-order QAM and MIMO.</p>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<!-- ABOUT -->
+			<section class="about-section">
+				<h2>About This Calculator</h2>
+				<p>
+					Bandwidth figures are based on published 3GPP, IEEE 802.11, and ITU specifications.
+					They represent theoretical maximums under optimal conditions — full channel utilization,
+					line-of-sight, and best-case modulation schemes.
+				</p>
+				<p>
+					For telecom architects evaluating access technologies, the key insight is that
+					5G mmWave and Wi-Fi 7 dramatically exceed legacy mobile standards, but coverage
+					trade-offs mean they are not universally deployable. Fixed fiber (XGS-PON)
+					remains the most consistent high-bandwidth option.
+				</p>
+				<p class="tool-credit">
+					Built by <a href="/about">Saurabh Pant</a> —
+					<a href="/contact">suggest improvements →</a>
+				</p>
+			</section>
+
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	main { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
+	.page-header { text-align: center; padding: 2rem 0; border-bottom: 2px solid #eee; margin-bottom: 2rem; }
+	.page-header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+	.subtitle { color: #666; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+	/* Calculator Container */
+	.calculator-container { background: #fafafa; border: 1px solid #eee; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+
+	/* Filter Bar */
+	.filter-bar { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+	.filter-btn { padding: 0.5rem 1.1rem; border: 1px solid #ddd; border-radius: 20px; background: white; font-size: 0.85rem; cursor: pointer; color: #555; transition: all 0.2s; }
+	.filter-btn:hover { border-color: #2337ff; color: #2337ff; }
+	.filter-btn.active { background: #2337ff; color: white; border-color: #2337ff; }
+
+	/* Results Grid */
+	.results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+
+	/* Result Cards */
+	.result-card { border-radius: 12px; padding: 1.25rem; text-align: center; border: 2px solid transparent; transition: transform 0.2s; }
+	.result-card:hover { transform: translateY(-2px); }
+	.result-card.hidden { display: none; }
+	.result-card.best { border-color: #166534; background: #dcfce7; }
+	.result-card.good { border-color: #1d4ed8; background: #dbeafe; }
+	.result-card.moderate { border-color: #92400e; background: #fef3c7; }
+	.result-card.poor { border-color: #991b1b; background: #fee2e2; }
+	.result-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+	.result-tech { font-size: 0.8rem; font-weight: bold; text-transform: uppercase; color: #555; margin-bottom: 0.15rem; }
+	.result-standard { font-size: 0.7rem; color: #888; margin-bottom: 0.5rem; }
+	.bw-row { display: flex; justify-content: space-around; gap: 0.25rem; margin: 0.5rem 0; }
+	.bw-item { flex: 1; }
+	.bw-label { font-size: 0.65rem; color: #777; text-transform: uppercase; margin-bottom: 2px; }
+	.bw-value { font-size: 1.3rem; font-weight: bold; line-height: 1.1; }
+	.bw-unit { font-size: 0.65rem; color: #777; }
+	.result-badge { display: inline-block; margin-top: 0.5rem; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
+	.badge-best { background: #166534; color: white; }
+	.badge-good { background: #1d4ed8; color: white; }
+	.badge-moderate { background: #92400e; color: white; }
+	.badge-poor { background: #991b1b; color: white; }
+
+	/* Explanation */
+	.explanation-section h3 { font-size: 1.1rem; margin-bottom: 1rem; }
+	.explanation-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; }
+	.explanation-card { background: white; border: 1px solid #eee; border-radius: 8px; padding: 1rem; }
+	.explanation-card h4 { font-size: 0.85rem; margin-bottom: 0.4rem; color: #333; }
+	.explanation-card p { font-size: 0.8rem; color: #666; margin: 0; line-height: 1.5; }
+
+	/* About */
+	.about-section { border-top: 2px solid #eee; padding-top: 2rem; }
+	.about-section h2 { font-size: 1.4rem; margin-bottom: 1rem; }
+	.about-section p { color: #555; line-height: 1.7; margin-bottom: 1rem; font-size: 0.95rem; }
+	.tool-credit { color: #888 !important; font-size: 0.85rem !important; }
+	.tool-credit a { color: #2337ff; }
+
+	/* Mobile */
+	@media (max-width: 720px) {
+		.results-grid { grid-template-columns: 1fr 1fr; }
+		.filter-bar { gap: 0.4rem; }
+		.filter-btn { font-size: 0.8rem; padding: 0.4rem 0.8rem; }
+	}
+</style>
+
+<script is:inline>
+
+const TECHNOLOGIES = [
+	{
+		name: "2G EDGE",
+		icon: "🔴",
+		standard: "3GPP Rel. 4",
+		category: "mobile",
+		dlMbps: 0.384,
+		ulMbps: 0.118,
+		desc: "Enhanced Data rates for GSM Evolution. Theoretical 384 kbps using 8-PSK over 200 kHz channels.",
+	},
+	{
+		name: "3G HSPA+",
+		icon: "🟠",
+		standard: "3GPP Rel. 9",
+		category: "mobile",
+		dlMbps: 42,
+		ulMbps: 11.5,
+		desc: "Evolved HSPA using 64-QAM DL and 16-QAM UL over 5 MHz WCDMA carriers with 2×2 MIMO.",
+	},
+	{
+		name: "4G LTE",
+		icon: "🟡",
+		standard: "3GPP Rel. 8",
+		category: "mobile",
+		dlMbps: 150,
+		ulMbps: 50,
+		desc: "LTE Category 4 — 20 MHz channel, 2×2 MIMO, 64-QAM. The baseline 4G standard deployed globally.",
+	},
+	{
+		name: "4G LTE-A",
+		icon: "🔵",
+		standard: "3GPP Rel. 10",
+		category: "mobile",
+		dlMbps: 600,
+		ulMbps: 100,
+		desc: "LTE Advanced with 3-carrier aggregation (3×20 MHz), 4×4 MIMO, and 256-QAM downlink.",
+	},
+	{
+		name: "5G Sub-6GHz",
+		icon: "🟣",
+		standard: "3GPP Rel. 15",
+		category: "mobile",
+		dlMbps: 2000,
+		ulMbps: 500,
+		desc: "5G NR SA with 100 MHz channel, 4×4 MIMO, 256-QAM. Balances coverage and capacity for urban deployments.",
+	},
+	{
+		name: "5G mmWave",
+		icon: "⭐",
+		standard: "3GPP Rel. 15",
+		category: "mobile",
+		dlMbps: 20000,
+		ulMbps: 10000,
+		desc: "5G at 28/39 GHz with 800 MHz channel (4×200 MHz CA), massive MIMO, 256-QAM. Extreme throughput at short range.",
+	},
+	{
+		name: "ADSL2+",
+		icon: "🔌",
+		standard: "ITU G.992.5",
+		category: "fixed",
+		dlMbps: 24,
+		ulMbps: 3.5,
+		desc: "Asymmetric DSL over copper. Highly distance-dependent — performance halves roughly every 1.5 km from the DSLAM.",
+	},
+	{
+		name: "VDSL2 Vectored",
+		icon: "🔧",
+		standard: "ITU G.993.2",
+		category: "fixed",
+		dlMbps: 300,
+		ulMbps: 100,
+		desc: "Very-high-speed DSL with vectoring for crosstalk cancellation. Requires fiber to the cabinet (FTTC).",
+	},
+	{
+		name: "G.fast",
+		icon: "⚙️",
+		standard: "ITU G.9700",
+		category: "fixed",
+		dlMbps: 1000,
+		ulMbps: 1000,
+		desc: "Gigabit DSL using 106–212 MHz spectrum over short copper drops (<100 m from fiber DPU). Near-symmetric.",
+	},
+	{
+		name: "DOCSIS 3.1",
+		icon: "📺",
+		standard: "CableLabs",
+		category: "fixed",
+		dlMbps: 10000,
+		ulMbps: 1500,
+		desc: "Cable broadband using OFDM (4096-QAM) over 190 MHz downstream channels on shared HFC network.",
+	},
+	{
+		name: "GPON Fiber",
+		icon: "🟦",
+		standard: "ITU G.984",
+		category: "fixed",
+		dlMbps: 2488,
+		ulMbps: 1244,
+		desc: "Gigabit-capable PON. Shared 2.5 Gbps DL / 1.25 Gbps UL across up to 64 subscribers on a passive splitter.",
+	},
+	{
+		name: "XGS-PON",
+		icon: "🟢",
+		standard: "ITU G.9807",
+		category: "fixed",
+		dlMbps: 10000,
+		ulMbps: 10000,
+		desc: "10-Gigabit Symmetric PON — the current standard for full-fiber deployments. Symmetric 10 Gbps to premises.",
+	},
+	{
+		name: "Wi-Fi 4 (n)",
+		icon: "📻",
+		standard: "IEEE 802.11n",
+		category: "wifi",
+		dlMbps: 600,
+		ulMbps: 600,
+		desc: "2.4/5 GHz, 40 MHz channels, 4×4 MIMO, 64-QAM. Introduced MIMO to Wi-Fi — still in many legacy devices.",
+	},
+	{
+		name: "Wi-Fi 5 (ac)",
+		icon: "📡",
+		standard: "IEEE 802.11ac",
+		category: "wifi",
+		dlMbps: 3500,
+		ulMbps: 1000,
+		desc: "5 GHz only, 160 MHz channels, 8×8 MU-MIMO, 256-QAM. Wave 2 added MU-MIMO for concurrent client streams.",
+	},
+	{
+		name: "Wi-Fi 6 (ax)",
+		icon: "🔶",
+		standard: "IEEE 802.11ax",
+		category: "wifi",
+		dlMbps: 9608,
+		ulMbps: 9608,
+		desc: "2.4/5/6 GHz, 160 MHz channels, 8×8 MU-MIMO, 1024-QAM, OFDMA. Designed for dense multi-client environments.",
+	},
+	{
+		name: "Wi-Fi 7 (be)",
+		icon: "🌟",
+		standard: "IEEE 802.11be",
+		category: "wifi",
+		dlMbps: 46120,
+		ulMbps: 46120,
+		desc: "2.4/5/6 GHz, 320 MHz channels, 16×16 MIMO, 4096-QAM, multi-link operation. Theoretical peak exceeds 46 Gbps.",
+	},
+];
+
+function formatBw(mbps) {
+	if (mbps >= 1000) {
+		const gbps = mbps / 1000;
+		return { value: gbps >= 10 ? gbps.toFixed(0) : gbps.toFixed(1), unit: "Gbps" };
+	}
+	if (mbps < 1) return { value: (mbps * 1000).toFixed(0), unit: "Kbps" };
+	return { value: mbps >= 100 ? Math.round(mbps).toString() : mbps.toString(), unit: "Mbps" };
+}
+
+function getRating(mbps) {
+	if (mbps >= 1000) return { label: "Ultra", cls: "best", badge: "badge-best" };
+	if (mbps >= 100)  return { label: "High",  cls: "good", badge: "badge-good" };
+	if (mbps >= 10)   return { label: "Moderate", cls: "moderate", badge: "badge-moderate" };
+	return { label: "Low", cls: "poor", badge: "badge-poor" };
+}
+
+function render(filter) {
+	const grid = document.getElementById("results-grid");
+	const sorted = [...TECHNOLOGIES].sort((a, b) => b.dlMbps - a.dlMbps);
+	grid.innerHTML = sorted.map(t => {
+		const visible = filter === "all" || t.category === filter;
+		const dl = formatBw(t.dlMbps);
+		const ul = formatBw(t.ulMbps);
+		const r  = getRating(t.dlMbps);
+		return `
+			<div class="result-card ${r.cls}${visible ? "" : " hidden"}" data-category="${t.category}" title="${t.desc}">
+				<div class="result-icon">${t.icon}</div>
+				<div class="result-tech">${t.name}</div>
+				<div class="result-standard">${t.standard}</div>
+				<div class="bw-row">
+					<div class="bw-item">
+						<div class="bw-label">↓ Down</div>
+						<div class="bw-value">${dl.value}</div>
+						<div class="bw-unit">${dl.unit}</div>
+					</div>
+					<div class="bw-item">
+						<div class="bw-label">↑ Up</div>
+						<div class="bw-value">${ul.value}</div>
+						<div class="bw-unit">${ul.unit}</div>
+					</div>
+				</div>
+				<span class="result-badge ${r.badge}">${r.label}</span>
+			</div>
+		`;
+	}).join("");
+}
+
+render("all");
+
+document.querySelectorAll(".filter-btn").forEach(btn => {
+	btn.addEventListener("click", () => {
+		document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+		btn.classList.add("active");
+		const filter = btn.dataset.filter;
+		document.querySelectorAll(".result-card").forEach(card => {
+			if (filter === "all" || card.dataset.category === filter) {
+				card.classList.remove("hidden");
+			} else {
+				card.classList.add("hidden");
+			}
+		});
+	});
+});
+</script>
