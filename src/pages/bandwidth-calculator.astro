@@ -9,7 +9,7 @@ import { SITE_TITLE } from '../consts';
 	<head>
 		<BaseHead
 			title={`Bandwidth Calculator — ${SITE_TITLE}`}
-			description="Compare theoretical maximum bandwidth across wireless and wireline technologies — from 2G to fiber optic to LEO satellite. A free tool for telecom professionals."
+			description="Compare theoretical maximum bandwidth across wireless and wireline technologies — from 2G to fiber optic to LEO."
 		/>
 	</head>
 	<body>
@@ -18,135 +18,108 @@ import { SITE_TITLE } from '../consts';
 			<section class="page-header">
 				<h1>Bandwidth Calculator</h1>
 				<p class="subtitle">
-					Compare theoretical maximum bandwidth across wireless and wireline
+					Compare theoretical maximum bandwidth across wireless and wireline 
 					technologies — from 2G to fiber optic to LEO.
 				</p>
 			</section>
 
-			<div class="calculator-container">
+			<div class="tool-container">
 
-				<!-- INPUT SECTION -->
-				<div class="input-section">
-					<div class="input-group">
-						<label for="tech-a">Technology A</label>
-						<select id="tech-a">
-							<option value="">— Select technology —</option>
-							<optgroup label="📱 Mobile">
-								<option value="2g-edge">2G EDGE</option>
-								<option value="3g-hspa">3G HSPA+</option>
-								<option value="4g-lte">4G LTE</option>
-								<option value="4g-lte-a">4G LTE-A</option>
-								<option value="5g-sub6">5G Sub-6GHz</option>
-								<option value="5g-mmwave">5G mmWave</option>
-							</optgroup>
-							<optgroup label="🏠 Fixed Line">
-								<option value="adsl">ADSL2+</option>
-								<option value="vdsl2">VDSL2 Vectored</option>
-								<option value="gfast">G.fast</option>
-								<option value="docsis31">DOCSIS 3.1 (Cable)</option>
-								<option value="gpon">GPON Fiber</option>
-								<option value="xgspon">XGS-PON Fiber</option>
-							</optgroup>
-							<optgroup label="📶 Wi-Fi">
-								<option value="wifi4">Wi-Fi 4 (802.11n)</option>
-								<option value="wifi5">Wi-Fi 5 (802.11ac)</option>
-								<option value="wifi6">Wi-Fi 6 (802.11ax)</option>
-								<option value="wifi7">Wi-Fi 7 (802.11be)</option>
-							</optgroup>
-							<optgroup label="🛰️ Satellite">
-								<option value="leo">LEO Satellite (Starlink)</option>
-								<option value="geo">GEO Satellite</option>
-							</optgroup>
-						</select>
+				<div class="top-row">
+					<div class="select-group">
+						<label>Technology A</label>
+						<select id="ta"><option value="">— Select technology —</option></select>
 					</div>
-
-					<div class="vs-label">VS</div>
-
-					<div class="input-group">
-						<label for="tech-b">Technology B</label>
-						<select id="tech-b">
-							<option value="">— Select technology —</option>
-							<optgroup label="📱 Mobile">
-								<option value="2g-edge">2G EDGE</option>
-								<option value="3g-hspa">3G HSPA+</option>
-								<option value="4g-lte">4G LTE</option>
-								<option value="4g-lte-a">4G LTE-A</option>
-								<option value="5g-sub6">5G Sub-6GHz</option>
-								<option value="5g-mmwave">5G mmWave</option>
-							</optgroup>
-							<optgroup label="🏠 Fixed Line">
-								<option value="adsl">ADSL2+</option>
-								<option value="vdsl2">VDSL2 Vectored</option>
-								<option value="gfast">G.fast</option>
-								<option value="docsis31">DOCSIS 3.1 (Cable)</option>
-								<option value="gpon">GPON Fiber</option>
-								<option value="xgspon">XGS-PON Fiber</option>
-							</optgroup>
-							<optgroup label="📶 Wi-Fi">
-								<option value="wifi4">Wi-Fi 4 (802.11n)</option>
-								<option value="wifi5">Wi-Fi 5 (802.11ac)</option>
-								<option value="wifi6">Wi-Fi 6 (802.11ax)</option>
-								<option value="wifi7">Wi-Fi 7 (802.11be)</option>
-							</optgroup>
-							<optgroup label="🛰️ Satellite">
-								<option value="leo">LEO Satellite (Starlink)</option>
-								<option value="geo">GEO Satellite</option>
-							</optgroup>
-						</select>
+					<div class="vs-pill">VS</div>
+					<div class="select-group">
+						<label>Technology B</label>
+						<select id="tb"><option value="">— Select technology —</option></select>
 					</div>
-
-					<button id="compare-btn">Compare</button>
+					<button id="cmp-btn">Compare</button>
 				</div>
 
-				<!-- EMPTY STATE -->
-				<div id="empty-state" class="empty-state">
-					<p>⬆️ Select two technologies above to compare bandwidth</p>
+				<div class="quick-row">
+					<p class="quick-label">Quick comparisons</p>
+					<div class="qtags">
+						<span class="qtag" onclick="q('4g-lte','5g-sub6')">4G vs 5G</span>
+						<span class="qtag" onclick="q('fiber-gpon','adsl2')">Fiber vs DSL</span>
+						<span class="qtag" onclick="q('5g-mmwave','wifi6')">5G mmWave vs Wi-Fi 6</span>
+						<span class="qtag" onclick="q('leo-sat','fiber-xgs')">LEO vs Fiber</span>
+						<span class="qtag" onclick="q('2g-gprs','4g-lte')">2G vs 4G</span>
+						<span class="qtag" onclick="q('cable-docsis','ethernet-10g')">Cable vs 10G LAN</span>
+						<span class="qtag" onclick="q('wifi4','wifi6')">Wi-Fi 4 vs Wi-Fi 6</span>
+					</div>
 				</div>
 
-				<!-- RESULTS SECTION -->
-				<div id="results" style="display:none;">
-					<h2 class="results-title">Bandwidth Comparison</h2>
-					<p class="results-subtitle">Theoretical peak values under ideal conditions</p>
+				<div class="empty-state" id="empty">
+					<p>⬆ Select two technologies and hit Compare</p>
+				</div>
 
-					<!-- Side-by-side summary cards -->
-					<div id="compare-cards" class="compare-cards"></div>
+				<div class="result-wrap" id="result">
 
-					<!-- Bandwidth bar chart -->
-					<div id="bars-section" class="bars-section">
-						<h3 class="section-label">📊 Bandwidth at a Glance</h3>
-						<div id="bars-grid" class="bars-grid"></div>
+					<!-- HERO -->
+					<div class="hero-vs" id="hero-vs"></div>
+
+					<!-- SPEED RACE -->
+					<div class="section-block">
+						<div class="section-label">Speed race — solid = max, faded = typical</div>
+						<div id="race-bars"></div>
 					</div>
 
-					<!-- Specs comparison cards -->
-					<div id="specs-section" class="specs-section">
-						<h3 class="section-label">🔬 Technical Specifications</h3>
-						<div id="specs-cards" class="spec-cards"></div>
+					<!-- REAL WORLD -->
+					<div class="section-block">
+						<div class="section-label">How long to download?</div>
+						<div class="rw-grid" id="rw-grid"></div>
 					</div>
 
-					<!-- Technology descriptions -->
-					<div id="explanation-section" class="explanation-section">
-						<h3 class="section-label">📡 About These Technologies</h3>
-						<div id="explanation-grid" class="explanation-grid"></div>
+					<!-- SPECS -->
+					<div class="section-block">
+						<div class="section-label">Technical specs</div>
+						<table class="spec-table">
+							<thead>
+								<tr>
+									<th>Spec</th>
+									<th class="right" id="th-a">Tech A</th>
+									<th class="right" id="th-b">Tech B</th>
+								</tr>
+							</thead>
+							<tbody id="spec-body"></tbody>
+						</table>
 					</div>
+
+					<!-- USE CASES -->
+					<div class="section-block">
+						<div class="section-label" style="margin-bottom:6px">What can you do with it?</div>
+						<div class="uc-legend-row">
+							<div class="uc-legend"><div class="dot dot-a"></div><span id="leg-a">Tech A</span></div>
+							<div class="uc-legend"><div class="dot dot-b"></div><span id="leg-b">Tech B</span></div>
+							<div class="uc-legend"><div class="dot dot-no"></div><span>Not supported</span></div>
+						</div>
+						<div class="uc-grid" id="uc-grid"></div>
+					</div>
+
+					<!-- FUN FACT -->
+					<div class="fun-box" id="fun-box"></div>
+
 				</div>
 
 			</div>
 
-			<!-- ABOUT -->
 			<section class="about-section">
 				<h2>About This Calculator</h2>
 				<p>
-					Bandwidth figures are sourced from published 3GPP, IEEE 802.11, and ITU specifications
-					and represent theoretical maximums under optimal conditions — full channel utilization,
-					line-of-sight, best-case modulation, and no shared contention.
+					Bandwidth figures are sourced from published 3GPP, IEEE 802.11, and ITU 
+					specifications and represent theoretical maximums under optimal conditions. 
+					Real-world speeds vary based on distance, interference, network load, and 
+					device capability.
 				</p>
 				<p>
-					Real-world throughput is typically 30–60% of theoretical peaks due to overhead,
-					interference, distance attenuation, and network congestion. Use these numbers to
-					understand the relative capability of each access technology, not as deployment targets.
+					This tool is designed to help students and professionals quickly understand 
+					the relative capabilities of different network technologies — from the 
+					earliest mobile standards to modern fiber and satellite systems.
 				</p>
 				<p class="tool-credit">
-					Built by <a href="/about">Saurabh Pant</a> —
+					Built by <a href="/about">Saurabh Pant</a> — 
 					<a href="/contact">suggest improvements →</a>
 				</p>
 			</section>
@@ -160,541 +133,301 @@ import { SITE_TITLE } from '../consts';
 	main { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
 	.page-header { text-align: center; padding: 2rem 0; border-bottom: 2px solid #eee; margin-bottom: 2rem; }
 	.page-header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
-	.subtitle { color: #666; font-size: 1.1rem; max-width: 620px; margin: 0 auto; }
+	.subtitle { color: #666; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+	.tool-container { background: #fafafa; border: 1px solid #eee; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
 
-	/* Calculator container */
-	.calculator-container { background: #fafafa; border: 1px solid #eee; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+	/* TOP ROW */
+	.top-row { display: flex; gap: 8px; align-items: flex-end; margin-bottom: 1.25rem; flex-wrap: wrap; }
+	.select-group { flex: 1; min-width: 160px; }
+	.select-group label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; font-weight: bold; }
+	.select-group select { width: 100%; padding: 0.7rem 1rem; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: white; outline: none; }
+	.select-group select:focus { border-color: #2337ff; }
+	.vs-pill { padding: 6px 12px; background: #f0f0f0; border-radius: 20px; font-size: 12px; font-weight: bold; color: #888; align-self: flex-end; margin-bottom: 2px; flex: none; }
+	#cmp-btn { padding: 0.7rem 1.5rem; background: #2337ff; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; flex: none; align-self: flex-end; }
+	#cmp-btn:hover { background: #1a2acc; }
 
-	/* Input section */
-	.input-section { display: grid; grid-template-columns: 1fr auto 1fr auto; gap: 1rem; align-items: end; margin-bottom: 1.5rem; }
-	.input-group { display: flex; flex-direction: column; gap: 0.4rem; }
-	.input-group label { font-size: 0.85rem; font-weight: bold; color: #444; }
-	.input-group select { padding: 0.7rem 1rem; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: white; outline: none; }
-	.input-group select:focus { border-color: #2337ff; }
-	.vs-label { font-size: 1rem; font-weight: bold; color: #aaa; padding-bottom: 0.75rem; align-self: end; text-align: center; }
-	#compare-btn { padding: 0.7rem 1.5rem; background: #2337ff; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; white-space: nowrap; height: fit-content; }
-	#compare-btn:hover { background: #1a2acc; }
+	/* QUICK TAGS */
+	.quick-row { margin-bottom: 1.5rem; }
+	.quick-label { font-size: 11px; color: #888; margin: 0 0 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+	.qtags { display: flex; flex-wrap: wrap; gap: 5px; }
+	.qtag { font-size: 11px; padding: 3px 10px; background: white; border: 1px solid #eee; border-radius: 20px; cursor: pointer; color: #666; }
+	.qtag:hover { border-color: #2337ff; color: #2337ff; }
 
-	/* Empty state */
-	.empty-state { text-align: center; padding: 3rem; color: #888; font-size: 1rem; }
+	/* EMPTY STATE */
+	.empty-state { text-align: center; padding: 2.5rem; color: #888; font-size: 14px; }
+	.empty-state p { margin: 0; }
+	.result-wrap { display: none; }
 
-	/* Results */
-	.results-title { font-size: 1.4rem; margin-bottom: 0.25rem; }
-	.results-subtitle { color: #888; font-size: 0.85rem; margin-bottom: 1.5rem; }
+	/* HERO */
+	.hero-vs { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; margin-bottom: 1.5rem; }
+	.hero-card { border-radius: 12px; padding: 1.25rem; text-align: center; border: 1px solid #eee; background: white; }
+	.hero-card.winner-card { border: 2px solid #0F6E56; background: #EAF3DE; }
+	.hero-emoji { font-size: 2.5rem; margin-bottom: 6px; }
+	.hero-name { font-size: 14px; font-weight: bold; color: #111; margin-bottom: 4px; }
+	.hero-cat { font-size: 11px; padding: 2px 8px; border-radius: 10px; display: inline-block; margin-bottom: 8px; }
+	.cat-wireless { background: #E6F1FB; color: #0C447C; }
+	.cat-wireline { background: #EAF3DE; color: #27500A; }
+	.hero-speed-a { font-size: 2rem; font-weight: bold; color: #185FA5; line-height: 1; margin-bottom: 2px; }
+	.hero-speed-b { font-size: 2rem; font-weight: bold; color: #0F6E56; line-height: 1; margin-bottom: 2px; }
+	.hero-unit { font-size: 11px; color: #888; }
+	.hero-tag { font-size: 11px; margin-top: 6px; padding: 2px 8px; border-radius: 10px; display: inline-block; }
+	.tag-winner { background: #EAF3DE; color: #27500A; }
+	.tag-loser { background: #f0f0f0; color: #888; }
+	.vs-circle { width: 44px; height: 44px; border-radius: 50%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: #888; flex-shrink: 0; margin: 0 auto; }
 
-	/* Compare cards */
-	.compare-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
-	.compare-card { border-radius: 12px; padding: 1.5rem; border: 2px solid; text-align: center; }
-	.compare-card.card-a { background: #eff6ff; border-color: #2337ff; }
-	.compare-card.card-b { background: #f0fdf4; border-color: #166534; }
-	.card-label { font-size: 0.7rem; font-weight: bold; text-transform: uppercase; margin-bottom: 0.35rem; }
-	.card-a .card-label { color: #2337ff; }
-	.card-b .card-label { color: #166534; }
-	.card-name { font-size: 1.15rem; font-weight: bold; color: #111; margin-bottom: 0.2rem; }
-	.card-category { font-size: 0.75rem; color: #777; margin-bottom: 1rem; }
-	.card-bw { display: flex; justify-content: space-around; gap: 0.5rem; }
-	.bw-stat { text-align: center; }
-	.bw-dir { font-size: 0.65rem; color: #777; text-transform: uppercase; margin-bottom: 2px; }
-	.bw-num { font-size: 1.6rem; font-weight: bold; line-height: 1.1; }
-	.bw-unit { font-size: 0.7rem; color: #777; }
-	.card-a .bw-num { color: #2337ff; }
-	.card-b .bw-num { color: #166534; }
-	.card-winner { display: inline-block; margin-top: 0.75rem; padding: 0.2rem 0.75rem; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
-	.winner-dl { background: #fef3c7; color: #92400e; }
-	.winner-ul { background: #dcfce7; color: #166534; }
-	.winner-both { background: #dbeafe; color: #1d4ed8; }
+	/* SECTIONS */
+	.section-block { margin-bottom: 1.5rem; }
+	.section-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; font-weight: bold; }
 
-	/* Bar chart */
-	.bars-section { margin-bottom: 2rem; }
-	.section-label { font-size: 1rem; margin-bottom: 1rem; color: #333; }
-	.bars-grid { display: flex; flex-direction: column; gap: 0.75rem; }
-	.bar-row { display: grid; grid-template-columns: 80px 1fr 90px; align-items: center; gap: 0.75rem; }
-	.bar-label { font-size: 0.75rem; color: #555; font-weight: bold; text-align: right; }
-	.bar-track { background: #eee; border-radius: 4px; height: 22px; position: relative; overflow: hidden; }
-	.bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; min-width: 2px; }
-	.bar-fill.fill-a { background: #2337ff; }
-	.bar-fill.fill-b { background: #166534; }
-	.bar-value { font-size: 0.78rem; font-weight: bold; color: #333; }
+	/* SPEED BARS */
+	.race-row { margin-bottom: 10px; }
+	.race-header { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
+	.race-label { color: #888; }
+	.race-vals { display: flex; gap: 8px; }
+	.race-val-a { color: #185FA5; font-weight: bold; }
+	.race-val-b { color: #0F6E56; font-weight: bold; }
+	.race-track { background: #eee; border-radius: 4px; height: 8px; overflow: hidden; margin-bottom: 3px; }
+	.race-bar-a { height: 8px; background: #185FA5; border-radius: 4px; transition: width 0.6s ease; }
+	.race-bar-b { height: 8px; background: #0F6E56; border-radius: 4px; transition: width 0.6s ease; }
 
-	/* Spec cards */
-	.specs-section { margin-bottom: 2rem; }
-	.spec-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-	.spec-card { background: white; border: 2px solid; border-radius: 12px; overflow: hidden; }
-	.spec-card.spec-a { border-color: #2337ff; }
-	.spec-card.spec-b { border-color: #166534; }
-	.spec-card-header { padding: 0.85rem 1.1rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
-	.spec-card.spec-a .spec-card-header { background: #eff6ff; }
-	.spec-card.spec-b .spec-card-header { background: #f0fdf4; }
-	.spec-card-name { font-size: 0.95rem; font-weight: bold; color: #111; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-	.spec-badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 20px; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
-	.spec-card.spec-a .spec-badge { background: #dbeafe; color: #1d4ed8; }
-	.spec-card.spec-b .spec-badge { background: #dcfce7; color: #166534; }
-	.spec-card-body { padding: 0.25rem 1.1rem 0.75rem; }
-	.spec-row { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; padding: 0.4rem 0; border-bottom: 1px solid #f3f3f3; }
-	.spec-row:last-child { border-bottom: none; }
-	.spec-metric { font-size: 0.72rem; color: #888; white-space: nowrap; flex-shrink: 0; }
-	.spec-value { font-size: 0.8rem; font-weight: 600; text-align: right; word-break: break-word; }
-	.spec-value.is-winner { color: #166534; }
-	.spec-value.is-loser { color: #bbb; }
-	.spec-value.is-neutral { color: #333; }
+	/* REAL WORLD */
+	.rw-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+	.rw-card { background: white; border: 1px solid #eee; border-radius: 10px; padding: 10px; text-align: center; }
+	.rw-icon { font-size: 1.5rem; margin-bottom: 4px; }
+	.rw-task { font-size: 11px; color: #888; margin-bottom: 6px; line-height: 1.3; }
+	.rw-result-a { font-size: 13px; font-weight: bold; color: #185FA5; margin-bottom: 2px; }
+	.rw-result-b { font-size: 13px; font-weight: bold; color: #0F6E56; }
 
-	/* Explanations */
-	.explanation-section { }
-	.explanation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-	.explanation-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 1.25rem; }
-	.explanation-card.exp-a { border-left: 3px solid #2337ff; }
-	.explanation-card.exp-b { border-left: 3px solid #166534; }
-	.exp-title { font-size: 0.85rem; font-weight: bold; color: #333; margin-bottom: 0.4rem; }
-	.exp-text { font-size: 0.8rem; color: #666; margin: 0; line-height: 1.6; }
+	/* SPEC TABLE */
+	.spec-table { width: 100%; border-collapse: collapse; }
+	.spec-table th { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; padding: 6px 8px; text-align: left; border-bottom: 1px solid #eee; }
+	.spec-table th.right { text-align: right; }
+	.spec-table td { font-size: 13px; padding: 8px; border-bottom: 1px solid #f0f0f0; }
+	.spec-table td.metric { color: #888; font-size: 12px; }
+	.spec-table td.val-a { text-align: right; color: #185FA5; font-weight: bold; }
+	.spec-table td.val-b { text-align: right; color: #0F6E56; font-weight: bold; }
+	.spec-table td.muted { color: #aaa !important; font-weight: normal !important; }
 
-	/* About */
+	/* USE CASES */
+	.uc-legend-row { display: flex; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+	.uc-legend { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #888; }
+	.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+	.dot-a { background: #185FA5; }
+	.dot-b { background: #0F6E56; }
+	.dot-no { background: #E24B4A; }
+	.uc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 6px; }
+	.uc-card { background: white; border: 1px solid #eee; border-radius: 8px; padding: 8px; text-align: center; }
+	.uc-icon { font-size: 1.2rem; margin-bottom: 3px; }
+	.uc-name { font-size: 10px; color: #888; margin-bottom: 5px; line-height: 1.3; }
+	.uc-dot-row { display: flex; justify-content: center; gap: 4px; }
+
+	/* FUN FACT */
+	.fun-box { background: #f0f4ff; border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #555; line-height: 1.6; border-left: 3px solid #2337ff; }
+	.fun-box strong { color: #111; }
+
+	/* ABOUT */
 	.about-section { border-top: 2px solid #eee; padding-top: 2rem; }
 	.about-section h2 { font-size: 1.4rem; margin-bottom: 1rem; }
 	.about-section p { color: #555; line-height: 1.7; margin-bottom: 1rem; font-size: 0.95rem; }
 	.tool-credit { color: #888 !important; font-size: 0.85rem !important; }
 	.tool-credit a { color: #2337ff; }
 
-	/* Mobile */
+	/* MOBILE */
 	@media (max-width: 720px) {
-		/* Stack dropdowns vertically, full width, VS hidden */
-		.input-section { grid-template-columns: 1fr; gap: 0.75rem; }
-		.vs-label { display: none; }
-		.input-group select { width: 100%; }
-		#compare-btn { width: 100%; }
-		/* Result cards stack to single column */
-		.compare-cards { grid-template-columns: 1fr; }
-		.spec-cards { grid-template-columns: 1fr; }
-		.explanation-grid { grid-template-columns: 1fr; }
-		/* Tighten bar rows for narrow screens */
-		.bar-row { grid-template-columns: 55px 1fr 72px; gap: 0.5rem; }
-		.bar-label { font-size: 0.7rem; }
-		.bar-value { font-size: 0.72rem; }
+		.top-row { flex-direction: column; }
+		.select-group { min-width: 100%; }
+		.vs-pill { display: none; }
+		#cmp-btn { width: 100%; }
+		.hero-vs { grid-template-columns: 1fr auto 1fr; }
+		.hero-speed-a, .hero-speed-b { font-size: 1.4rem; }
+		.hero-emoji { font-size: 1.8rem; }
+		.rw-grid { grid-template-columns: 1fr 1fr; }
+		.uc-grid { grid-template-columns: repeat(4, 1fr); }
 	}
 </style>
 
 <script is:inline>
-
-const TECHNOLOGIES = {
-	"2g-edge": {
-		name: "2G EDGE",
-		category: "Mobile",
-		icon: "📱",
-		dlMbps: 0.384,
-		ulMbps: 0.118,
-		typicalDlMbps: 0.1,
-		typicalUlMbps: 0.05,
-		band: "850 / 900 / 1800 / 1900 MHz",
-		channelWidth: "200 kHz",
-		modulation: "8-PSK",
-		latencyMs: 300,
-		rangeKm: 35,
-		desc: "Enhanced Data rates for GSM Evolution. Theoretical 384 kbps DL using 8-PSK modulation. Still used for IoT and M2M in areas without 4G coverage.",
-	},
-	"3g-hspa": {
-		name: "3G HSPA+",
-		category: "Mobile",
-		icon: "📱",
-		dlMbps: 42,
-		ulMbps: 11.5,
-		typicalDlMbps: 8,
-		typicalUlMbps: 2,
-		band: "850 / 900 / 1700 / 2100 MHz",
-		channelWidth: "5 MHz",
-		modulation: "64-QAM (DL) / 16-QAM (UL)",
-		latencyMs: 50,
-		rangeKm: 15,
-		desc: "Evolved High Speed Packet Access with 2×2 MIMO. Peak 42 Mbps DL via Dual Carrier HSPA+. Widely used as 4G fallback in rural areas.",
-	},
-	"4g-lte": {
-		name: "4G LTE",
-		category: "Mobile",
-		icon: "📱",
-		dlMbps: 150,
-		ulMbps: 50,
-		typicalDlMbps: 25,
-		typicalUlMbps: 8,
-		band: "700 MHz – 2.6 GHz",
-		channelWidth: "20 MHz",
-		modulation: "64-QAM, 2×2 MIMO",
-		latencyMs: 30,
-		rangeKm: 10,
-		desc: "LTE Category 4 — the baseline 4G standard. 20 MHz channel, 2×2 MIMO, 64-QAM gives 150 Mbps theoretical DL. Globally ubiquitous.",
-	},
-	"4g-lte-a": {
-		name: "4G LTE-A",
-		category: "Mobile",
-		icon: "📱",
-		dlMbps: 600,
-		ulMbps: 100,
-		typicalDlMbps: 80,
-		typicalUlMbps: 20,
-		band: "Multi-band 700 MHz – 2.6 GHz",
-		channelWidth: "3×20 MHz (CA)",
-		modulation: "256-QAM, 4×4 MIMO",
-		latencyMs: 20,
-		rangeKm: 8,
-		desc: "LTE Advanced with 3-carrier aggregation, 4×4 MIMO, and 256-QAM. Deployed as 'LTE+' or '4.5G' — bridges the gap to 5G.",
-	},
-	"5g-sub6": {
-		name: "5G Sub-6GHz",
-		category: "Mobile",
-		icon: "📱",
-		dlMbps: 2000,
-		ulMbps: 500,
-		typicalDlMbps: 200,
-		typicalUlMbps: 50,
-		band: "600 MHz – 6 GHz",
-		channelWidth: "100 MHz",
-		modulation: "256-QAM, 4×4 MIMO",
-		latencyMs: 5,
-		rangeKm: 5,
-		desc: "5G NR Standalone on sub-6 GHz bands. Balances coverage and capacity with 100 MHz channels and 4×4 MIMO. The primary 5G deployment band globally.",
-	},
-	"5g-mmwave": {
-		name: "5G mmWave",
-		category: "Mobile",
-		icon: "📱",
-		dlMbps: 20000,
-		ulMbps: 10000,
-		typicalDlMbps: 3000,
-		typicalUlMbps: 1000,
-		band: "24–40 GHz",
-		channelWidth: "4×200 MHz (CA)",
-		modulation: "256-QAM, Massive MIMO",
-		latencyMs: 1,
-		rangeKm: 0.3,
-		desc: "5G on millimeter-wave bands with 800 MHz aggregated channel and massive MIMO. Delivers extreme throughput at very short range (<300 m).",
-	},
-	"adsl": {
-		name: "ADSL2+",
-		category: "Fixed Line",
-		icon: "🏠",
-		dlMbps: 24,
-		ulMbps: 3.5,
-		typicalDlMbps: 12,
-		typicalUlMbps: 1.5,
-		band: "138 kHz – 2.2 MHz",
-		channelWidth: "2.2 MHz",
-		modulation: "DMT (4096 sub-carriers)",
-		latencyMs: 25,
-		rangeKm: 5,
-		desc: "Asymmetric DSL over copper telephone lines. Highly distance-sensitive — performance roughly halves every 1.5 km from the DSLAM.",
-	},
-	"vdsl2": {
-		name: "VDSL2 Vectored",
-		category: "Fixed Line",
-		icon: "🏠",
-		dlMbps: 300,
-		ulMbps: 100,
-		typicalDlMbps: 80,
-		typicalUlMbps: 30,
-		band: "Up to 35 MHz",
-		channelWidth: "35 MHz",
-		modulation: "DMT with vectoring",
-		latencyMs: 8,
-		rangeKm: 0.5,
-		desc: "Very-high-speed DSL with vectoring (crosstalk cancellation). Requires fiber to the cabinet (FTTC). Best within 500 m of the DPU.",
-	},
-	"gfast": {
-		name: "G.fast",
-		category: "Fixed Line",
-		icon: "🏠",
-		dlMbps: 1000,
-		ulMbps: 1000,
-		typicalDlMbps: 500,
-		typicalUlMbps: 500,
-		band: "2 – 212 MHz",
-		channelWidth: "212 MHz",
-		modulation: "DMT (4096-QAM equiv.)",
-		latencyMs: 5,
-		rangeKm: 0.1,
-		desc: "Gigabit DSL using 106–212 MHz spectrum over very short copper drops (<100 m). Near-symmetric — used for FTTB (fiber to the building).",
-	},
-	"docsis31": {
-		name: "DOCSIS 3.1",
-		category: "Fixed Line",
-		icon: "🏠",
-		dlMbps: 10000,
-		ulMbps: 1500,
-		typicalDlMbps: 1000,
-		typicalUlMbps: 200,
-		band: "5 MHz – 1 GHz (HFC)",
-		channelWidth: "192 MHz OFDM",
-		modulation: "4096-QAM (OFDM)",
-		latencyMs: 10,
-		rangeKm: 30,
-		desc: "Cable broadband using OFDM with 4096-QAM over a shared HFC network. 10 Gbps DL theoretical — shared among node subscribers.",
-	},
-	"gpon": {
-		name: "GPON Fiber",
-		category: "Fixed Line",
-		icon: "🏠",
-		dlMbps: 2488,
-		ulMbps: 1244,
-		typicalDlMbps: 600,
-		typicalUlMbps: 300,
-		band: "1490 / 1310 nm optical",
-		channelWidth: "N/A (optical)",
-		modulation: "NRZ optical",
-		latencyMs: 1.5,
-		rangeKm: 20,
-		desc: "Gigabit-capable Passive Optical Network. Shared 2.5 Gbps DL / 1.25 Gbps UL across up to 64 subscribers on a single passive splitter.",
-	},
-	"xgspon": {
-		name: "XGS-PON",
-		category: "Fixed Line",
-		icon: "🏠",
-		dlMbps: 10000,
-		ulMbps: 10000,
-		typicalDlMbps: 2000,
-		typicalUlMbps: 2000,
-		band: "1577 / 1270 nm optical",
-		channelWidth: "N/A (optical)",
-		modulation: "NRZ optical",
-		latencyMs: 1.5,
-		rangeKm: 20,
-		desc: "10-Gigabit Symmetric PON — the current standard for new full-fiber FTTP deployments. Symmetric 10 Gbps to the premises.",
-	},
-	"wifi4": {
-		name: "Wi-Fi 4 (802.11n)",
-		category: "Wi-Fi",
-		icon: "📶",
-		dlMbps: 600,
-		ulMbps: 600,
-		typicalDlMbps: 100,
-		typicalUlMbps: 100,
-		band: "2.4 / 5 GHz",
-		channelWidth: "40 MHz",
-		modulation: "64-QAM, 4×4 MIMO",
-		latencyMs: 5,
-		rangeKm: 0.07,
-		desc: "IEEE 802.11n introduced MIMO to Wi-Fi. 40 MHz channels and 4×4 MIMO give 600 Mbps theoretical. Still found in millions of legacy devices.",
-	},
-	"wifi5": {
-		name: "Wi-Fi 5 (802.11ac)",
-		category: "Wi-Fi",
-		icon: "📶",
-		dlMbps: 3500,
-		ulMbps: 1000,
-		typicalDlMbps: 400,
-		typicalUlMbps: 150,
-		band: "5 GHz only",
-		channelWidth: "160 MHz",
-		modulation: "256-QAM, 8×8 MU-MIMO",
-		latencyMs: 4,
-		rangeKm: 0.05,
-		desc: "5 GHz only, 160 MHz channels, 8×8 MU-MIMO, 256-QAM. Wave 2 introduced MU-MIMO for concurrent downstream streams to multiple clients.",
-	},
-	"wifi6": {
-		name: "Wi-Fi 6 (802.11ax)",
-		category: "Wi-Fi",
-		icon: "📶",
-		dlMbps: 9608,
-		ulMbps: 9608,
-		typicalDlMbps: 1200,
-		typicalUlMbps: 1200,
-		band: "2.4 / 5 / 6 GHz",
-		channelWidth: "160 MHz",
-		modulation: "1024-QAM, 8×8 MU-MIMO, OFDMA",
-		latencyMs: 3,
-		rangeKm: 0.06,
-		desc: "OFDMA and 1024-QAM enable 9.6 Gbps theoretical across 2.4/5/6 GHz bands. Designed for dense environments with many concurrent devices.",
-	},
-	"wifi7": {
-		name: "Wi-Fi 7 (802.11be)",
-		category: "Wi-Fi",
-		icon: "📶",
-		dlMbps: 46120,
-		ulMbps: 46120,
-		typicalDlMbps: 5000,
-		typicalUlMbps: 5000,
-		band: "2.4 / 5 / 6 GHz",
-		channelWidth: "320 MHz",
-		modulation: "4096-QAM, 16×16 MIMO, MLO",
-		latencyMs: 1,
-		rangeKm: 0.07,
-		desc: "320 MHz channels, 4096-QAM, 16×16 MIMO, and multi-link operation (MLO) across bands. Theoretical peak exceeds 46 Gbps — the fastest Wi-Fi standard.",
-	},
-	"leo": {
-		name: "LEO Satellite",
-		category: "Satellite",
-		icon: "🛰️",
-		dlMbps: 350,
-		ulMbps: 40,
-		typicalDlMbps: 100,
-		typicalUlMbps: 15,
-		band: "Ku / Ka band (12–30 GHz)",
-		channelWidth: "250 MHz",
-		modulation: "QPSK / 16-APSK",
-		latencyMs: 20,
-		rangeKm: 1000,
-		desc: "Low Earth Orbit satellite (e.g., Starlink) at ~550 km altitude. Best-effort with variable throughput depending on demand. Suitable for rural broadband.",
-	},
-	"geo": {
-		name: "GEO Satellite",
-		category: "Satellite",
-		icon: "🛰️",
-		dlMbps: 100,
-		ulMbps: 3,
-		typicalDlMbps: 25,
-		typicalUlMbps: 1,
-		band: "Ku / Ka band (12–30 GHz)",
-		channelWidth: "500 MHz",
-		modulation: "DVB-S2X, 32-APSK",
-		latencyMs: 600,
-		rangeKm: 3000,
-		desc: "Geostationary satellite at 35,786 km. Wide continental coverage but unavoidable 600ms+ latency. Limited to basic browsing and video streaming.",
-	},
+const T={
+	'2g-gprs':{n:'2G GPRS',e:'📟',cat:'wireless',dl:0.114,ul:0.04,real:0.04,lat:500,freq:'900/1800 MHz',range:'35 km',mod:'GMSK',gen:'2G',fact:'2G is slower than a 1990s fax machine. Downloading a 4K movie would take roughly 3 weeks!'},
+	'3g-hspa':{n:'3G HSPA+',e:'📱',cat:'wireless',dl:42,ul:5.76,real:5,lat:100,freq:'2100 MHz',range:'5 km',mod:'QPSK/16QAM',gen:'3G',fact:'3G felt like magic in 2005. It could stream a YouTube video — in 240p.'},
+	'4g-lte':{n:'4G LTE',e:'📶',cat:'wireless',dl:150,ul:50,real:40,lat:30,freq:'700–2600 MHz',range:'2 km',mod:'64QAM/OFDMA',gen:'4G',fact:'4G LTE changed everything. HD streaming, video calls, apps — all became effortless on the go.'},
+	'5g-sub6':{n:'5G Sub-6 GHz',e:'🚀',cat:'wireless',dl:1000,ul:200,real:200,lat:5,freq:'600 MHz – 6 GHz',range:'1 km',mod:'256QAM/OFDMA',gen:'5G',fact:'5G is so fast you can download a full HD movie before the download bar even appears on screen!'},
+	'5g-mmwave':{n:'5G mmWave',e:'⚡',cat:'wireless',dl:10000,ul:2000,real:2000,lat:1,freq:'24–100 GHz',range:'100 m',mod:'256QAM/MIMO',gen:'5G',fact:'5G mmWave hits 10 Gbps — fast enough to download 1,000 songs per second! But a wall stops it dead.'},
+	'wifi4':{n:'Wi-Fi 4 (802.11n)',e:'🏠',cat:'wireless',dl:600,ul:600,real:100,lat:5,freq:'2.4/5 GHz',range:'70 m',mod:'64QAM/MIMO',gen:'802.11n',fact:'Wi-Fi 4 from 2009 introduced MIMO — your router sprouted multiple antennas and home internet got faster.'},
+	'wifi6':{n:'Wi-Fi 6 (802.11ax)',e:'🛜',cat:'wireless',dl:9608,ul:9608,real:1500,lat:2,freq:'2.4/5/6 GHz',range:'50 m',mod:'1024QAM/OFDMA',gen:'802.11ax',fact:'Wi-Fi 6 serves 8 devices simultaneously at full speed. Perfect for streaming on every screen at once!'},
+	'leo-sat':{n:'LEO Satellite',e:'🛰️',cat:'wireless',dl:350,ul:40,real:150,lat:40,freq:'Ka/Ku-band',range:'Global',mod:'Adaptive QPSK',gen:'Space',fact:'LEO satellites orbit at 550 km. You can get broadband in the middle of the Pacific Ocean or the Sahara!'},
+	'adsl2':{n:'ADSL2+',e:'☎️',cat:'wireline',dl:24,ul:1,real:8,lat:20,freq:'2.2 MHz',range:'5 km',mod:'DMT/QAM',gen:'xDSL',fact:'ADSL upload is painfully slow — sending a 1 GB file takes over 2 hours. Gets worse the farther you are!'},
+	'vdsl2':{n:'VDSL2 / G.fast',e:'🔌',cat:'wireline',dl:300,ul:100,real:100,lat:10,freq:'35 MHz',range:'300 m',mod:'QAM-4096',gen:'xDSL',fact:'VDSL is fast — but only if you live close to the cabinet. Move 500m away and speed halves instantly.'},
+	'cable-docsis':{n:'DOCSIS 3.1',e:'📺',cat:'wireline',dl:10000,ul:1000,real:800,lat:10,freq:'1.2 GHz',range:'Shared node',mod:'4096-QAM/OFDM',gen:'HFC Cable',fact:'Cable internet is shared with neighbours. Quiet at 3am = super fast. Peak time at 8pm = much slower!'},
+	'fiber-gpon':{n:'GPON Fiber',e:'💎',cat:'wireline',dl:2500,ul:1250,real:1000,lat:2,freq:'1310/1490 nm',range:'20 km',mod:'NRZ Optical',gen:'GPON',fact:'Fiber sends light through glass — immune to interference, weather, and distance. The future of broadband!'},
+	'fiber-xgs':{n:'XGS-PON Fiber',e:'🔵',cat:'wireline',dl:10000,ul:10000,real:2500,lat:1,freq:'1270/1577 nm',range:'20 km',mod:'NRZ Optical',gen:'XGS-PON',fact:'XGS-PON is the Ferrari of broadband — 10 Gbps both ways. Upload a 4K movie in 3 seconds flat!'},
+	'ethernet-1g':{n:'Gigabit Ethernet',e:'🟢',cat:'wireline',dl:1000,ul:1000,real:940,lat:0.1,freq:'Cat5e/Cat6',range:'100 m',mod:'PAM-5',gen:'LAN',fact:'A Gigabit LAN cable is near-perfect — you get 940 Mbps of the 1000 Mbps theoretical. Near zero waste!'},
+	'ethernet-10g':{n:'10G Ethernet',e:'🔷',cat:'wireline',dl:10000,ul:10000,real:9500,lat:0.05,freq:'Cat6a/SFP+',range:'100 m',mod:'PAM-16',gen:'LAN',fact:'10G Ethernet is the data center workhorse. Transferring your entire laptop drive takes under 90 seconds!'},
 };
 
-function fmtBw(mbps) {
-	if (mbps >= 1000) {
-		const g = mbps / 1000;
-		return { num: g >= 10 ? g.toFixed(0) : g.toFixed(1), unit: "Gbps" };
-	}
-	if (mbps < 1) return { num: (mbps * 1000).toFixed(0), unit: "Kbps" };
-	return { num: mbps >= 100 ? Math.round(mbps).toString() : mbps.toString(), unit: "Mbps" };
+const UCS=[
+	{n:'WhatsApp call',e:'📞',minMbps:0.1,maxLat:300},
+	{n:'SD streaming',e:'📱',minMbps:3,maxLat:500},
+	{n:'HD streaming',e:'🎬',minMbps:25,maxLat:200},
+	{n:'4K streaming',e:'📺',minMbps:50,maxLat:100},
+	{n:'Online gaming',e:'🎮',minMbps:10,maxLat:30},
+	{n:'HD video call',e:'💻',minMbps:10,maxLat:150},
+	{n:'Cloud backup',e:'☁️',minMbps:50,maxLat:1000},
+	{n:'Remote desktop',e:'🖥️',minMbps:5,maxLat:50},
+];
+
+function fmt(mbps){
+	if(mbps>=1000)return(mbps>=10000?Math.round(mbps/1000):(mbps/1000).toFixed(1))+' Gbps';
+	if(mbps<1)return Math.round(mbps*1000)+' Kbps';
+	return Math.round(mbps)+' Mbps';
 }
 
-// Log scale 0–100% across 0.05 Mbps to 50,000 Mbps
-function logPct(mbps) {
-	const lo = Math.log10(0.05);
-	const hi = Math.log10(50000);
-	const pct = (Math.log10(Math.max(mbps, 0.05)) - lo) / (hi - lo) * 100;
-	return Math.max(2, Math.min(100, pct));
+function dlTime(mbps,gb){
+	const secs=(gb*8*1024)/mbps;
+	if(secs<1)return Math.round(secs*1000)+'ms';
+	if(secs<60)return Math.round(secs)+'s';
+	if(secs<3600)return Math.round(secs/60)+'min';
+	return(secs/3600).toFixed(1)+'hr';
 }
 
-function compare() {
-	const keyA = document.getElementById("tech-a").value;
-	const keyB = document.getElementById("tech-b").value;
-
-	if (!keyA || !keyB) {
-		alert("Please select both technologies!");
-		return;
-	}
-	if (keyA === keyB) {
-		alert("Please select two different technologies!");
-		return;
-	}
-
-	const a = TECHNOLOGIES[keyA];
-	const b = TECHNOLOGIES[keyB];
-
-	// --- Summary cards ---
-	const cards = document.getElementById("compare-cards");
-	[{ t: a, cls: "card-a", letter: "A" }, { t: b, cls: "card-b", letter: "B" }].forEach(({ t, cls, letter }) => {
-		const dl = fmtBw(t.dlMbps);
-		const ul = fmtBw(t.ulMbps);
-		cards.innerHTML += `
-			<div class="compare-card ${cls}">
-				<div class="card-label">Technology ${letter} — ${t.category} ${t.icon}</div>
-				<div class="card-name">${t.name}</div>
-				<div class="card-bw">
-					<div class="bw-stat">
-						<div class="bw-dir">↓ Downlink</div>
-						<div class="bw-num">${dl.num}</div>
-						<div class="bw-unit">${dl.unit}</div>
-					</div>
-					<div class="bw-stat">
-						<div class="bw-dir">↑ Uplink</div>
-						<div class="bw-num">${ul.num}</div>
-						<div class="bw-unit">${ul.unit}</div>
-					</div>
-				</div>
-			</div>
-		`;
+function populate(){
+	const groups={wireless:'Wireless',wireline:'Wireline'};
+	['ta','tb'].forEach(id=>{
+		const sel=document.getElementById(id);
+		Object.entries(groups).forEach(([cat,label])=>{
+			const og=document.createElement('optgroup');
+			og.label=label;
+			Object.entries(T).filter(([,t])=>t.cat===cat).forEach(([key,t])=>{
+				const o=document.createElement('option');
+				o.value=key;o.textContent=t.n;
+				og.appendChild(o);
+			});
+			sel.appendChild(og);
+		});
 	});
-	cards.innerHTML = cards.innerHTML; // re-trigger
-
-	// --- Bar chart ---
-	const barsGrid = document.getElementById("bars-grid");
-	const rows = [
-		{ label: "Peak DL", valA: a.dlMbps, valB: b.dlMbps },
-		{ label: "Peak UL", valA: a.ulMbps, valB: b.ulMbps },
-		{ label: "Typical DL", valA: a.typicalDlMbps, valB: b.typicalDlMbps },
-		{ label: "Typical UL", valA: a.typicalUlMbps, valB: b.typicalUlMbps },
-	];
-	barsGrid.innerHTML = rows.map(row => {
-		const fmtA = fmtBw(row.valA);
-		const fmtB = fmtBw(row.valB);
-		return `
-			<div class="bar-group">
-				<div class="bar-group-label">${row.label}</div>
-				<div class="bar-row">
-					<div class="bar-label" style="color:#2337ff">${a.name.split(" ")[0]}</div>
-					<div class="bar-track"><div class="bar-fill fill-a" style="width:${logPct(row.valA)}%"></div></div>
-					<div class="bar-value">${fmtA.num} ${fmtA.unit}</div>
-				</div>
-				<div class="bar-row">
-					<div class="bar-label" style="color:#166534">${b.name.split(" ")[0]}</div>
-					<div class="bar-track"><div class="bar-fill fill-b" style="width:${logPct(row.valB)}%"></div></div>
-					<div class="bar-value">${fmtB.num} ${fmtB.unit}</div>
-				</div>
-			</div>
-		`;
-	}).join("");
-
-	// --- Spec cards (side-by-side, each with label:value rows) ---
-	const specDefs = [
-		{ label: "Peak Downlink",    valA: fmtBw(a.dlMbps),         valB: fmtBw(b.dlMbps),         cmp: a.dlMbps > b.dlMbps ? "a" : "b" },
-		{ label: "Peak Uplink",      valA: fmtBw(a.ulMbps),         valB: fmtBw(b.ulMbps),         cmp: a.ulMbps > b.ulMbps ? "a" : "b" },
-		{ label: "Typical Downlink", valA: fmtBw(a.typicalDlMbps),  valB: fmtBw(b.typicalDlMbps),  cmp: a.typicalDlMbps > b.typicalDlMbps ? "a" : "b" },
-		{ label: "Typical Uplink",   valA: fmtBw(a.typicalUlMbps),  valB: fmtBw(b.typicalUlMbps),  cmp: a.typicalUlMbps > b.typicalUlMbps ? "a" : "b" },
-		{ label: "Latency",          valA: { num: a.latencyMs + " ms", unit: "" }, valB: { num: b.latencyMs + " ms", unit: "" }, cmp: a.latencyMs < b.latencyMs ? "a" : "b" },
-		{ label: "Frequency",        valA: { num: a.band, unit: "" },        valB: { num: b.band, unit: "" },        cmp: null },
-		{ label: "Channel Width",    valA: { num: a.channelWidth, unit: "" }, valB: { num: b.channelWidth, unit: "" }, cmp: null },
-		{ label: "Modulation",       valA: { num: a.modulation, unit: "" },  valB: { num: b.modulation, unit: "" },  cmp: null },
-		{ label: "Coverage",         valA: { num: a.rangeKm >= 1 ? a.rangeKm + " km" : (a.rangeKm * 1000) + " m", unit: "" }, valB: { num: b.rangeKm >= 1 ? b.rangeKm + " km" : (b.rangeKm * 1000) + " m", unit: "" }, cmp: null },
-	];
-
-	function valueClass(cmp, side) {
-		if (cmp === null) return "is-neutral";
-		return cmp === side ? "is-winner" : "is-loser";
-	}
-
-	function buildSpecCard(t, side, cardCls) {
-		const rows = specDefs.map(s => {
-			const raw = side === "a" ? s.valA : s.valB;
-			const display = raw.num + (raw.unit ? " " + raw.unit : "");
-			return `<div class="spec-row">
-				<span class="spec-metric">${s.label}</span>
-				<span class="spec-value ${valueClass(s.cmp, side)}">${display}</span>
-			</div>`;
-		}).join("");
-		return `<div class="spec-card ${cardCls}">
-			<div class="spec-card-header">
-				<span class="spec-card-name">${t.name}</span>
-				<span class="spec-badge">${t.category} ${t.icon}</span>
-			</div>
-			<div class="spec-card-body">${rows}</div>
-		</div>`;
-	}
-
-	document.getElementById("specs-cards").innerHTML =
-		buildSpecCard(a, "a", "spec-a") + buildSpecCard(b, "b", "spec-b");
-
-	// --- Explanations ---
-	const expGrid = document.getElementById("explanation-grid");
-	expGrid.innerHTML = `
-		<div class="explanation-card exp-a">
-			<div class="exp-title">${a.icon} ${a.name}</div>
-			<p class="exp-text">${a.desc}</p>
-		</div>
-		<div class="explanation-card exp-b">
-			<div class="exp-title">${b.icon} ${b.name}</div>
-			<p class="exp-text">${b.desc}</p>
-		</div>
-	`;
-
-	document.getElementById("empty-state").style.display = "none";
-	document.getElementById("results").style.display = "block";
 }
 
-document.getElementById("compare-btn").addEventListener("click", function() {
-	document.getElementById("compare-cards").innerHTML = "";
-	document.getElementById("bars-grid").innerHTML = "";
-	document.getElementById("specs-cards").innerHTML = "";
-	document.getElementById("explanation-grid").innerHTML = "";
-	compare();
-});
+function q(a,b){
+	document.getElementById('ta').value=a;
+	document.getElementById('tb').value=b;
+	go();
+}
+
+function go(){
+	const ak=document.getElementById('ta').value;
+	const bk=document.getElementById('tb').value;
+	if(!ak||!bk||ak===bk){
+		document.getElementById('empty').style.display='block';
+		document.getElementById('result').style.display='none';
+		return;
+	}
+	const A=T[ak],B=T[bk];
+	document.getElementById('empty').style.display='none';
+	document.getElementById('result').style.display='block';
+
+	// HERO
+	const aWins=A.dl>=B.dl;
+	document.getElementById('hero-vs').innerHTML=`
+		<div class="hero-card ${aWins?'winner-card':''}">
+			<div class="hero-emoji">${A.e}</div>
+			<div class="hero-name">${A.n}</div>
+			<span class="hero-cat cat-${A.cat}">${A.cat}</span>
+			<div class="hero-speed-a">${fmt(A.dl)}</div>
+			<div class="hero-unit">peak downlink</div>
+			<div class="hero-tag ${aWins?'tag-winner':'tag-loser'}">${aWins?'🏆 Faster':'Slower'}</div>
+		</div>
+		<div class="vs-circle">VS</div>
+		<div class="hero-card ${!aWins?'winner-card':''}">
+			<div class="hero-emoji">${B.e}</div>
+			<div class="hero-name">${B.n}</div>
+			<span class="hero-cat cat-${B.cat}">${B.cat}</span>
+			<div class="hero-speed-b">${fmt(B.dl)}</div>
+			<div class="hero-unit">peak downlink</div>
+			<div class="hero-tag ${!aWins?'tag-winner':'tag-loser'}">${!aWins?'🏆 Faster':'Slower'}</div>
+		</div>`;
+
+	// BARS
+	const gmax=Math.max(A.dl,B.dl,A.real,B.real,A.ul,B.ul);
+	document.getElementById('race-bars').innerHTML=[
+		{label:'Peak downlink',av:A.dl,bv:B.dl},
+		{label:'Typical speed',av:A.real,bv:B.real},
+		{label:'Peak uplink',av:A.ul,bv:B.ul},
+	].map(r=>`
+		<div class="race-row">
+			<div class="race-header">
+				<span class="race-label">${r.label}</span>
+				<div class="race-vals">
+					<span class="race-val-a">${fmt(r.av)}</span>
+					<span style="color:#aaa">vs</span>
+					<span class="race-val-b">${fmt(r.bv)}</span>
+				</div>
+			</div>
+			<div class="race-track"><div class="race-bar-a" style="width:${Math.max(2,Math.round(r.av/gmax*100))}%"></div></div>
+			<div class="race-track"><div class="race-bar-b" style="width:${Math.max(2,Math.round(r.bv/gmax*100))}%"></div></div>
+		</div>`).join('');
+
+	// REAL WORLD
+	const rwtasks=[
+		{e:'🎵',n:'1,000 songs (4GB)',gb:4},
+		{e:'🎬',n:'HD movie (8GB)',gb:8},
+		{e:'💾',n:'OS update (5GB)',gb:5},
+		{e:'📸',n:'1,000 photos (3GB)',gb:3},
+	];
+	document.getElementById('rw-grid').innerHTML=rwtasks.map(t=>`
+		<div class="rw-card">
+			<div class="rw-icon">${t.e}</div>
+			<div class="rw-task">${t.n}</div>
+			<div class="rw-result-a">${A.e} ${dlTime(A.real,t.gb)}</div>
+			<div class="rw-result-b">${B.e} ${dlTime(B.real,t.gb)}</div>
+		</div>`).join('');
+
+	// SPECS
+	document.getElementById('th-a').textContent=A.n;
+	document.getElementById('th-b').textContent=B.n;
+	const specs=[
+		{label:'Peak downlink',av:fmt(A.dl),bv:fmt(B.dl),an:A.dl,bn:B.dl,h:'better'},
+		{label:'Typical speed',av:fmt(A.real),bv:fmt(B.real),an:A.real,bn:B.real,h:'better'},
+		{label:'Latency',av:A.lat+'ms',bv:B.lat+'ms',an:A.lat,bn:B.lat,h:'lower'},
+		{label:'Frequency',av:A.freq,bv:B.freq,an:null},
+		{label:'Range',av:A.range,bv:B.range,an:null},
+		{label:'Modulation',av:A.mod,bv:B.mod,an:null},
+		{label:'Generation',av:A.gen,bv:B.gen,an:null},
+	];
+	document.getElementById('spec-body').innerHTML=specs.map(s=>{
+		let ca='',cb='';
+		if(s.an!==null){
+			const aw=s.h==='better'?s.an>s.bn:s.an<s.bn;
+			const bw=s.h==='better'?s.bn>s.an:s.bn<s.an;
+			ca=aw?'':'muted';
+			cb=bw?'':'muted';
+		}
+		return`<tr><td class="metric">${s.label}</td><td class="val-a ${ca}">${s.av}</td><td class="val-b ${cb}">${s.bv}</td></tr>`;
+	}).join('');
+
+	// USE CASES
+	document.getElementById('leg-a').textContent=A.n;
+	document.getElementById('leg-b').textContent=B.n;
+	document.getElementById('uc-grid').innerHTML=UCS.map(uc=>{
+		const aok=A.real>=uc.minMbps&&A.lat<=uc.maxLat;
+		const bok=B.real>=uc.minMbps&&B.lat<=uc.maxLat;
+		return`<div class="uc-card">
+			<div class="uc-icon">${uc.e}</div>
+			<div class="uc-name">${uc.n}</div>
+			<div class="uc-dot-row">
+				<div class="dot" style="background:${aok?'#0F6E56':'#E24B4A'}"></div>
+				<div class="dot" style="background:${bok?'#0F6E56':'#E24B4A'}"></div>
+			</div>
+		</div>`;
+	}).join('');
+
+	// FUN FACT
+	const faster=A.dl>B.dl?A:B;
+	const slower=A.dl>B.dl?B:A;
+	const ratio=faster.dl/slower.dl;
+	const ratioStr=ratio>=1000?Math.round(ratio/1000)+'K':ratio>=10?Math.round(ratio):ratio.toFixed(1);
+	document.getElementById('fun-box').innerHTML=`<strong>Did you know?</strong> ${faster.n} is <strong>${ratioStr}x faster</strong> than ${slower.n} at peak. ${faster.fact}`;
+}
+
+document.getElementById('cmp-btn').addEventListener('click',go);
+populate();
 </script>
