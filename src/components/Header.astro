@@ -5,6 +5,15 @@ import { SITE_TITLE } from '../consts';
 <header>
 	<nav>
 		<h2><a href="/">{SITE_TITLE}</a></h2>
+		<div class="desktop-links">
+			<HeaderLink href="/">Home</HeaderLink>
+			<HeaderLink href="/blog">Articles</HeaderLink>
+			<HeaderLink href="/publications">Publications</HeaderLink>
+			<HeaderLink href="/citations">Citations</HeaderLink>
+			<HeaderLink href="/tools">Tools</HeaderLink>
+			<HeaderLink href="/about">About</HeaderLink>
+			<HeaderLink href="/contact">Contact</HeaderLink>
+		</div>
 		<div class="social-links">
 			<a href="https://www.linkedin.com/in/saurabh-pant-67b67a10/" target="_blank">
 				<span class="sr-only">Connect with Saurabh Pant on LinkedIn</span>
@@ -30,15 +39,6 @@ import { SITE_TITLE } from '../consts';
 					<path fill="currentColor" d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5z"/>
 				</svg>
 			</a>
-		</div>
-		<div class="desktop-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Articles</HeaderLink>
-			<HeaderLink href="/publications">Publications</HeaderLink>
-			<HeaderLink href="/citations">Citations</HeaderLink>
-			<HeaderLink href="/tools">Tools</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
-			<HeaderLink href="/contact">Contact</HeaderLink>
 		</div>
 		<button class="hamburger" id="hamburger" aria-label="Open menu">
 			<span></span>
