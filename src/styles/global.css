@@ -122,15 +122,6 @@ hr {
 	h2 { font-size: 1.6em; }
 	h3 { font-size: 1.3em; }
 
-	/* Navigation */
-	nav {
-		flex-wrap: wrap !important;
-		padding: 0.5em 0 !important;
-	}
-	nav h2 {
-		width: 100%;
-		padding: 0.5em 0 !important;
-	}
 	.internal-links {
 		display: flex !important;
 		flex-wrap: nowrap !important;
