@@ -138,8 +138,14 @@ import { SITE_TITLE } from '../consts';
 			padding: 0;
 		}
 		nav {
-			height: 52px;
+			height: 64px;
 			padding: 0 1rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+		h2 {
+			font-size: 1.5em;
 		}
 		h2 a {
 			padding: 0;
@@ -154,9 +160,15 @@ import { SITE_TITLE } from '../consts';
 			display: none;
 		}
 
-		/* Show hamburger */
+		/* Show hamburger — sized to match the larger header text */
 		.hamburger {
 			display: flex;
+			padding: 8px;
+			gap: 6px;
+		}
+		.hamburger span {
+			width: 32px;
+			height: 3px;
 		}
 
 		/* Mobile menu: collapsed by default using max-height */
