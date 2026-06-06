@@ -184,13 +184,14 @@ import { SITE_TITLE } from '../consts';
 			right: -100%;
 			width: 100%;
 			height: auto;
+			max-height: calc(100vh - 52px);
 			background: white;
 			flex-direction: column;
 			align-items: stretch;
 			z-index: 150;
 			transition: right 0.3s ease;
 			overflow-y: auto;
-			box-shadow: -4px 8px 24px rgba(0, 0, 0, 0.12);
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 		}
 		.internal-links.open {
 			right: 0;
@@ -198,7 +199,7 @@ import { SITE_TITLE } from '../consts';
 		.internal-links a {
 			padding: 1.2rem 1.5rem;
 			border-bottom: 1px solid #eee;
-			font-size: 1.8rem;
+			font-size: 3.6rem;
 			color: rgb(var(--black));
 			text-decoration: none;
 			display: block;
@@ -229,24 +230,18 @@ import { SITE_TITLE } from '../consts';
 
 	function openMenu() {
 		navMenu.classList.add('open');
-		overlay.classList.add('open');
 		hamburger.classList.add('menu-open');
-		document.body.style.overflow = 'hidden';
 	}
 
 	function closeMenu() {
 		navMenu.classList.remove('open');
-		overlay.classList.remove('open');
 		hamburger.classList.remove('menu-open');
-		document.body.style.overflow = '';
 	}
 
 	// Toggle open/close on hamburger tap
 	hamburger.addEventListener('click', () => {
 		navMenu.classList.contains('open') ? closeMenu() : openMenu();
 	});
-
-	overlay.addEventListener('click', closeMenu);
 
 	// Close when a nav link is tapped
 	navMenu.querySelectorAll('a').forEach(link => {
