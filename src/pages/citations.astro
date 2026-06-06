@@ -1,0 +1,118 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`Citations — ${SITE_TITLE}`}
+			description="Academic citations, references, and research publications by Saurabh Pant on telecom, OSS/BSS, 5G, and digital infrastructure."
+		/>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="page-header">
+				<h1>Citations & Research</h1>
+				<p class="subtitle">
+					Academic publications, citations, and research references from
+					20+ years in telecom transformation and digital infrastructure.
+				</p>
+			</section>
+
+			<!-- MY PUBLICATIONS -->
+			<section class="cite-section">
+				<h2>📄 My Publications</h2>
+
+				<div class="pub-list">
+
+					<div class="pub-card">
+						<div class="pub-meta">
+							<span class="status-badge in-progress">In Progress</span>
+							<span class="pub-venue">arXiv · IEEE</span>
+						</div>
+						<h3>Coming Soon</h3>
+						<p class="pub-desc">Research on OSI layer networking — to be published on arXiv and IEEE.</p>
+						<div class="pub-tags">
+							<span class="tag">OSI</span>
+							<span class="tag">Networking</span>
+							<span class="tag">Research</span>
+						</div>
+					</div>
+
+				</div>
+			</section>
+
+			<!-- CITATIONS & REFERENCES -->
+			<section class="cite-section">
+				<h2>🔗 Citations & References</h2>
+
+				<div class="placeholder-box">
+					<div class="placeholder-icon">📬</div>
+					<p class="placeholder-title">Citations will appear here once papers are published</p>
+					<p class="placeholder-sub">
+						In the meantime, you can find my academic profile on
+						<a href="https://scholar.google.com/citations?user=QPDMorAAAAAJ&hl=en" target="_blank">Google Scholar →</a>
+					</p>
+				</div>
+			</section>
+
+			<!-- GOOGLE SCHOLAR CTA -->
+			<section class="scholar-cta">
+				<div class="cta-inner">
+					<div>
+						<h2>View Full Academic Profile</h2>
+						<p>All publications, citations, and h-index metrics are tracked on Google Scholar.</p>
+					</div>
+					<a href="https://scholar.google.com/citations?user=QPDMorAAAAAJ&hl=en" target="_blank" class="cta-btn">
+						<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5z"/></svg>
+						Open Google Scholar
+					</a>
+				</div>
+			</section>
+
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	main { max-width: 860px; margin: 0 auto; padding: 2rem 1rem; }
+	.page-header { text-align: center; padding: 2rem 0; border-bottom: 2px solid #eee; margin-bottom: 2rem; }
+	.page-header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+	.subtitle { color: #666; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+	.cite-section { margin-bottom: 3rem; }
+	.cite-section h2 { font-size: 1.6rem; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid #eee; }
+
+	/* Publication card */
+	.pub-list { display: flex; flex-direction: column; gap: 1.5rem; }
+	.pub-card { border: 1px solid #e0e0e0; border-radius: 8px; padding: 1.5rem; background: #fafafa; border-left: 4px solid #2337ff; }
+	.pub-meta { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; align-items: center; }
+	.status-badge { padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+	.status-badge.in-progress { background: #fef3c7; color: #92400e; }
+	.pub-venue { color: #888; font-size: 0.85rem; }
+	.pub-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #111; }
+	.pub-desc { color: #555; font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.6; }
+	.pub-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+	.tag { background: #f0f4ff; color: #2337ff; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
+
+	/* Placeholder */
+	.placeholder-box { border: 2px dashed #ddd; border-radius: 8px; padding: 3rem 2rem; text-align: center; }
+	.placeholder-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+	.placeholder-title { font-size: 1rem; color: #555; font-weight: 500; margin-bottom: 0.5rem; }
+	.placeholder-sub { color: #888; font-size: 0.9rem; margin: 0; }
+	.placeholder-sub a { color: #2337ff; text-decoration: none; }
+	.placeholder-sub a:hover { text-decoration: underline; }
+
+	/* Scholar CTA */
+	.scholar-cta { background: #f0f4ff; border-radius: 12px; padding: 2rem; margin-top: 1rem; }
+	.cta-inner { display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+	.scholar-cta h2 { font-size: 1.2rem; color: #111; margin-bottom: 0.35rem; }
+	.scholar-cta p { color: #555; font-size: 0.9rem; margin: 0; }
+	.cta-btn { display: flex; align-items: center; gap: 0.5rem; background: #2337ff; color: white; padding: 0.7rem 1.4rem; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; white-space: nowrap; transition: background 0.2s; }
+	.cta-btn:hover { background: #1a2acc; }
+</style>
