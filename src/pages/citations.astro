@@ -31,6 +31,24 @@ import { SITE_TITLE } from '../consts';
 
 					<div class="pub-card">
 						<div class="pub-meta">
+							<span class="status-badge published">Published</span>
+							<span class="pub-venue">saurabhpant.com · Policy Analysis</span>
+							<span class="pub-date">June 2026</span>
+						</div>
+						<h3><a href="/publications/trai-mvno-india-opportunity">Unlocking India's Billion-Dollar MVNO Opportunity: Why TRAI Must Lower the Entry Barrier Now</a></h3>
+						<p class="pub-desc">India's MVNO market remains one of the most underdeveloped among major economies. A bold regulatory reset by TRAI — reducing entry fees, streamlining licensing, and leveraging BSNL's underutilised infrastructure — could catalyse a new billion-dollar economy spanning IoT, rural connectivity, and niche digital services.</p>
+						<div class="pub-tags">
+							<span class="tag">MVNO</span>
+							<span class="tag">TRAI</span>
+							<span class="tag">India Telecom</span>
+							<span class="tag">Regulatory Policy</span>
+							<span class="tag">IoT</span>
+							<span class="tag">BSNL</span>
+						</div>
+					</div>
+
+					<div class="pub-card">
+						<div class="pub-meta">
 							<span class="status-badge in-progress">In Progress</span>
 							<span class="pub-venue">arXiv · IEEE</span>
 						</div>
@@ -94,7 +112,11 @@ import { SITE_TITLE } from '../consts';
 	.pub-meta { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; align-items: center; }
 	.status-badge { padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
 	.status-badge.in-progress { background: #fef3c7; color: #92400e; }
+	.status-badge.published { background: #dcfce7; color: #166534; }
 	.pub-venue { color: #888; font-size: 0.85rem; }
+	.pub-date { color: #888; font-size: 0.85rem; }
+	.pub-card h3 a { color: #2337ff; text-decoration: none; }
+	.pub-card h3 a:hover { text-decoration: underline; }
 	.pub-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #111; }
 	.pub-desc { color: #555; font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.6; }
 	.pub-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
