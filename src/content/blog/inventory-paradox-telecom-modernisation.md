@@ -2,7 +2,7 @@
 title: "The Inventory Paradox: Why Only Network Equipment Vendors Can Crack Telecom's Hardest Modernisation Problem"
 description: "Resource inventory modernisation has defeated IT giants, ITSM platforms, and independent software vendors alike. Yet network equipment providers keep winning. This is the story of why — and how AI may finally change the rules of the game."
 pubDate: 2026-06-14
-heroImage: "/blog-placeholder-3.jpg"
+heroImage: "/Inventory.jpg"
 ---
 
 Ask any Chief Technology Officer at a Tier-1 telecom operator what their single most intractable operational technology problem is, and a disproportionate number will give you the same answer: network resource inventory.
