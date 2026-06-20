@@ -1,0 +1,638 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`SNMP MIB Explorer — ${SITE_TITLE}`}
+			description="Browse and search standard SNMP MIBs and OIDs. Look up any OID, explore MIB trees, and get AI-powered plain English explanations. Free tool for network and telecom engineers."
+		/>
+	</head>
+	<body>
+		<Header />
+		<main>
+
+			<section class="page-header">
+				<div class="page-header-inner">
+					<div class="page-label">Interactive Tool</div>
+					<h1>SNMP MIB Explorer</h1>
+					<p class="subtitle">
+						Search any OID or MIB name, browse standard MIB trees, and get 
+						AI-powered plain English explanations — built for network and 
+						telecom engineers.
+					</p>
+					<div class="header-badges">
+						<span class="badge badge-blue">Standard MIBs</span>
+						<span class="badge badge-green">AI Explanations</span>
+						<span class="badge badge-gray">Free to Use</span>
+					</div>
+				</div>
+			</section>
+
+			<div class="tool-wrap">
+
+				<!-- SEARCH ROW -->
+				<div class="search-section">
+					<div class="search-row">
+						<input
+							type="text"
+							id="oid-input"
+							placeholder="Search OID (e.g. 1.3.6.1.2.1.1.1) or MIB name (e.g. sysDescr, ifInOctets)"
+							autocomplete="off"
+						/>
+						<button id="search-btn">Search</button>
+					</div>
+					<div class="quick-label">Quick browse by category</div>
+					<div class="category-tags" id="category-tags"></div>
+				</div>
+
+				<!-- RESULTS -->
+				<div id="empty-state" class="empty-state">
+					<div class="empty-icon">🔍</div>
+					<p>Enter an OID or MIB name above to get started</p>
+					<p class="empty-hint">Try: <span class="hint-tag" onclick="quickSearch('sysDescr')">sysDescr</span> · <span class="hint-tag" onclick="quickSearch('ifInOctets')">ifInOctets</span> · <span class="hint-tag" onclick="quickSearch('1.3.6.1.2.1.1.1')">1.3.6.1.2.1.1.1</span> · <span class="hint-tag" onclick="quickSearch('bgpPeerState')">bgpPeerState</span></p>
+				</div>
+
+				<div id="result-section" style="display:none;">
+
+					<!-- OID CARD -->
+					<div class="oid-card" id="oid-card">
+						<div class="oid-card-header">
+							<div>
+								<div class="oid-name" id="res-name"></div>
+								<div class="oid-value" id="res-oid"></div>
+							</div>
+							<div class="oid-badges">
+								<span class="badge-mib" id="res-mib"></span>
+								<span class="badge-access" id="res-access"></span>
+							</div>
+						</div>
+						<div class="oid-meta-grid">
+							<div class="meta-item">
+								<div class="meta-label">Type</div>
+								<div class="meta-value" id="res-type"></div>
+							</div>
+							<div class="meta-item">
+								<div class="meta-label">Status</div>
+								<div class="meta-value" id="res-status"></div>
+							</div>
+							<div class="meta-item">
+								<div class="meta-label">Category</div>
+								<div class="meta-value" id="res-category"></div>
+							</div>
+							<div class="meta-item">
+								<div class="meta-label">RFC / Standard</div>
+								<div class="meta-value" id="res-rfc"></div>
+							</div>
+						</div>
+						<div class="oid-desc-section">
+							<div class="desc-label">Description</div>
+							<div class="oid-desc" id="res-desc"></div>
+						</div>
+
+						<!-- MIB TREE PATH -->
+						<div class="tree-path-section">
+							<div class="desc-label">MIB Tree Path</div>
+							<div class="tree-path" id="res-tree"></div>
+						</div>
+
+						<!-- SNMP EXAMPLE -->
+						<div class="example-section">
+							<div class="desc-label">Example SNMP Command</div>
+							<div class="code-block" id="res-example"></div>
+						</div>
+
+						<!-- RELATED OIDs -->
+						<div class="related-section" id="related-section">
+							<div class="desc-label">Related OIDs</div>
+							<div class="related-tags" id="res-related"></div>
+						</div>
+					</div>
+
+					<!-- AI EXPLANATION -->
+					<div class="ai-section">
+						<div class="ai-header">
+							<div class="ai-icon">🤖</div>
+							<div>
+								<div class="ai-title">AI Explanation</div>
+								<div class="ai-subtitle">Plain English — powered by Llama 3.1 via Groq (free)</div>
+							</div>
+							<button class="ai-btn" id="ai-btn" onclick="getAIExplanation()">
+								Explain This OID
+							</button>
+						</div>
+						<div id="ai-output" class="ai-output" style="display:none;"></div>
+						<div id="ai-loading" class="ai-loading" style="display:none;">
+							<div class="ai-spinner"></div>
+							<span>Llama is analysing this OID...</span>
+						</div>
+					</div>
+
+				</div>
+
+				<!-- MULTIPLE RESULTS -->
+				<div id="multi-result" style="display:none;">
+					<div class="multi-label">Multiple matches found — select one:</div>
+					<div id="multi-list" class="multi-list"></div>
+				</div>
+
+				<!-- NOT FOUND -->
+				<div id="not-found" class="not-found" style="display:none;">
+					<div class="nf-icon">❌</div>
+					<p>No OID or MIB found matching your search.</p>
+					<p class="nf-hint">Try a different OID number or MIB object name.</p>
+				</div>
+
+			</div>
+
+			<!-- ABOUT -->
+			<section class="about-section">
+				<div class="about-grid">
+					<div>
+						<h2>About This Tool</h2>
+						<p>The SNMP MIB Explorer covers all major standard MIBs including RFC1213 (MIB-II), IF-MIB, IP-MIB, TCP-MIB, UDP-MIB, OSPF-MIB, BGP4-MIB, MPLS-MIB, and ENTITY-MIB — with telecom-relevant MIBs added progressively.</p>
+						<p>The AI explanation feature uses Llama 3.1 via Groq to translate technical OID definitions into plain English context — including when you would use each OID, what the values mean, and how it relates to network operations.</p>
+						<p class="tool-credit">Built by <a href="/about">Saurabh Pant</a> · <a href="/contact">Suggest an OID or MIB →</a></p>
+					</div>
+					<div class="mib-coverage">
+						<div class="coverage-title">MIB Coverage</div>
+						<div class="coverage-grid">
+							<div class="cov-item">
+								<span class="cov-dot green"></span>RFC1213 / MIB-II
+							</div>
+							<div class="cov-item">
+								<span class="cov-dot green"></span>IF-MIB
+							</div>
+							<div class="cov-item">
+								<span class="cov-dot green"></span>IP-MIB
+							</div>
+							<div class="cov-item">
+								<span class="cov-dot green"></span>TCP-MIB
+							</div>
+							<div class="cov-item">
+								<span class="cov-dot green"></span>UDP-MIB
+							</div>
+							<div class="cov-item">
+								<span class="cov-dot green"></span>OSPF-MIB
+							</div>
+							<div class="cov-item">
+								<span class="cov-dot green"></span>BGP4-MIB
+							</div>
+							<div class="cov-item">
+								<span class="cov-dot green"></span>MPLS-MIB
+							</div>
+							<div class="cov-item">
+								<span class="cov-dot green"></span>ENTITY-MIB
+							</div>
+							<div class="cov-item">
+								<span class="cov-dot yellow"></span>3GPP MIBs (coming)
+							</div>
+							<div class="cov-item">
+								<span class="cov-dot yellow"></span>Vendor MIBs (coming)
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	main { max-width: 900px; margin: 0 auto; padding: 0 1rem 4rem; }
+
+	/* PAGE HEADER */
+	.page-header { padding: 2.5rem 0 2rem; border-bottom: 2px solid #eee; margin-bottom: 2rem; }
+	.page-header-inner { max-width: 680px; }
+	.page-label { font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em; color: #2337ff; margin-bottom: 0.75rem; }
+	.page-header h1 { font-size: 2.2rem; font-weight: 700; color: #111; margin-bottom: 0.75rem; }
+	.subtitle { color: #555; font-size: 1rem; line-height: 1.7; margin-bottom: 1rem; }
+	.header-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+	.badge { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 20px; }
+	.badge-blue { background: #dbeafe; color: #1d4ed8; }
+	.badge-green { background: #dcfce7; color: #166534; }
+	.badge-gray { background: #f3f4f6; color: #374151; }
+
+	/* TOOL WRAP */
+	.tool-wrap { background: #fafafa; border: 1px solid #eee; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+
+	/* SEARCH */
+	.search-section { margin-bottom: 1.5rem; }
+	.search-row { display: flex; gap: 8px; margin-bottom: 1rem; }
+	.search-row input { flex: 1; padding: 0.75rem 1rem; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; background: white; }
+	.search-row input:focus { border-color: #2337ff; }
+	.search-row button { padding: 0.75rem 1.5rem; background: #2337ff; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; white-space: nowrap; }
+	.search-row button:hover { background: #1a2acc; }
+	.quick-label { font-size: 11px; color: #888; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+	.category-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+	.cat-tag { font-size: 12px; padding: 4px 12px; background: white; border: 1px solid #ddd; border-radius: 20px; cursor: pointer; color: #555; }
+	.cat-tag:hover { border-color: #2337ff; color: #2337ff; }
+
+	/* EMPTY STATE */
+	.empty-state { text-align: center; padding: 3rem 1rem; color: #888; }
+	.empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+	.empty-state p { margin: 0 0 0.5rem; font-size: 14px; }
+	.empty-hint { font-size: 13px; color: #aaa; }
+	.hint-tag { color: #2337ff; cursor: pointer; background: #f0f4ff; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+	.hint-tag:hover { background: #dbeafe; }
+
+	/* OID CARD */
+	.oid-card { background: white; border: 1px solid #eee; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
+	.oid-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; gap: 1rem; flex-wrap: wrap; }
+	.oid-name { font-size: 1.4rem; font-weight: 700; color: #111; margin-bottom: 4px; }
+	.oid-value { font-size: 0.85rem; color: #888; font-family: monospace; }
+	.oid-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+	.badge-mib { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: #f0f4ff; color: #2337ff; }
+	.badge-access { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+	.access-ro { background: #dcfce7; color: #166534; }
+	.access-rw { background: #fef3c7; color: #92400e; }
+	.access-na { background: #f3f4f6; color: #374151; }
+
+	/* META GRID */
+	.oid-meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.25rem; padding: 1rem; background: #f8f9ff; border-radius: 8px; }
+	.meta-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; font-weight: 600; }
+	.meta-value { font-size: 13px; color: #111; font-weight: 500; }
+
+	/* DESCRIPTION */
+	.oid-desc-section { margin-bottom: 1.25rem; }
+	.desc-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; font-weight: 600; }
+	.oid-desc { font-size: 13px; color: #444; line-height: 1.7; }
+
+	/* TREE PATH */
+	.tree-path-section { margin-bottom: 1.25rem; }
+	.tree-path { font-size: 12px; font-family: monospace; color: #555; background: #f8f8f8; padding: 0.6rem 0.8rem; border-radius: 6px; border: 1px solid #eee; word-break: break-all; }
+
+	/* EXAMPLE */
+	.example-section { margin-bottom: 1.25rem; }
+	.code-block { font-size: 12px; font-family: monospace; color: #1d4ed8; background: #eff6ff; padding: 0.75rem 1rem; border-radius: 6px; border: 1px solid #bfdbfe; word-break: break-all; }
+
+	/* RELATED */
+	.related-section { }
+	.related-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+	.rel-tag { font-size: 12px; padding: 3px 10px; background: #f0f4ff; border: 1px solid #c7d7ff; border-radius: 20px; cursor: pointer; color: #2337ff; }
+	.rel-tag:hover { background: #dbeafe; }
+
+	/* AI SECTION */
+	.ai-section { background: white; border: 1px solid #eee; border-radius: 12px; padding: 1.5rem; }
+	.ai-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 0; flex-wrap: wrap; }
+	.ai-icon { font-size: 1.5rem; }
+	.ai-title { font-size: 1rem; font-weight: 700; color: #111; }
+	.ai-subtitle { font-size: 0.8rem; color: #888; }
+	.ai-btn { margin-left: auto; padding: 0.5rem 1.25rem; background: #111; color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+	.ai-btn:hover { background: #333; }
+	.ai-btn:disabled { background: #ccc; cursor: not-allowed; }
+	.ai-output { margin-top: 1rem; font-size: 13px; color: #333; line-height: 1.8; padding: 1rem; background: #f8f9ff; border-radius: 8px; border-left: 3px solid #2337ff; }
+	.ai-loading { margin-top: 1rem; display: flex; align-items: center; gap: 0.75rem; color: #888; font-size: 13px; }
+	.ai-spinner { width: 16px; height: 16px; border: 2px solid #ddd; border-top-color: #2337ff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+	@keyframes spin { to { transform: rotate(360deg); } }
+
+	/* MULTI RESULT */
+	.multi-label { font-size: 13px; color: #666; margin-bottom: 0.75rem; font-weight: 600; }
+	.multi-list { display: flex; flex-direction: column; gap: 6px; }
+	.multi-item { padding: 0.75rem 1rem; background: white; border: 1px solid #eee; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+	.multi-item:hover { border-color: #2337ff; background: #f0f4ff; }
+	.multi-name { font-size: 14px; font-weight: 600; color: #111; }
+	.multi-oid { font-size: 12px; color: #888; font-family: monospace; }
+	.multi-mib { font-size: 11px; color: #2337ff; background: #f0f4ff; padding: 2px 8px; border-radius: 10px; }
+
+	/* NOT FOUND */
+	.not-found { text-align: center; padding: 2.5rem; color: #888; }
+	.nf-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+	.not-found p { margin: 0 0 0.4rem; font-size: 14px; }
+	.nf-hint { font-size: 12px; color: #aaa; }
+
+	/* ABOUT */
+	.about-section { border-top: 2px solid #eee; padding-top: 2rem; }
+	.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+	.about-section h2 { font-size: 1.3rem; margin-bottom: 0.75rem; }
+	.about-section p { font-size: 0.9rem; color: #555; line-height: 1.7; margin-bottom: 0.75rem; }
+	.tool-credit { color: #888 !important; font-size: 0.82rem !important; }
+	.tool-credit a { color: #2337ff; }
+	.mib-coverage { }
+	.coverage-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #888; margin-bottom: 0.75rem; }
+	.coverage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+	.cov-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #444; }
+	.cov-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+	.cov-dot.green { background: #22c55e; }
+	.cov-dot.yellow { background: #f59e0b; }
+
+	/* MOBILE */
+	@media (max-width: 720px) {
+		.tool-wrap { padding: 1rem; }
+		.oid-meta-grid { grid-template-columns: 1fr 1fr; }
+		.about-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+		.ai-btn { width: 100%; margin-left: 0; margin-top: 0.75rem; }
+		.search-row { flex-direction: column; }
+		.search-row button { width: 100%; }
+	}
+</style>
+
+<script is:inline>
+
+// ─── MIB DATABASE ───────────────────────────────────────────────────────────
+const MIBS = [
+  // ── SYSTEM (RFC1213 / SNMPv2-MIB) ──
+  { oid:'1.3.6.1.2.1.1.1.0', name:'sysDescr', mib:'RFC1213-MIB', type:'DisplayString', access:'read-only', status:'current', category:'System', rfc:'RFC 1213', tree:'iso.org.dod.internet.mgmt.mib-2.system.sysDescr', desc:'A textual description of the entity. This value should include the full name and version identification of the system hardware type, software operating system, and networking software.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.1.1.0', related:['sysObjectID','sysUpTime','sysContact','sysName','sysLocation'] },
+  { oid:'1.3.6.1.2.1.1.2.0', name:'sysObjectID', mib:'RFC1213-MIB', type:'OBJECT IDENTIFIER', access:'read-only', status:'current', category:'System', rfc:'RFC 1213', tree:'iso.org.dod.internet.mgmt.mib-2.system.sysObjectID', desc:"The vendor's authoritative identification of the network management subsystem contained in the entity. This value is allocated within the SMI enterprises subtree (1.3.6.1.4.1) and provides an easy and unambiguous means for determining what kind of box is being managed.", example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.1.2.0', related:['sysDescr','sysUpTime','sysName'] },
+  { oid:'1.3.6.1.2.1.1.3.0', name:'sysUpTime', mib:'RFC1213-MIB', type:'TimeTicks', access:'read-only', status:'current', category:'System', rfc:'RFC 1213', tree:'iso.org.dod.internet.mgmt.mib-2.system.sysUpTime', desc:'The time (in hundredths of a second) since the network management portion of the system was last re-initialized. A useful indicator of device stability and whether a reboot has occurred.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.1.3.0', related:['sysDescr','sysObjectID','sysContact'] },
+  { oid:'1.3.6.1.2.1.1.4.0', name:'sysContact', mib:'RFC1213-MIB', type:'DisplayString', access:'read-write', status:'current', category:'System', rfc:'RFC 1213', tree:'iso.org.dod.internet.mgmt.mib-2.system.sysContact', desc:'The textual identification of the contact person for this managed node, together with information on how to contact this person. If no contact information is known, the value is the zero-length string.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.1.4.0', related:['sysName','sysLocation','sysDescr'] },
+  { oid:'1.3.6.1.2.1.1.5.0', name:'sysName', mib:'RFC1213-MIB', type:'DisplayString', access:'read-write', status:'current', category:'System', rfc:'RFC 1213', tree:'iso.org.dod.internet.mgmt.mib-2.system.sysName', desc:"An administratively assigned name for this managed node. By convention, this is the node's fully-qualified domain name. If the name is unknown, the value is the zero-length string.", example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.1.5.0', related:['sysContact','sysLocation','sysDescr'] },
+  { oid:'1.3.6.1.2.1.1.6.0', name:'sysLocation', mib:'RFC1213-MIB', type:'DisplayString', access:'read-write', status:'current', category:'System', rfc:'RFC 1213', tree:'iso.org.dod.internet.mgmt.mib-2.system.sysLocation', desc:'The physical location of this node (e.g., telephone closet, 3rd floor). If the location is unknown, the value is the zero-length string.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.1.6.0', related:['sysContact','sysName','sysDescr'] },
+
+  // ── INTERFACES (IF-MIB) ──
+  { oid:'1.3.6.1.2.1.2.1.0', name:'ifNumber', mib:'IF-MIB', type:'Integer32', access:'read-only', status:'current', category:'Interfaces', rfc:'RFC 2863', tree:'iso.org.dod.internet.mgmt.mib-2.interfaces.ifNumber', desc:'The number of network interfaces (regardless of their current state) present on this system.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.2.1.0', related:['ifDescr','ifType','ifSpeed','ifOperStatus'] },
+  { oid:'1.3.6.1.2.1.2.2.1.2', name:'ifDescr', mib:'IF-MIB', type:'DisplayString', access:'read-only', status:'current', category:'Interfaces', rfc:'RFC 2863', tree:'iso.org.dod.internet.mgmt.mib-2.interfaces.ifTable.ifEntry.ifDescr', desc:'A textual string containing information about the interface. This string should include the name of the manufacturer, the product name and the version of the interface hardware/software.', example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.2.2.1.2', related:['ifType','ifSpeed','ifOperStatus','ifInOctets','ifOutOctets'] },
+  { oid:'1.3.6.1.2.1.2.2.1.5', name:'ifSpeed', mib:'IF-MIB', type:'Gauge32', access:'read-only', status:'current', category:'Interfaces', rfc:'RFC 2863', tree:'iso.org.dod.internet.mgmt.mib-2.interfaces.ifTable.ifEntry.ifSpeed', desc:"An estimate of the interface's current bandwidth in bits per second. For interfaces that do not vary in bandwidth or for those where no accurate estimation can be made, this object should contain the nominal bandwidth.", example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.2.2.1.5', related:['ifDescr','ifType','ifOperStatus','ifHighSpeed'] },
+  { oid:'1.3.6.1.2.1.2.2.1.7', name:'ifAdminStatus', mib:'IF-MIB', type:'INTEGER', access:'read-write', status:'current', category:'Interfaces', rfc:'RFC 2863', tree:'iso.org.dod.internet.mgmt.mib-2.interfaces.ifTable.ifEntry.ifAdminStatus', desc:'The desired state of the interface. The testing(3) state indicates that no operational packets can be passed. Values: up(1), down(2), testing(3).', example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.2.2.1.7', related:['ifOperStatus','ifDescr','ifSpeed'] },
+  { oid:'1.3.6.1.2.1.2.2.1.8', name:'ifOperStatus', mib:'IF-MIB', type:'INTEGER', access:'read-only', status:'current', category:'Interfaces', rfc:'RFC 2863', tree:'iso.org.dod.internet.mgmt.mib-2.interfaces.ifTable.ifEntry.ifOperStatus', desc:'The current operational state of the interface. Values: up(1), down(2), testing(3), unknown(4), dormant(5), notPresent(6), lowerLayerDown(7). Essential for fault monitoring.', example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.2.2.1.8', related:['ifAdminStatus','ifDescr','ifSpeed','ifInOctets'] },
+  { oid:'1.3.6.1.2.1.2.2.1.10', name:'ifInOctets', mib:'IF-MIB', type:'Counter32', access:'read-only', status:'current', category:'Interfaces', rfc:'RFC 2863', tree:'iso.org.dod.internet.mgmt.mib-2.interfaces.ifTable.ifEntry.ifInOctets', desc:'The total number of octets received on the interface, including framing characters. This counter wraps at 4,294,967,295. Use ifHCInOctets for high-speed interfaces to avoid wrap.', example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.2.2.1.10', related:['ifOutOctets','ifInErrors','ifInDiscards','ifHCInOctets'] },
+  { oid:'1.3.6.1.2.1.2.2.1.16', name:'ifOutOctets', mib:'IF-MIB', type:'Counter32', access:'read-only', status:'current', category:'Interfaces', rfc:'RFC 2863', tree:'iso.org.dod.internet.mgmt.mib-2.interfaces.ifTable.ifEntry.ifOutOctets', desc:'The total number of octets transmitted out of the interface, including framing characters. Wraps at 4,294,967,295. Used with ifInOctets for bidirectional bandwidth utilisation monitoring.', example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.2.2.1.16', related:['ifInOctets','ifOutErrors','ifOutDiscards','ifHCOutOctets'] },
+  { oid:'1.3.6.1.2.1.2.2.1.14', name:'ifInErrors', mib:'IF-MIB', type:'Counter32', access:'read-only', status:'current', category:'Interfaces', rfc:'RFC 2863', tree:'iso.org.dod.internet.mgmt.mib-2.interfaces.ifTable.ifEntry.ifInErrors', desc:'The number of inbound packets that contained errors preventing them from being deliverable to a higher-layer protocol. A rising counter indicates interface or cabling problems.', example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.2.2.1.14', related:['ifOutErrors','ifInDiscards','ifInOctets'] },
+
+  // ── IF-MIB HIGH CAPACITY ──
+  { oid:'1.3.6.1.2.1.31.1.1.1.6', name:'ifHCInOctets', mib:'IF-MIB', type:'Counter64', access:'read-only', status:'current', category:'Interfaces', rfc:'RFC 2863', tree:'iso.org.dod.internet.mgmt.mib-2.ifMIB.ifMIBObjects.ifXTable.ifXEntry.ifHCInOctets', desc:'The total number of octets received on the interface. This is the 64-bit version of ifInOctets, designed for high-speed interfaces (Gigabit Ethernet and above) where the 32-bit counter wraps too quickly for accurate polling.', example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.31.1.1.1.6', related:['ifHCOutOctets','ifInOctets','ifHighSpeed','ifAlias'] },
+  { oid:'1.3.6.1.2.1.31.1.1.1.10', name:'ifHCOutOctets', mib:'IF-MIB', type:'Counter64', access:'read-only', status:'current', category:'Interfaces', rfc:'RFC 2863', tree:'iso.org.dod.internet.mgmt.mib-2.ifMIB.ifMIBObjects.ifXTable.ifXEntry.ifHCOutOctets', desc:'The total number of octets transmitted out of the interface. 64-bit version of ifOutOctets for high-speed interfaces. Standard for modern bandwidth utilisation monitoring on 1G+ interfaces.', example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.31.1.1.1.10', related:['ifHCInOctets','ifOutOctets','ifHighSpeed','ifAlias'] },
+  { oid:'1.3.6.1.2.1.31.1.1.1.15', name:'ifHighSpeed', mib:'IF-MIB', type:'Gauge32', access:'read-only', status:'current', category:'Interfaces', rfc:'RFC 2863', tree:'iso.org.dod.internet.mgmt.mib-2.ifMIB.ifMIBObjects.ifXTable.ifXEntry.ifHighSpeed', desc:"An estimate of the interface's current bandwidth in units of 1,000,000 bits per second. Used for interfaces with speed above 4,294 Mbps where ifSpeed overflows. Essential for 10G and 100G interfaces.", example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.31.1.1.1.15', related:['ifHCInOctets','ifHCOutOctets','ifSpeed','ifAlias'] },
+  { oid:'1.3.6.1.2.1.31.1.1.1.18', name:'ifAlias', mib:'IF-MIB', type:'DisplayString', access:'read-write', status:'current', category:'Interfaces', rfc:'RFC 2863', tree:'iso.org.dod.internet.mgmt.mib-2.ifMIB.ifMIBObjects.ifXTable.ifXEntry.ifAlias', desc:'This object is an alias name for the interface as specified by a network manager, and provides a non-volatile handle for the interface. Often used to store circuit IDs, customer names, or port descriptions.', example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.31.1.1.1.18', related:['ifDescr','ifName','ifHighSpeed'] },
+
+  // ── IP-MIB ──
+  { oid:'1.3.6.1.2.1.4.1.0', name:'ipForwarding', mib:'IP-MIB', type:'INTEGER', access:'read-write', status:'current', category:'IP', rfc:'RFC 4293', tree:'iso.org.dod.internet.mgmt.mib-2.ip.ipForwarding', desc:'The indication of whether this entity is acting as an IPv4 router in respect to the forwarding of datagrams received by, but not addressed to, this entity. Values: forwarding(1) - acts as router, notForwarding(2) - acts as host.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.4.1.0', related:['ipDefaultTTL','ipInReceives','ipRoutingDiscards'] },
+  { oid:'1.3.6.1.2.1.4.3.0', name:'ipInReceives', mib:'IP-MIB', type:'Counter32', access:'read-only', status:'current', category:'IP', rfc:'RFC 4293', tree:'iso.org.dod.internet.mgmt.mib-2.ip.ipInReceives', desc:'The total number of input datagrams received from interfaces, including those received in error. A useful baseline metric for IP traffic volume and router load.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.4.3.0', related:['ipInDelivers','ipOutRequests','ipInDiscards','ipForwarding'] },
+  { oid:'1.3.6.1.2.1.4.10.0', name:'ipInDiscards', mib:'IP-MIB', type:'Counter32', access:'read-only', status:'current', category:'IP', rfc:'RFC 4293', tree:'iso.org.dod.internet.mgmt.mib-2.ip.ipInDiscards', desc:'The number of input IP datagrams for which no problems were encountered to prevent their continued processing, but which were discarded (e.g., for lack of buffer space). A rising counter may indicate memory or buffer exhaustion.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.4.10.0', related:['ipInReceives','ipOutDiscards','ipInErrors'] },
+
+  // ── TCP-MIB ──
+  { oid:'1.3.6.1.2.1.6.1.0', name:'tcpRtoAlgorithm', mib:'TCP-MIB', type:'INTEGER', access:'read-only', status:'current', category:'TCP', rfc:'RFC 4022', tree:'iso.org.dod.internet.mgmt.mib-2.tcp.tcpRtoAlgorithm', desc:'The algorithm used to determine the timeout value used for retransmitting unacknowledged octets. Values: other(1), constant(2), rsre(3), vanj(4), rfc2988(5).', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.6.1.0', related:['tcpActiveOpens','tcpPassiveOpens','tcpCurrEstab'] },
+  { oid:'1.3.6.1.2.1.6.5.0', name:'tcpActiveOpens', mib:'TCP-MIB', type:'Counter32', access:'read-only', status:'current', category:'TCP', rfc:'RFC 4022', tree:'iso.org.dod.internet.mgmt.mib-2.tcp.tcpActiveOpens', desc:'The number of times TCP connections have made a direct transition to the SYN-SENT state from the CLOSED state. Indicates how many outbound TCP connections have been initiated.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.6.5.0', related:['tcpPassiveOpens','tcpCurrEstab','tcpAttemptFails'] },
+  { oid:'1.3.6.1.2.1.6.9.0', name:'tcpCurrEstab', mib:'TCP-MIB', type:'Gauge32', access:'read-only', status:'current', category:'TCP', rfc:'RFC 4022', tree:'iso.org.dod.internet.mgmt.mib-2.tcp.tcpCurrEstab', desc:'The number of TCP connections for which the current state is either ESTABLISHED or CLOSE-WAIT. A key metric for monitoring active session load on a network device or server.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.6.9.0', related:['tcpActiveOpens','tcpPassiveOpens','tcpAttemptFails','tcpEstabResets'] },
+
+  // ── UDP-MIB ──
+  { oid:'1.3.6.1.2.1.7.1.0', name:'udpInDatagrams', mib:'UDP-MIB', type:'Counter32', access:'read-only', status:'current', category:'UDP', rfc:'RFC 4113', tree:'iso.org.dod.internet.mgmt.mib-2.udp.udpInDatagrams', desc:'The total number of UDP datagrams delivered to UDP users. Useful for monitoring UDP traffic volume, particularly relevant for VoIP, DNS, SNMP, and streaming applications.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.7.1.0', related:['udpOutDatagrams','udpInErrors','udpNoPorts'] },
+  { oid:'1.3.6.1.2.1.7.2.0', name:'udpNoPorts', mib:'UDP-MIB', type:'Counter32', access:'read-only', status:'current', category:'UDP', rfc:'RFC 4113', tree:'iso.org.dod.internet.mgmt.mib-2.udp.udpNoPorts', desc:'The total number of received UDP datagrams for which there was no application at the destination port. A rising counter may indicate port scanning activity or misconfigured applications.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.7.2.0', related:['udpInDatagrams','udpInErrors','udpOutDatagrams'] },
+
+  // ── OSPF-MIB ──
+  { oid:'1.3.6.1.2.1.14.1.2.0', name:'ospfRouterId', mib:'OSPF-MIB', type:'IpAddress', access:'read-write', status:'current', category:'OSPF', rfc:'RFC 4750', tree:'iso.org.dod.internet.mgmt.mib-2.ospf.ospfGeneralGroup.ospfRouterId', desc:"A 32-bit integer uniquely identifying the router in the Autonomous System. By convention, to ensure uniqueness, this should default to the value of one of the router's IP interface addresses.", example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.14.1.2.0', related:['ospfAdminStat','ospfAreaCount','ospfNbrState'] },
+  { oid:'1.3.6.1.2.1.14.1.3.0', name:'ospfAdminStat', mib:'OSPF-MIB', type:'Status', access:'read-write', status:'current', category:'OSPF', rfc:'RFC 4750', tree:'iso.org.dod.internet.mgmt.mib-2.ospf.ospfGeneralGroup.ospfAdminStat', desc:'The administrative status of OSPF in the router. Values: enabled(1) - OSPF process is active, disabled(2) - OSPF is not active. A loopback interface will remain active even when disabled.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.14.1.3.0', related:['ospfRouterId','ospfAreaCount','ospfVersionNumber'] },
+  { oid:'1.3.6.1.2.1.14.10.1.6', name:'ospfNbrState', mib:'OSPF-MIB', type:'INTEGER', access:'read-only', status:'current', category:'OSPF', rfc:'RFC 4750', tree:'iso.org.dod.internet.mgmt.mib-2.ospf.ospfNbrTable.ospfNbrEntry.ospfNbrState', desc:'The state of the relationship with this neighbour. Values: down(1), attempt(2), init(3), twoWay(4), exchangeStart(5), exchange(6), loading(7), full(8). Full(8) indicates a healthy OSPF adjacency.', example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.14.10.1.6', related:['ospfNbrRtrId','ospfNbrPriority','ospfNbrEvents'] },
+
+  // ── BGP4-MIB ──
+  { oid:'1.3.6.1.2.1.15.1.0', name:'bgpVersion', mib:'BGP4-MIB', type:'OCTET STRING', access:'read-only', status:'current', category:'BGP', rfc:'RFC 1657', tree:'iso.org.dod.internet.mgmt.mib-2.bgp.bgpVersion', desc:'Vector of supported BGP protocol version numbers. Each peer negotiates the version of BGP to run. Version 4 is the current standard (BGP-4), supporting CIDR and route aggregation.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.15.1.0', related:['bgpLocalAs','bgpPeerState','bgpPeerAdminStatus'] },
+  { oid:'1.3.6.1.2.1.15.2.0', name:'bgpLocalAs', mib:'BGP4-MIB', type:'Integer32', access:'read-only', status:'current', category:'BGP', rfc:'RFC 1657', tree:'iso.org.dod.internet.mgmt.mib-2.bgp.bgpLocalAs', desc:"The local autonomous system number. Identifies this router's AS in BGP routing. Essential for verifying BGP configuration and diagnosing routing policy issues.", example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.15.2.0', related:['bgpVersion','bgpPeerState','bgpPeerRemoteAs'] },
+  { oid:'1.3.6.1.2.1.15.3.1.3', name:'bgpPeerState', mib:'BGP4-MIB', type:'INTEGER', access:'read-only', status:'current', category:'BGP', rfc:'RFC 1657', tree:'iso.org.dod.internet.mgmt.mib-2.bgp.bgpPeerTable.bgpPeerEntry.bgpPeerState', desc:'The BGP peer connection state machine state. Values: idle(1), connect(2), active(3), opensent(4), openconfirm(5), established(6). Established(6) is the healthy state indicating a fully functional BGP session.', example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.15.3.1.3', related:['bgpPeerAdminStatus','bgpPeerRemoteAs','bgpPeerInUpdates','bgpLocalAs'] },
+  { oid:'1.3.6.1.2.1.15.3.1.10', name:'bgpPeerInUpdates', mib:'BGP4-MIB', type:'Counter32', access:'read-only', status:'current', category:'BGP', rfc:'RFC 1657', tree:'iso.org.dod.internet.mgmt.mib-2.bgp.bgpPeerTable.bgpPeerEntry.bgpPeerInUpdates', desc:'The number of BGP UPDATE messages received on this connection. UPDATE messages carry routing information. A sudden spike may indicate route flapping or policy changes upstream.', example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.15.3.1.10', related:['bgpPeerOutUpdates','bgpPeerState','bgpPeerInTotalMessages'] },
+
+  // ── MPLS-MIB ──
+  { oid:'1.3.6.1.2.1.10.166.1.1.1.0', name:'mplsLsrId', mib:'MPLS-LSR-STD-MIB', type:'OCTET STRING', access:'read-write', status:'current', category:'MPLS', rfc:'RFC 3813', tree:'iso.org.dod.internet.mgmt.mib-2.transmission.mplsStdMIB.mplsLsrObjects.mplsLsrId', desc:'This object contains the Label Switching Router (LSR) identifier. This is used to uniquely identify the LSR within an MPLS network domain. Typically set to a loopback IP address for stability.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.10.166.1.1.1.0', related:['mplsLsrLoopbackIfIndex','mplsInSegmentIfIndex','mplsOutSegmentIfIndex'] },
+  { oid:'1.3.6.1.2.1.10.166.2.1.1.3', name:'mplsInSegmentLabel', mib:'MPLS-LSR-STD-MIB', type:'MplsLabel', access:'read-create', status:'current', category:'MPLS', rfc:'RFC 3813', tree:'iso.org.dod.internet.mgmt.mib-2.transmission.mplsStdMIB.mplsInSegmentTable.mplsInSegmentEntry.mplsInSegmentLabel', desc:'The incoming MPLS label for this segment. This is the label value that the LSR expects to receive on the incoming interface. Labels range from 0 to 1,048,575 with values 0-15 reserved for special purposes.', example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.10.166.2.1.1.3', related:['mplsInSegmentIfIndex','mplsOutSegmentLabel','mplsLsrId'] },
+
+  // ── ENTITY-MIB ──
+  { oid:'1.3.6.1.2.1.47.1.1.1.1.2', name:'entPhysicalDescr', mib:'ENTITY-MIB', type:'DisplayString', access:'read-only', status:'current', category:'Entity/Inventory', rfc:'RFC 6933', tree:'iso.org.dod.internet.mgmt.mib-2.entityMIB.entityMIBObjects.entityPhysical.entPhysicalTable.entPhysicalEntry.entPhysicalDescr', desc:'A textual description of physical component. This object provides human-readable identification of a physical entity, including vendor name, product name, version, and serial number where available. Essential for network inventory.', example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.47.1.1.1.1.2', related:['entPhysicalName','entPhysicalClass','entPhysicalSerialNum','entPhysicalModelName'] },
+  { oid:'1.3.6.1.2.1.47.1.1.1.1.5', name:'entPhysicalClass', mib:'ENTITY-MIB', type:'INTEGER', access:'read-only', status:'current', category:'Entity/Inventory', rfc:'RFC 6933', tree:'iso.org.dod.internet.mgmt.mib-2.entityMIB.entityMIBObjects.entityPhysical.entPhysicalTable.entPhysicalEntry.entPhysicalClass', desc:'An indication of the general hardware type of the physical entity. Values: other(1), unknown(2), chassis(3), backplane(4), container(5), powerSupply(6), fan(7), sensor(8), module(9), port(10), stack(11), cpu(12). Critical for automated inventory classification.', example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.47.1.1.1.1.5', related:['entPhysicalDescr','entPhysicalName','entPhysicalSerialNum'] },
+  { oid:'1.3.6.1.2.1.47.1.1.1.1.11', name:'entPhysicalSerialNum', mib:'ENTITY-MIB', type:'SnmpAdminString', access:'read-write', status:'current', category:'Entity/Inventory', rfc:'RFC 6933', tree:'iso.org.dod.internet.mgmt.mib-2.entityMIB.entityMIBObjects.entityPhysical.entPhysicalTable.entPhysicalEntry.entPhysicalSerialNum', desc:"The vendor-specific serial number string for the physical entity. A zero-length string if no serial number information is available. Critical for asset tracking, warranty management, and physical inventory reconciliation.", example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.47.1.1.1.1.11', related:['entPhysicalDescr','entPhysicalClass','entPhysicalModelName','entPhysicalName'] },
+  { oid:'1.3.6.1.2.1.47.1.1.1.1.13', name:'entPhysicalModelName', mib:'ENTITY-MIB', type:'SnmpAdminString', access:'read-only', status:'current', category:'Entity/Inventory', rfc:'RFC 6933', tree:'iso.org.dod.internet.mgmt.mib-2.entityMIB.entityMIBObjects.entityPhysical.entPhysicalTable.entPhysicalEntry.entPhysicalModelName', desc:"The vendor-specific model name identifier string associated with this physical component. Typically the product part number or model designation. Used extensively in automated network inventory and reconciliation tools.", example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.47.1.1.1.1.13', related:['entPhysicalSerialNum','entPhysicalDescr','entPhysicalName'] },
+];
+
+// ─── CATEGORIES ─────────────────────────────────────────────────────────────
+const CATEGORIES = ['System','Interfaces','IP','TCP','UDP','OSPF','BGP','MPLS','Entity/Inventory'];
+const CATEGORY_ICONS = {
+  'System':'🖥️', 'Interfaces':'🔌', 'IP':'🌐', 'TCP':'📡',
+  'UDP':'📨', 'OSPF':'🔄', 'BGP':'🗺️', 'MPLS':'🏷️', 'Entity/Inventory':'📦'
+};
+
+let currentOID = null;
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+function init() {
+  // Render category tags
+  const tagContainer = document.getElementById('category-tags');
+  CATEGORIES.forEach(cat => {
+    const tag = document.createElement('span');
+    tag.className = 'cat-tag';
+    tag.textContent = CATEGORY_ICONS[cat] + ' ' + cat;
+    tag.onclick = () => browseCategory(cat);
+    tagContainer.appendChild(tag);
+  });
+}
+
+// ─── SEARCH ──────────────────────────────────────────────────────────────────
+function search(query) {
+  if (!query.trim()) return;
+  query = query.trim();
+
+  // Try exact OID match
+  let result = MIBS.find(m => m.oid === query);
+  if (result) { showResult(result); return; }
+
+  // Try exact name match (case insensitive)
+  result = MIBS.find(m => m.name.toLowerCase() === query.toLowerCase());
+  if (result) { showResult(result); return; }
+
+  // Try partial name match
+  const partialMatches = MIBS.filter(m =>
+    m.name.toLowerCase().includes(query.toLowerCase()) ||
+    m.desc.toLowerCase().includes(query.toLowerCase()) ||
+    m.oid.startsWith(query)
+  );
+
+  if (partialMatches.length === 1) { showResult(partialMatches[0]); return; }
+  if (partialMatches.length > 1) { showMultiple(partialMatches); return; }
+
+  showNotFound();
+}
+
+function quickSearch(name) {
+  document.getElementById('oid-input').value = name;
+  search(name);
+}
+
+function browseCategory(cat) {
+  document.getElementById('oid-input').value = cat;
+  const matches = MIBS.filter(m => m.category === cat);
+  if (matches.length === 1) { showResult(matches[0]); return; }
+  showMultiple(matches);
+}
+
+// ─── SHOW RESULT ─────────────────────────────────────────────────────────────
+function showResult(oid) {
+  currentOID = oid;
+  hide('empty-state'); hide('not-found'); hide('multi-result');
+  show('result-section');
+
+  document.getElementById('res-name').textContent = oid.name;
+  document.getElementById('res-oid').textContent = oid.oid;
+  document.getElementById('res-mib').textContent = oid.mib;
+  document.getElementById('res-type').textContent = oid.type;
+  document.getElementById('res-status').textContent = oid.status;
+  document.getElementById('res-category').textContent = CATEGORY_ICONS[oid.category] + ' ' + oid.category;
+  document.getElementById('res-rfc').textContent = oid.rfc;
+  document.getElementById('res-desc').textContent = oid.desc;
+  document.getElementById('res-tree').textContent = oid.tree;
+  document.getElementById('res-example').textContent = oid.example;
+
+  // Access badge
+  const accessEl = document.getElementById('res-access');
+  accessEl.textContent = oid.access;
+  accessEl.className = 'badge-access ' + (
+    oid.access === 'read-only' ? 'access-ro' :
+    oid.access === 'read-write' ? 'access-rw' : 'access-na'
+  );
+
+  // Related OIDs
+  const relatedEl = document.getElementById('res-related');
+  relatedEl.innerHTML = '';
+  if (oid.related && oid.related.length > 0) {
+    oid.related.forEach(r => {
+      const tag = document.createElement('span');
+      tag.className = 'rel-tag';
+      tag.textContent = r;
+      tag.onclick = () => quickSearch(r);
+      relatedEl.appendChild(tag);
+    });
+    show('related-section');
+  } else {
+    hide('related-section');
+  }
+
+  // Reset AI section
+  document.getElementById('ai-output').style.display = 'none';
+  document.getElementById('ai-loading').style.display = 'none';
+  document.getElementById('ai-btn').disabled = false;
+  document.getElementById('ai-btn').textContent = 'Explain This OID';
+}
+
+function showMultiple(results) {
+  currentOID = null;
+  hide('empty-state'); hide('not-found'); hide('result-section');
+  show('multi-result');
+  const list = document.getElementById('multi-list');
+  list.innerHTML = '';
+  results.forEach(r => {
+    const item = document.createElement('div');
+    item.className = 'multi-item';
+    item.innerHTML = `
+      <div>
+        <div class="multi-name">${r.name}</div>
+        <div class="multi-oid">${r.oid}</div>
+      </div>
+      <span class="multi-mib">${r.mib}</span>`;
+    item.onclick = () => showResult(r);
+    list.appendChild(item);
+  });
+}
+
+function showNotFound() {
+  hide('empty-state'); hide('result-section'); hide('multi-result');
+  show('not-found');
+}
+
+// ─── AI EXPLANATION (Groq API — Free, No Credit Card) ───────────────────────
+const GROQ_API_KEY = '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'; // Replaced with key from console.groq.com
+
+async function getAIExplanation() {
+  if (!currentOID) return;
+  const btn = document.getElementById('ai-btn');
+  btn.disabled = true;
+  btn.textContent = 'Explaining...';
+  hide('ai-output');
+  show('ai-loading');
+
+  const prompt = `You are an expert network engineer with deep knowledge of SNMP MIBs and telecom networks.
+
+Explain this SNMP OID in plain English for a network engineer:
+
+OID: ${currentOID.oid}
+Name: ${currentOID.name}
+MIB: ${currentOID.mib}
+Type: ${currentOID.type}
+Access: ${currentOID.access}
+Description: ${currentOID.desc}
+
+Please provide:
+1. What this OID measures or represents in simple terms
+2. When and why a network engineer would query this OID
+3. What typical values mean in a real network context
+4. Any important caveats or gotchas to be aware of
+5. How it relates to network operations or troubleshooting
+
+Keep the explanation practical and concise — 150 to 200 words.`;
+
+  try {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${GROQ_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'llama-3.1-8b-instant',
+        max_tokens: 500,
+        temperature: 0.7,
+        messages: [
+          {
+            role: 'system',
+            content: 'You are an expert network engineer specialising in SNMP, MIBs, and telecom network operations. Give practical, concise explanations.'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ]
+      })
+    });
+
+    const data = await response.json();
+
+    // Handle Groq API errors
+    if (data.error) {
+      throw new Error(data.error.message || 'Groq API error');
+    }
+
+    const text = data.choices && data.choices[0] && data.choices[0].message
+      ? data.choices[0].message.content
+      : 'Unable to generate explanation. Please try again.';
+
+    hide('ai-loading');
+    const outputEl = document.getElementById('ai-output');
+    outputEl.textContent = text;
+    show('ai-output');
+    btn.textContent = 'Regenerate';
+    btn.disabled = false;
+
+  } catch (err) {
+    hide('ai-loading');
+    const outputEl = document.getElementById('ai-output');
+
+    // Helpful error messages
+    if (err.message && err.message.includes('401')) {
+      outputEl.textContent = '⚠️ Invalid API key. Please check your Groq API key at console.groq.com';
+    } else if (err.message && err.message.includes('429')) {
+      outputEl.textContent = '⚠️ Rate limit reached. Groq free tier allows 30 requests/minute. Please wait a moment and try again.';
+    } else {
+      outputEl.textContent = '⚠️ AI explanation unavailable. Please check your connection and try again.';
+    }
+
+    show('ai-output');
+    btn.textContent = 'Try Again';
+    btn.disabled = false;
+  }
+}
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+function show(id) { document.getElementById(id).style.display = ''; }
+function hide(id) { document.getElementById(id).style.display = 'none'; }
+
+// ─── EVENT LISTENERS ─────────────────────────────────────────────────────────
+document.getElementById('search-btn').addEventListener('click', () => {
+  search(document.getElementById('oid-input').value);
+});
+document.getElementById('oid-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') search(document.getElementById('oid-input').value);
+});
+
+init();
+</script>
