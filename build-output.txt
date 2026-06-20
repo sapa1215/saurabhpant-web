@@ -1,0 +1,13 @@
+﻿
+> build
+> astro build
+
+node.exe : '"node"' is not recognized as an internal or external command,
+At line:1 char:61
++ ... hpant-web'; & 'C:\Program Files\nodejs\node.exe' 'C:\Program Files\no ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ('"node"' is not...ternal command, 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+operable program or batch file.
