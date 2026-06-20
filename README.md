@@ -51,6 +51,19 @@ and deploys your site within 2-3 minutes!
 
 ---
 
+## Environment Variables
+
+Copy `.env.example` to `.env` and fill in your local values.
+Astro will read `PUBLIC_GROQ_API_KEY` at build time, and `.gitignore` already excludes `.env`.
+
+Example:
+
+```env
+PUBLIC_GROQ_API_KEY=your_public_groq_api_key_here
+```
+
+---
+
 ## Quick Content Tips For EB-1/EB-2
 
 1. Publish at least 1 article per week
