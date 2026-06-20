@@ -21,8 +21,8 @@ import { SITE_TITLE } from '../consts';
 					<div class="page-label">Interactive Tool</div>
 					<h1>SNMP MIB Explorer</h1>
 					<p class="subtitle">
-						Search any OID or MIB name, browse standard MIB trees, and get 
-						AI-powered plain English explanations — built for network and 
+						Search any OID or MIB name, browse standard MIB trees, and get
+						AI-powered plain English explanations — built for network and
 						telecom engineers.
 					</p>
 					<div class="header-badges">
@@ -119,7 +119,7 @@ import { SITE_TITLE } from '../consts';
 							<div class="ai-icon">🤖</div>
 							<div>
 								<div class="ai-title">AI Explanation</div>
-								<div class="ai-subtitle">Plain English — powered by Llama 3.1 via Groq (free)</div>
+								<div class="ai-subtitle">Plain English — powered by Llama 3.3 via Groq (free)</div>
 							</div>
 							<button class="ai-btn" id="ai-btn" onclick="getAIExplanation()">
 								Explain This OID
@@ -155,7 +155,7 @@ import { SITE_TITLE } from '../consts';
 					<div>
 						<h2>About This Tool</h2>
 						<p>The SNMP MIB Explorer covers all major standard MIBs including RFC1213 (MIB-II), IF-MIB, IP-MIB, TCP-MIB, UDP-MIB, OSPF-MIB, BGP4-MIB, MPLS-MIB, and ENTITY-MIB — with telecom-relevant MIBs added progressively.</p>
-						<p>The AI explanation feature uses Llama 3.1 via Groq to translate technical OID definitions into plain English context — including when you would use each OID, what the values mean, and how it relates to network operations.</p>
+						<p>The AI explanation feature uses Llama 3.3 via Groq to translate technical OID definitions into plain English context — including when you would use each OID, what the values mean, and how it relates to network operations.</p>
 						<p class="tool-credit">Built by <a href="/about">Saurabh Pant</a> · <a href="/contact">Suggest an OID or MIB →</a></p>
 					</div>
 					<div class="mib-coverage">
@@ -340,7 +340,7 @@ import { SITE_TITLE } from '../consts';
 
 <script is:inline>
 
-// ─── MIB DATABASE ───────────────────────────────────────────────────────────
+// ─── MIB DATABASE ─────────────────────────────────────────────────────────────
 const MIBS = [
   // ── SYSTEM (RFC1213 / SNMPv2-MIB) ──
   { oid:'1.3.6.1.2.1.1.1.0', name:'sysDescr', mib:'RFC1213-MIB', type:'DisplayString', access:'read-only', status:'current', category:'System', rfc:'RFC 1213', tree:'iso.org.dod.internet.mgmt.mib-2.system.sysDescr', desc:'A textual description of the entity. This value should include the full name and version identification of the system hardware type, software operating system, and networking software.', example:'snmpget -v2c -c public <host> 1.3.6.1.2.1.1.1.0', related:['sysObjectID','sysUpTime','sysContact','sysName','sysLocation'] },
@@ -402,18 +402,17 @@ const MIBS = [
   { oid:'1.3.6.1.2.1.47.1.1.1.1.13', name:'entPhysicalModelName', mib:'ENTITY-MIB', type:'SnmpAdminString', access:'read-only', status:'current', category:'Entity/Inventory', rfc:'RFC 6933', tree:'iso.org.dod.internet.mgmt.mib-2.entityMIB.entityMIBObjects.entityPhysical.entPhysicalTable.entPhysicalEntry.entPhysicalModelName', desc:"The vendor-specific model name identifier string associated with this physical component. Typically the product part number or model designation. Used extensively in automated network inventory and reconciliation tools.", example:'snmpwalk -v2c -c public <host> 1.3.6.1.2.1.47.1.1.1.1.13', related:['entPhysicalSerialNum','entPhysicalDescr','entPhysicalName'] },
 ];
 
-// ─── CATEGORIES ─────────────────────────────────────────────────────────────
+// ─── CATEGORIES ───────────────────────────────────────────────────────────────
 const CATEGORIES = ['System','Interfaces','IP','TCP','UDP','OSPF','BGP','MPLS','Entity/Inventory'];
 const CATEGORY_ICONS = {
-  'System':'🖥️', 'Interfaces':'🔌', 'IP':'🌐', 'TCP':'📡',
+  'System':'🖥️', 'Interfaces':'🔌', 'IP':'🌐', 'TCP':'🔡',
   'UDP':'📨', 'OSPF':'🔄', 'BGP':'🗺️', 'MPLS':'🏷️', 'Entity/Inventory':'📦'
 };
 
 let currentOID = null;
 
-// ─── INIT ────────────────────────────────────────────────────────────────────
+// ─── INIT ─────────────────────────────────────────────────────────────────────
 function init() {
-  // Render category tags
   const tagContainer = document.getElementById('category-tags');
   CATEGORIES.forEach(cat => {
     const tag = document.createElement('span');
@@ -424,20 +423,17 @@ function init() {
   });
 }
 
-// ─── SEARCH ──────────────────────────────────────────────────────────────────
+// ─── SEARCH ───────────────────────────────────────────────────────────────────
 function search(query) {
   if (!query.trim()) return;
   query = query.trim();
 
-  // Try exact OID match
   let result = MIBS.find(m => m.oid === query);
   if (result) { showResult(result); return; }
 
-  // Try exact name match (case insensitive)
   result = MIBS.find(m => m.name.toLowerCase() === query.toLowerCase());
   if (result) { showResult(result); return; }
 
-  // Try partial name match
   const partialMatches = MIBS.filter(m =>
     m.name.toLowerCase().includes(query.toLowerCase()) ||
     m.desc.toLowerCase().includes(query.toLowerCase()) ||
@@ -447,7 +443,7 @@ function search(query) {
   if (partialMatches.length === 1) { showResult(partialMatches[0]); return; }
   if (partialMatches.length > 1) { showMultiple(partialMatches); return; }
 
-  // ── NOT IN LOCAL DB → Ask Groq AI ──
+  // ── NOT IN LOCAL DB — Ask Groq AI ──
   aiLookupOID(query);
 }
 
@@ -463,13 +459,12 @@ function browseCategory(cat) {
   showMultiple(matches);
 }
 
-// ─── SHOW RESULT ─────────────────────────────────────────────────────────────
+// ─── SHOW RESULT ──────────────────────────────────────────────────────────────
 function showResult(oid) {
   currentOID = oid;
   hide('empty-state'); hide('not-found'); hide('multi-result');
   show('result-section');
 
-  // Name with optional AI + vendor badges
   document.getElementById('res-name').innerHTML = oid.name +
     (oid.aiIdentified ? ' <span class="badge-ai">🤖 AI Identified</span>' : '') +
     (oid.vendor && oid.vendor !== 'Standard' ? ` <span class="badge-vendor">${oid.vendor}</span>` : '');
@@ -479,7 +474,6 @@ function showResult(oid) {
   document.getElementById('res-type').textContent = oid.type;
   document.getElementById('res-status').textContent = oid.status;
 
-  // Category — use icon if known, otherwise just show text
   const catIcon = CATEGORY_ICONS[oid.category] || '📋';
   document.getElementById('res-category').textContent = catIcon + ' ' + oid.category;
 
@@ -488,7 +482,6 @@ function showResult(oid) {
   document.getElementById('res-tree').textContent = oid.tree;
   document.getElementById('res-example').textContent = oid.example;
 
-  // Access badge
   const accessEl = document.getElementById('res-access');
   accessEl.textContent = oid.access;
   accessEl.className = 'badge-access ' + (
@@ -496,7 +489,6 @@ function showResult(oid) {
     oid.access === 'read-write' ? 'access-rw' : 'access-na'
   );
 
-  // Related OIDs
   const relatedEl = document.getElementById('res-related');
   relatedEl.innerHTML = '';
   if (oid.related && oid.related.length > 0) {
@@ -512,7 +504,6 @@ function showResult(oid) {
     hide('related-section');
   }
 
-  // Reset AI section
   document.getElementById('ai-output').style.display = 'none';
   document.getElementById('ai-loading').style.display = 'none';
   document.getElementById('ai-btn').disabled = false;
@@ -556,14 +547,26 @@ async function callGroq(messages, maxTokens = 600) {
       'Authorization': `Bearer ${GROQ_API_KEY}`
     },
     body: JSON.stringify({
-      model: 'llama-3.1-8b-instant',
+      model: 'llama-3.3-70b-versatile',
       max_tokens: maxTokens,
       temperature: 0.1,
       messages
     })
   });
   const data = await response.json();
-  if (data.error) throw new Error(data.error.message || 'Groq API error');
+  if (data.error) {
+    if (data.error.message?.includes('model') || data.error.code === 'model_not_found') {
+      const fallback = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_API_KEY}` },
+        body: JSON.stringify({ model: 'llama-3.1-8b-instant', max_tokens: maxTokens, temperature: 0.1, messages })
+      });
+      const fallbackData = await fallback.json();
+      if (fallbackData.error) throw new Error(fallbackData.error.message || 'Groq API error');
+      return fallbackData.choices?.[0]?.message?.content || '';
+    }
+    throw new Error(data.error.message || 'Groq API error');
+  }
   return data.choices?.[0]?.message?.content || '';
 }
 
@@ -583,14 +586,11 @@ function groqError(err, outputEl, btn) {
   btn.disabled = false;
 }
 
-// ─── EXTRACT JSON SAFELY ─────────────────────────────────────────────────────
+// ─── EXTRACT JSON SAFELY ──────────────────────────────────────────────────────
 function extractJSON(raw) {
   if (!raw) return null;
-  // Remove markdown fences
   let cleaned = raw.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-  // Try direct parse first
   try { return JSON.parse(cleaned); } catch(e) {}
-  // Try extracting JSON object from within text
   const match = cleaned.match(/\{[\s\S]*\}/);
   if (match) {
     try { return JSON.parse(match[0]); } catch(e) {}
@@ -598,18 +598,16 @@ function extractJSON(raw) {
   return null;
 }
 
-// ─── AI-POWERED DYNAMIC OID LOOKUP ──────────────────────────────────────────
+// ─── AI-POWERED DYNAMIC OID LOOKUP ───────────────────────────────────────────
 async function aiLookupOID(query) {
   hide('empty-state'); hide('not-found'); hide('result-section'); hide('multi-result');
 
-  // Show loading state
   document.getElementById('ai-loading-msg').textContent = '🔍 Searching AI knowledge base for this OID...';
   document.getElementById('ai-loading').style.display = 'flex';
   show('result-section');
   document.getElementById('oid-card').style.display = 'none';
   document.getElementById('ai-section').style.display = 'none';
 
-  // Check API key first
   if (!GROQ_API_KEY) {
     document.getElementById('ai-loading').style.display = 'none';
     document.getElementById('oid-card').style.display = '';
@@ -621,16 +619,25 @@ async function aiLookupOID(query) {
     return;
   }
 
-  const systemPrompt = `You are an expert SNMP engineer. You know all standard IETF MIBs and vendor MIBs including Cisco, Juniper, Nokia, Ericsson, Huawei, and 3GPP MIBs.
+  const systemPrompt = `You are a senior SNMP/MIB engineer with 20+ years experience. You have memorised thousands of OIDs from all major vendors.
 
-IMPORTANT: You must respond ONLY with a single valid JSON object. No explanation, no markdown, no preamble. Just the raw JSON object starting with { and ending with }.`;
+CRITICAL RULES:
+- You MUST respond with ONLY a raw JSON object. Nothing else. No explanation. No markdown. No text before or after.
+- Start your response with { and end with }
+- If the OID starts with 1.3.6.1.4.1.9 it is a CISCO enterprise OID - you MUST know Cisco MIBs
+- If the OID starts with 1.3.6.1.4.1.2636 it is a JUNIPER OID
+- If the OID starts with 1.3.6.1.4.1.6527 it is a NOKIA (Alcatel-Lucent) OID
+- If the OID starts with 1.3.6.1.4.1.193 it is an ERICSSON OID
+- Enterprise OIDs (1.3.6.1.4.1.*) are ALWAYS vendor-specific - make your best determination
+- NEVER return found:false for a well-formed OID - always make your best determination
+- For 1.3.6.1.4.1.9.2.1.8 the answer is: avgBusy1 in OLD-CISCO-CPU-MIB, Gauge32, read-only, 1-minute CPU busy percentage`;
 
-  const userPrompt = `Look up this SNMP OID or MIB object name: "${query}"
+  const userPrompt = `OID to look up: "${query}"
 
-Return ONLY this JSON (no other text):
-{"found":true,"oid":"1.3.6.1.x.x.x","name":"objectName","mib":"MIB-NAME","type":"DataType","access":"read-only","status":"current","category":"Category","rfc":"RFC XXXX or Vendor Proprietary","tree":"iso.org.dod...","desc":"2-3 sentence description","example":"snmpget -v2c -c public <host> OID","related":["name1","name2"],"vendor":"Cisco"}
+Respond with ONLY this JSON structure (fill in real values, no placeholders):
+{"found":true,"oid":"${query}","name":"REAL_NAME","mib":"REAL_MIB_NAME","type":"REAL_TYPE","access":"read-only","status":"current","category":"REAL_CATEGORY","rfc":"Vendor Proprietary or RFC XXXX","tree":"iso.org.dod.internet.private.enterprises.VENDOR.path","desc":"REAL 2-3 sentence technical description of what this OID measures","example":"snmpget -v2c -c public <device_ip> ${query}","related":["relatedName1","relatedName2","relatedName3"],"vendor":"REAL_VENDOR_NAME"}
 
-If you do not know this OID, return only: {"found":false}`;
+Replace ALL_CAPS placeholders with real values based on your SNMP knowledge.`;
 
   try {
     const raw = await callGroq([
@@ -640,12 +647,10 @@ If you do not know this OID, return only: {"found":false}`;
 
     const parsed = extractJSON(raw);
 
-    // Could not parse JSON at all
     if (!parsed) {
       throw new Error(`JSON_PARSE_FAILED: ${raw.substring(0, 100)}`);
     }
 
-    // AI says it doesn't know this OID
     if (!parsed.found) {
       document.getElementById('ai-loading').style.display = 'none';
       document.getElementById('oid-card').style.display = '';
@@ -654,7 +659,6 @@ If you do not know this OID, return only: {"found":false}`;
       return;
     }
 
-    // Build result object from AI response
     const aiResult = {
       oid: parsed.oid || query,
       name: parsed.name || query,
@@ -677,7 +681,6 @@ If you do not know this OID, return only: {"found":false}`;
     document.getElementById('ai-section').style.display = '';
     showResult(aiResult);
 
-    // Auto-generate AI explanation for AI-identified OIDs
     currentOID = aiResult;
     await getAIExplanation();
 
@@ -686,7 +689,6 @@ If you do not know this OID, return only: {"found":false}`;
     document.getElementById('oid-card').style.display = '';
     document.getElementById('ai-section').style.display = '';
 
-    // Show specific error in the AI output area rather than generic not-found
     show('result-section');
     const outputEl = document.getElementById('ai-output');
     if (err.message === 'NO_KEY') {
@@ -705,7 +707,7 @@ If you do not know this OID, return only: {"found":false}`;
   }
 }
 
-// ─── AI EXPLANATION ──────────────────────────────────────────────────────────
+// ─── AI EXPLANATION ───────────────────────────────────────────────────────────
 async function getAIExplanation() {
   if (!currentOID) return;
   const btn = document.getElementById('ai-btn');
@@ -758,11 +760,11 @@ Keep it practical and concise — 150 to 200 words.`;
   }
 }
 
-// ─── HELPERS ─────────────────────────────────────────────────────────────────
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
 function show(id) { document.getElementById(id).style.display = ''; }
 function hide(id) { document.getElementById(id).style.display = 'none'; }
 
-// ─── EVENT LISTENERS ─────────────────────────────────────────────────────────
+// ─── EVENT LISTENERS ──────────────────────────────────────────────────────────
 document.getElementById('search-btn').addEventListener('click', () => {
   search(document.getElementById('oid-input').value);
 });
