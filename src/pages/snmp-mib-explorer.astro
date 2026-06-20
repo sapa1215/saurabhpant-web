@@ -201,9 +201,6 @@ import { SITE_TITLE } from '../consts';
 
 		</main>
 		<Footer />
-		<script define:vars={{ groqKey: import.meta.env.PUBLIC_GROQ_API_KEY || '' }}>
-			window.__GROQ_KEY__ = groqKey;
-		</script>
 	</body>
 </html>
 
@@ -536,16 +533,10 @@ function showNotFound() {
 }
 
 // ─── GROQ API HELPER ─────────────────────────────────────────────────────────
-const GROQ_API_KEY = window.__GROQ_KEY__ || '';
-
 async function callGroq(messages, maxTokens = 600) {
-  if (!GROQ_API_KEY) throw new Error('NO_KEY');
-  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+  const response = await fetch('/api/groq', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${GROQ_API_KEY}`
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: 'llama-3.3-70b-versatile',
       max_tokens: maxTokens,
@@ -553,31 +544,20 @@ async function callGroq(messages, maxTokens = 600) {
       messages
     })
   });
-  const data = await response.json();
-  if (data.error) {
-    if (data.error.message?.includes('model') || data.error.code === 'model_not_found') {
-      const fallback = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_API_KEY}` },
-        body: JSON.stringify({ model: 'llama-3.1-8b-instant', max_tokens: maxTokens, temperature: 0.1, messages })
-      });
-      const fallbackData = await fallback.json();
-      if (fallbackData.error) throw new Error(fallbackData.error.message || 'Groq API error');
-      return fallbackData.choices?.[0]?.message?.content || '';
-    }
-    throw new Error(data.error.message || 'Groq API error');
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
   }
+  const data = await response.json();
+  if (data.error) throw new Error(data.error.message || 'API error');
   return data.choices?.[0]?.message?.content || '';
 }
 
 function groqError(err, outputEl, btn) {
   hide('ai-loading');
-  if (err.message === 'NO_KEY') {
-    outputEl.textContent = '⚠️ Groq API key not configured. Add PUBLIC_GROQ_API_KEY to your .env file.';
-  } else if (err.message?.includes('401')) {
-    outputEl.textContent = '⚠️ Invalid API key. Check your Groq key at console.groq.com';
-  } else if (err.message?.includes('429')) {
+  if (err.message?.includes('429')) {
     outputEl.textContent = '⚠️ Rate limit reached. Please wait a moment and try again.';
+  } else if (err.message?.includes('403')) {
+    outputEl.textContent = '⚠️ Access denied. Please try again later.';
   } else {
     outputEl.textContent = '⚠️ AI unavailable. Please check your connection and try again.';
   }
@@ -607,17 +587,6 @@ async function aiLookupOID(query) {
   show('result-section');
   document.getElementById('oid-card').style.display = 'none';
   document.getElementById('ai-section').style.display = 'none';
-
-  if (!GROQ_API_KEY) {
-    document.getElementById('ai-loading').style.display = 'none';
-    document.getElementById('oid-card').style.display = '';
-    document.getElementById('ai-section').style.display = '';
-    const outputEl = document.getElementById('ai-output');
-    outputEl.textContent = '⚠️ Groq API key not configured. Add PUBLIC_GROQ_API_KEY to your .env file.';
-    show('ai-output');
-    show('ai-section');
-    return;
-  }
 
   const systemPrompt = `You are a senior SNMP/MIB engineer with 20+ years experience. You have memorised thousands of OIDs from all major vendors.
 
@@ -691,11 +660,7 @@ Replace ALL_CAPS placeholders with real values based on your SNMP knowledge.`;
 
     show('result-section');
     const outputEl = document.getElementById('ai-output');
-    if (err.message === 'NO_KEY') {
-      outputEl.textContent = '⚠️ Groq API key not configured.';
-    } else if (err.message?.includes('401')) {
-      outputEl.textContent = '⚠️ Invalid Groq API key. Please check console.groq.com';
-    } else if (err.message?.includes('429')) {
+    if (err.message?.includes('429')) {
       outputEl.textContent = '⚠️ Rate limit reached. Please wait 30 seconds and try again.';
     } else if (err.message?.includes('JSON_PARSE_FAILED')) {
       outputEl.textContent = '⚠️ AI returned unexpected response. Please try again.';
