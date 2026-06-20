@@ -201,6 +201,9 @@ import { SITE_TITLE } from '../consts';
 
 		</main>
 		<Footer />
+		<script define:vars={{ groqKey: import.meta.env.PUBLIC_GROQ_API_KEY || '' }}>
+			window.__GROQ_KEY__ = groqKey;
+		</script>
 	</body>
 </html>
 
@@ -542,7 +545,7 @@ function showNotFound() {
 }
 
 // ─── GROQ API HELPER ─────────────────────────────────────────────────────────
-const GROQ_API_KEY = import.meta.env.PUBLIC_GROQ_API_KEY || '';
+const GROQ_API_KEY = window.__GROQ_KEY__ || '';
 
 async function callGroq(messages, maxTokens = 600) {
   if (!GROQ_API_KEY) throw new Error('NO_KEY');
