@@ -13,7 +13,7 @@ export async function POST({ request, locals }) {
 
   if (!GROQ_API_KEY) {
     return new Response(
-      JSON.stringify({ error: 'API key not configured' }),
+      JSON.stringify({ error: 'API key not configured', debug: { hasRuntime: !!runtime, hasEnv: !!runtime?.env, keys: runtime?.env ? Object.keys(runtime.env) : [] } }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
