@@ -201,7 +201,7 @@ import { SITE_TITLE } from '../consts';
 
 		</main>
 		<Footer />
-		<script define:vars={{ groqKey: import.meta.env.PUBLIC_GROQ_API_KEY || '' }}>
+		<script define:vars={{ groqKey: import.meta.env.GROQ_API_KEY || '' }}>
 			window.__GROQ_KEY__ = groqKey;
 		</script>
 	</body>
