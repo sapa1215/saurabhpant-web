@@ -1,8 +1,13 @@
-export async function onRequestPost(context) {
-  const GROQ_API_KEY = context.env.GROQ_API_KEY;
+export const prerender = false;
 
-  const origin = context.request.headers.get('Origin');
-  if (origin !== 'https://saurabhpant.com') {
+const ALLOWED_ORIGINS = ['https://saurabhpant.com', 'https://www.saurabhpant.com'];
+
+export async function POST({ request, locals }) {
+  const runtime = locals.runtime;
+  const GROQ_API_KEY = runtime?.env?.GROQ_API_KEY;
+
+  const origin = request.headers.get('Origin');
+  if (origin && !ALLOWED_ORIGINS.includes(origin)) {
     return new Response('Forbidden', { status: 403 });
   }
 
@@ -14,24 +19,21 @@ export async function onRequestPost(context) {
   }
 
   try {
-    const body = await context.request.json();
-    const response = await fetch(
-      'https://api.groq.com/openai/v1/chat/completions',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${GROQ_API_KEY}`
-        },
-        body: JSON.stringify(body)
-      }
-    );
+    const body = await request.json();
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${GROQ_API_KEY}`
+      },
+      body: JSON.stringify(body)
+    });
     const data = await response.json();
     return new Response(JSON.stringify(data), {
       status: response.status,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://saurabhpant.com'
+        'Access-Control-Allow-Origin': origin || 'https://saurabhpant.com'
       }
     });
   } catch (err) {
@@ -42,7 +44,7 @@ export async function onRequestPost(context) {
   }
 }
 
-export async function onRequestOptions() {
+export async function OPTIONS() {
   return new Response(null, {
     headers: {
       'Access-Control-Allow-Origin': 'https://saurabhpant.com',
