@@ -201,6 +201,9 @@ import { SITE_TITLE } from '../consts';
 
 		</main>
 		<Footer />
+		<script define:vars={{ groqKey: import.meta.env.PUBLIC_GROQ_API_KEY || '' }}>
+			window.__GROQ_KEY__ = groqKey;
+		</script>
 	</body>
 </html>
 
@@ -533,10 +536,16 @@ function showNotFound() {
 }
 
 // ─── GROQ API HELPER ─────────────────────────────────────────────────────────
+const GROQ_API_KEY = window.__GROQ_KEY__ || '';
+
 async function callGroq(messages, maxTokens = 600) {
-  const response = await fetch('/api/groq', {
+  if (!GROQ_API_KEY) throw new Error('NO_KEY');
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${GROQ_API_KEY}`
+    },
     body: JSON.stringify({
       model: 'llama-3.3-70b-versatile',
       max_tokens: maxTokens,
@@ -544,9 +553,7 @@ async function callGroq(messages, maxTokens = 600) {
       messages
     })
   });
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const data = await response.json();
   if (data.error) throw new Error(data.error.message || 'API error');
   return data.choices?.[0]?.message?.content || '';
@@ -554,10 +561,10 @@ async function callGroq(messages, maxTokens = 600) {
 
 function groqError(err, outputEl, btn) {
   hide('ai-loading');
-  if (err.message?.includes('429')) {
+  if (err.message === 'NO_KEY') {
+    outputEl.textContent = '⚠️ Groq API key not configured.';
+  } else if (err.message?.includes('429')) {
     outputEl.textContent = '⚠️ Rate limit reached. Please wait a moment and try again.';
-  } else if (err.message?.includes('403')) {
-    outputEl.textContent = '⚠️ Access denied. Please try again later.';
   } else {
     outputEl.textContent = '⚠️ AI unavailable. Please check your connection and try again.';
   }
