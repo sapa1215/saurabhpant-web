@@ -20,7 +20,9 @@ import { SITE_TITLE } from '../../consts';
 			<section class="article-header">
 				<div class="article-meta-top">
 					<span class="article-category">Policy Analysis</span>
+					<span class="article-status-published">Published</span>
 					<span class="article-date">June 6, 2026</span>
+					<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6892441" target="_blank" class="ssrn-badge">SSRN #6892441 →</a>
 				</div>
 				<h1 class="article-title">
 					Unlocking India's Billion-Dollar MVNO Opportunity: Why TRAI Must Lower the Entry Barrier Now
@@ -47,6 +49,7 @@ import { SITE_TITLE } from '../../consts';
 					<span class="tag">Regulatory Reform</span>
 				</div>
 				<div class="share-row">
+					<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6892441" target="_blank" class="share-btn share-ssrn">Read on SSRN →</a>
 					<span class="share-label">Share:</span>
 					<a href="https://www.linkedin.com/sharing/share-offsite/?url=https://saurabhpant.com/publications/trai-mvno-india-opportunity" target="_blank" class="share-btn share-linkedin">LinkedIn</a>
 					<a href="https://twitter.com/intent/tweet?text=Unlocking+India%27s+Billion-Dollar+MVNO+Opportunity&url=https://saurabhpant.com/publications/trai-mvno-india-opportunity" target="_blank" class="share-btn share-x">X / Twitter</a>
@@ -511,6 +514,11 @@ import { SITE_TITLE } from '../../consts';
 	.article-header { padding: 2rem 0 2rem; border-bottom: 2px solid #eee; margin-bottom: 2.5rem; }
 	.article-meta-top { display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; }
 	.article-category { background: #dbeafe; color: #1d4ed8; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; }
+	.article-status-published { background: #dcfce7; color: #166534; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; }
+	.ssrn-badge { background: #166534; color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-decoration: none; }
+	.ssrn-badge:hover { background: #14532d; }
+	.share-ssrn { background: #166534; color: white; }
+	.share-ssrn:hover { background: #14532d; }
 	.article-date { color: #888; font-size: 0.85rem; }
 	.article-title { font-size: 2rem; font-weight: 700; color: #111; line-height: 1.25; margin-bottom: 1rem; }
 	.article-subtitle { font-size: 1.05rem; color: #555; line-height: 1.7; margin-bottom: 1.5rem; border-left: 3px solid #2337ff; padding-left: 1rem; }

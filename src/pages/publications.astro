@@ -32,6 +32,7 @@ import { SITE_TITLE } from '../consts';
 					<div class="pub-card">
 						<div class="pub-meta">
 							<span class="pub-type article">Article</span>
+							<span class="pub-status published">Published on SSRN</span>
 							<span class="pub-date">June 2026</span>
 						</div>
 						<h3><a href="/publications/trai-mvno-india-opportunity">Unlocking India's Billion-Dollar MVNO Opportunity: Why TRAI Must Lower the Entry Barrier Now</a></h3>
@@ -41,6 +42,9 @@ import { SITE_TITLE } from '../consts';
 							<span class="tag">TRAI</span>
 							<span class="tag">India Telecom</span>
 							<span class="tag">Regulatory Policy</span>
+						</div>
+						<div class="pub-actions">
+							<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6892441" target="_blank" class="ssrn-btn">View on SSRN →</a>
 						</div>
 					</div>
 
@@ -146,6 +150,11 @@ import { SITE_TITLE } from '../consts';
 	.pub-type { padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
 	.pub-type.article { background: #dbeafe; color: #1d4ed8; }
 	.pub-type.paper { background: #dcfce7; color: #166534; }
+	.pub-status { padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+	.pub-status.published { background: #dcfce7; color: #166534; }
+	.pub-actions { margin-top: 1rem; }
+	.ssrn-btn { display: inline-block; padding: 0.35rem 0.9rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600; text-decoration: none; background: #166534; color: white; }
+	.ssrn-btn:hover { background: #14532d; }
 	.pub-date { color: #888; font-size: 0.85rem; }
 	.pub-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
 	.pub-card h3 a { color: #2337ff; text-decoration: none; }
