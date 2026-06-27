@@ -86,11 +86,13 @@ import { SITE_TITLE } from '../consts';
 			<section class="cite-section">
 				<h2>🔗 Citations & References</h2>
 
-				<div class="placeholder-box">
-					<div class="placeholder-icon">📬</div>
-					<p class="placeholder-title">Citations will appear here once papers are published</p>
-					<p class="placeholder-sub">
-						In the meantime, you can find my academic profile on
+				<div class="cite-entry-box">
+					<p class="cite-entry-label">APA — SSRN (2026)</p>
+					<div class="cite-as-box">
+						Pant, S. (2026). Unlocking India's Billion-Dollar MVNO Opportunity: Why TRAI Must Lower the Entry Barrier Now. <em>SSRN</em>. <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6892441" target="_blank">https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6892441</a>
+					</div>
+					<p class="placeholder-sub" style="margin-top:1rem;">
+						Full academic profile and citation metrics on
 						<a href="https://scholar.google.com/citations?user=QPDMorAAAAAJ&hl=en" target="_blank">Google Scholar →</a>
 					</p>
 				</div>
@@ -153,6 +155,10 @@ import { SITE_TITLE } from '../consts';
 	.metrics-section { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1rem; padding: 2rem; background: #f8fafc; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
 	.metric h3 { font-size: 2rem; color: #2337ff; margin: 0 0 0.25rem; }
 	.metric p { color: #666; font-size: 0.85rem; margin: 0; }
+
+	/* Citation entry */
+	.cite-entry-box { border: 1px solid #e0e7ff; border-radius: 8px; padding: 1.5rem; background: #f8f9ff; }
+	.cite-entry-label { font-size: 0.7rem; font-weight: bold; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
 
 	/* Placeholder */
 	.placeholder-box { border: 2px dashed #ddd; border-radius: 8px; padding: 3rem 2rem; text-align: center; }
