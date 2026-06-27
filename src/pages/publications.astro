@@ -60,52 +60,6 @@ import { SITE_TITLE } from '../consts';
 			<section class="pub-section">
 				<h2>📄 Citations & Recognition</h2>
 
-				<div class="pub-list">
-
-					<div class="pub-card">
-						<div class="pub-meta">
-							<span class="status-badge published">Published</span>
-							<span class="pub-venue">SSRN</span>
-							<span class="pub-date">2026</span>
-						</div>
-						<h3><a href="/publications/trai-mvno-india-opportunity">Unlocking India's Billion-Dollar MVNO Opportunity: Why TRAI Must Lower the Entry Barrier Now</a></h3>
-						<p class="pub-desc">An original policy analysis examining how TRAI reducing entry barriers for new MVNO operators could catalyse a new billion-dollar economy spanning IoT, rural connectivity, and niche digital services — with global licensing fee comparisons across UK, US, and EU.</p>
-						<div class="pub-tags">
-							<span class="tag">MVNO</span>
-							<span class="tag">TRAI</span>
-							<span class="tag">India</span>
-							<span class="tag">IoT</span>
-							<span class="tag">BSNL</span>
-							<span class="tag">5G</span>
-							<span class="tag">Telecom Policy</span>
-							<span class="tag">Regulatory Reform</span>
-						</div>
-						<p class="cite-as-label">Cite as (APA)</p>
-						<div class="cite-as-box">
-							Pant, S. (2026). Unlocking India's Billion-Dollar MVNO Opportunity: Why TRAI Must Lower the Entry Barrier Now. <em>SSRN</em>. <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6892441" target="_blank">https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6892441</a>
-						</div>
-						<div class="pub-actions">
-							<a href="/publications/trai-mvno-india-opportunity" class="card-link primary">Read Article →</a>
-							<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6892441" target="_blank" class="card-link secondary">View on SSRN →</a>
-						</div>
-					</div>
-
-					<div class="pub-card">
-						<div class="pub-meta">
-							<span class="status-badge in-progress">In Progress</span>
-							<span class="pub-venue">arXiv · IEEE</span>
-						</div>
-						<h3>Coming Soon</h3>
-						<p class="pub-desc">Research on OSI layer networking — to be published on arXiv and IEEE.</p>
-						<div class="pub-tags">
-							<span class="tag">OSI</span>
-							<span class="tag">Networking</span>
-							<span class="tag">Research</span>
-						</div>
-					</div>
-
-				</div>
-
 				<!-- Metrics -->
 				<div class="metrics-section">
 					<div class="metric"><h3>2</h3><p>Published Articles</p></div>
@@ -114,16 +68,18 @@ import { SITE_TITLE } from '../consts';
 					<div class="metric"><h3>3</h3><p>Continents</p></div>
 				</div>
 
-				<!-- Live SSRN citation reference -->
-				<div class="cite-entry-box">
-					<p class="cite-entry-label">APA — SSRN (2026)</p>
-					<div class="cite-as-box">
-						Pant, S. (2026). Unlocking India's Billion-Dollar MVNO Opportunity: Why TRAI Must Lower the Entry Barrier Now. <em>SSRN</em>. <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6892441" target="_blank">https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6892441</a>
+				<!-- Google Scholar CTA -->
+				<div class="scholar-cta">
+					<div class="cta-inner">
+						<div>
+							<h2>Track Citations on Google Scholar</h2>
+							<p>Track citations and follow my research on Google Scholar — where all citation metrics, h-index, and academic impact are recorded.</p>
+						</div>
+						<a href="https://scholar.google.com/citations?user=QPDMorAAAAAJ&hl=en" target="_blank" class="cta-btn">
+							<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5z"/></svg>
+							Open Google Scholar
+						</a>
 					</div>
-					<p class="cite-note">
-						Full academic profile and citation metrics on
-						<a href="https://scholar.google.com/citations?user=QPDMorAAAAAJ&hl=en" target="_blank">Google Scholar →</a>
-					</p>
 				</div>
 
 			</section>
@@ -220,9 +176,9 @@ import { SITE_TITLE } from '../consts';
 	.status-badge.in-progress { background: #fef3c7; color: #92400e; }
 
 	/* Card body */
-	.pub-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #111; }
-	.pub-card h3 a { color: #2337ff; text-decoration: none; }
-	.pub-card h3 a:hover { text-decoration: underline; }
+	.pub-card h3 { font-size: 1.1rem !important; margin-bottom: 0.5rem; color: #111; }
+	.pub-card h3 a { color: #2337ff !important; text-decoration: none !important; }
+	.pub-card h3 a:hover { text-decoration: underline !important; }
 	.pub-desc { color: #555; font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.6; }
 	.pub-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
 	.tag { background: #f0f4ff; color: #2337ff; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; }
